@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema 
+    xmlns:rc="http://rollercoaster-schema.tv"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://rollercoaster-schema.tv"
+    elementFormDefault="qualified">
+    
+    <!--xsd:annotation>
+        <xsd:documentation xml:lang="EN">
+            Schema for track data of RollerCoaster Editor/Simulator
+            (student project of the Institute for scientific computing, TU Braunschweig)
+            http://www.wire.tu-bs.de/lehre/sep/09/e_rcoast.html
+        </xsd:documentation>
+    </xsd:annotation-->
+  
+    <xsd:element name="RollerCoaster" type="rc:RollerCoasterType"/>
+
+    <xsd:complexType name="RollerCoasterType">
+        <xsd:choice>
+            <xsd:element name="Track" type="rc:TrackType"/>
+            <xsd:element name="Construct" type="rc:ConstructType"/>
+        </xsd:choice>
+    </xsd:complexType>
+  
+    <xsd:complexType name="TrackType">
+        <xsd:all>
+            <xsd:element name="General" type="rc:GeneralType"/>
+            <xsd:element name="SimulationParameters" type="rc:SimType"/>
+            <xsd:element name="PillarList" type="rc:PillarListType"/>
+        </xsd:all>
+        <xsd:attribute name="version" type="xsd:string"/>
+    </xsd:complexType>
+  
+    <xsd:complexType name="ConstructType">
+        <xsd:all>
+            <xsd:element name="General" type="rc:GeneralType"/>
+            <xsd:element name="PillarList" type="rc:PillarListType"/>
+        </xsd:all>
+        <xsd:attribute name="version" type="xsd:string"/>
+    </xsd:complexType>
+  
+    <xsd:complexType name="GeneralType">
+        <xsd:all>
+            <xsd:element name="Name" type="xsd:string"/>
+            <xsd:element name="Author" type="xsd:string"/>
+            <xsd:element name="CreationDate" type="xsd:dateTime"/>
+            <xsd:element name="Length" type="xsd:double"/>
+            <xsd:element minOccurs="0" name="Preview" type="xsd:base64Binary"/>
+            <xsd:element minOccurs="0" name="Comment" type="xsd:string"/>
+        </xsd:all>
+    </xsd:complexType>
+  
+    <xsd:complexType name="SimType">
+        <xsd:all>
+            <xsd:element name="Speed" type="xsd:double"/>
+            <xsd:element name="Scale" type="xsd:double"/>
+            <xsd:element name="Direction" type="rc:DirectionType"/>
+        </xsd:all>
+    </xsd:complexType>
+  
+    <xsd:complexType name="PillarListType">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="3" name="Pillar" type="rc:PillarType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="PillarType">
+        <xsd:all>
+            <xsd:element name="PosX" type="rc:PositionType"/>
+            <xsd:element name="PosY" type="rc:PositionType"/>
+            <xsd:element name="PosZ" type="rc:PositionType"/>
+            <xsd:element name="YawX" type="xsd:double"/>
+            <xsd:element name="YawY" type="xsd:double"/>
+            <xsd:element name="YawZ" type="xsd:double"/>
+            <xsd:element name="YawAngle" type="xsd:int"/>
+        </xsd:all>
+        <xsd:attribute name="real" type="xsd:boolean"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="DirectionType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="forward"/>
+            <xsd:enumeration value="backward"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="PositionType">
+        <xsd:restriction base="xsd:double">
+            <xsd:minInclusive value="0"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
