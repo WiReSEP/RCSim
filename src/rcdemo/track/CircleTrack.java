@@ -25,7 +25,7 @@ import org.apache.commons.math3.linear.RealVector;
  * @author ezander
  */
 public class CircleTrack implements Track {
-    double omega = Math.PI * 2;
+    private final double omega = Math.PI * 2;
 
     @Override
     public RealVector getx(double s) {

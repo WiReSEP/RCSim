@@ -1,4 +1,4 @@
-jar/
-rcdemo/build/
-rcdemo/nbproject/
-rcdemo/dist/
+lib/
+build/
+nbproject/
+dist/

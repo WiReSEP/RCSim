@@ -30,8 +30,8 @@ public class CombinedForceModel implements ForceModel {
     private final List<Double> factors;
 
     CombinedForceModel() {
-        this.factors = new ArrayList<>();
-        this.models = new ArrayList<>();
+        factors = new ArrayList<>();
+        models = new ArrayList<>();
     }
 
     public CombinedForceModel add(ForceModel model) {
