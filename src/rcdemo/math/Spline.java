@@ -14,25 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.physics;
-
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
+package rcdemo.math;
 
 /**
  *
  * @author ezander
  */
-public class ZeroForceModel implements ForceModel {
+public interface Spline {
 
-    @Override
-    public RealVector getForce(RealVector x, RealVector v) {
-        return new ArrayRealVector(x.getDimension());
-    }
-
-    @Override
-    public double getPotentialEnergy(RealVector x, RealVector v) {
-        return 0;
-    }
+    double compute(double t, int deriv);
     
 }

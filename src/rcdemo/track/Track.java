@@ -21,4 +21,7 @@ public interface Track {
 
     RealVector getDDxDss(double s);
 
+    RealVector getYaw(double s);
+    
+    double getYawAngle(double s);
 }

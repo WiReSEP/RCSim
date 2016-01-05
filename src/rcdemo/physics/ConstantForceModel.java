@@ -40,4 +40,9 @@ public class ConstantForceModel implements ForceModel {
     public RealVector getForce(RealVector x, RealVector v) {
         return new ArrayRealVector(F);
     }
+
+    @Override
+    public double getPotentialEnergy(RealVector x, RealVector v) {
+        return -getForce(x, v).dotProduct(x);
+    }
 }

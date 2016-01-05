@@ -26,22 +26,36 @@ import org.apache.commons.math3.linear.RealVector;
  */
 public class CircleTrack implements Track {
     private final double omega = Math.PI * 2;
+    private final double alpha = 0.1;
 
     @Override
     public RealVector getx(double s) {
         double[] x = {Math.cos(omega * s), Math.sin(omega * s), 0};
+        x[2] = alpha * x[0];
         return new ArrayRealVector(x);
     }
 
     @Override
     public RealVector getDxDs(double s) {
         double[] dxds = {-omega * Math.sin(omega * s), omega * Math.cos(omega * s), 0};
+        dxds[2] = alpha * dxds[0];
         return new ArrayRealVector(dxds);
     }
 
     @Override
     public RealVector getDDxDss(double s) {
-        double[] dxds = {-omega * omega * Math.cos(omega * s), -omega * omega * Math.sin(omega * s), 0};
-        return new ArrayRealVector(dxds);
+        double[] ddxdss = {-omega * omega * Math.cos(omega * s), -omega * omega * Math.sin(omega * s), 0};
+        ddxdss[2] = alpha * ddxdss[0];
+        return new ArrayRealVector(ddxdss);
+    }
+
+    @Override
+    public RealVector getYaw(double s) {
+        return new ArrayRealVector(3);
+    }
+
+    @Override
+    public double getYawAngle(double s) {
+        return 0;
     }
 }

@@ -16,28 +16,65 @@
  */
 package rcdemo.track;
 
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import rcdemo.math.ClosedHermiteSpline;
+import rcdemo.math.Spline;
 import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public abstract class SplineTrack implements Track {
+public class SplineTrack implements Track {
+    Spline posX;
+    Spline posY;
+    Spline posZ;
+    
+    Spline yawX;
+    Spline yawY;
+    Spline yawZ;
+    
+    Spline yawAngle;
+
+    public SplineTrack(Spline posX, Spline posY, Spline posZ, Spline yawX, Spline yawY, Spline yawZ, Spline yawAngle) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+        this.yawX = yawX;
+        this.yawY = yawY;
+        this.yawZ = yawZ;
+        this.yawAngle = yawAngle;
+    }
+        
+    public RealVector getPosAt(double s, int deriv) {
+        double pos[] = {posX.compute(s, deriv), posY.compute(s, deriv), posZ.compute(s, deriv)};
+        return new ArrayRealVector(pos);
+    }
 
     @Override
     public RealVector getx(double s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getPosAt(s, 0);
     }
 
     @Override
     public RealVector getDxDs(double s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getPosAt(s, 1);
     }
 
     @Override
     public RealVector getDDxDss(double s) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getPosAt(s, 2);
     }
-    
+
+    @Override
+    public RealVector getYaw(double s) {
+        double yaw[] = {yawX.compute(s, 0), yawY.compute(s, 0), yawZ.compute(s, 0)};
+        return new ArrayRealVector(yaw);
+    }
+
+    @Override
+    public double getYawAngle(double s) {
+        return yawAngle.compute(s, 0);
+    }
 }

@@ -55,7 +55,20 @@ public class TrackODE implements SecondOrderDifferentialEquations {
         RealVector v = dxds.mapMultiply(dsdt);
         RealVector F = forceModel.getForce(x, v);
         double ddsdtt = F.subtract(ddxdss.mapMultiply(dsdt * dsdt)).dotProduct(u) / dxds.dotProduct(u);
+
+        //double E = 0.5 * v.dotProduct(v) + forceModel.getPotentialEnergy(x, v);
+        //System.out.format("%4.1f: %s %s %s\n", t, s, x, E);
+        //System.out.format("%7.5f: %s %s %s\n", t, s, x, E);
+
         yDDot[0] = ddsdtt;
     }
     
+    public double getEnergy(double s, double dsdt) {
+        RealVector x = track.getx(s);
+        RealVector dxds = track.getDxDs(s);
+        RealVector v = dxds.mapMultiply(dsdt);
+
+        double E = 0.5 * v.dotProduct(v) + forceModel.getPotentialEnergy(x, v);
+        return E;
+    }
 }

@@ -32,5 +32,11 @@ public class FrictionForceModel implements ForceModel {
         double factor = 0.5 * rho * v.getNorm() * Cd * A;
         return v.mapMultiply(-factor);
     }
+
+    @Override
+    public double getPotentialEnergy(RealVector x, RealVector v) {
+        // Frictional force is just lost, and not stored
+        return 0;
+    }
     
 }

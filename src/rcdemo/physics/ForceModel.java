@@ -15,4 +15,5 @@ public interface ForceModel {
 
     RealVector getForce(RealVector x, RealVector v);
     
+    double getPotentialEnergy(RealVector x, RealVector v);
 }

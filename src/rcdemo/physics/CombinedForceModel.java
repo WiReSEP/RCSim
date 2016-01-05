@@ -29,7 +29,7 @@ public class CombinedForceModel implements ForceModel {
     private final List<ForceModel> models;
     private final List<Double> factors;
 
-    CombinedForceModel() {
+    public CombinedForceModel() {
         factors = new ArrayList<>();
         models = new ArrayList<>();
     }
@@ -52,6 +52,15 @@ public class CombinedForceModel implements ForceModel {
             F.combineToSelf(1.0, factors.get(i), model.getForce(x, v));
         }
         return F;
+    }
+
+    @Override
+    public double getPotentialEnergy(RealVector x, RealVector v) {
+        double E = 0;
+        for (ForceModel model : models) {
+            E += model.getPotentialEnergy(x, v);
+        }
+        return E;
     }
     
 }

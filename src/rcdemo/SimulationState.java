@@ -17,9 +17,11 @@
 package rcdemo;
 
 import java.util.ArrayList;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.linear.ArrayRealVector;
 import org.w3c.dom.Element;
 import rcdemo.io.XMLHelper;
+import rcdemo.math.ClosedHermiteSpline;
+import rcdemo.track.SplineTrack;
 import rcdemo.track.Track;
 
 /**
@@ -51,24 +53,36 @@ class SimulationState {
         ArrayList<Element> pillars = XMLHelper.getChildrenByName(pillarListElement, "Pillar");
         int n = pillars.size();
         
-        ArrayList<Vector3D> pillarPosList = new ArrayList<>(n);
-        ArrayList<Vector3D> pillarYawList = new ArrayList<>(n);
-        ArrayList<Double> pillarYawAngleList = new ArrayList<>(n);
+        ArrayRealVector posXVector = new ArrayRealVector(n);
+        ArrayRealVector posYVector = new ArrayRealVector(n);
+        ArrayRealVector posZVector = new ArrayRealVector(n);
+        ArrayRealVector yawXVector = new ArrayRealVector(n);
+        ArrayRealVector yawYVector = new ArrayRealVector(n);
+        ArrayRealVector yawZVector = new ArrayRealVector(n);
+        ArrayRealVector yawAngleVector = new ArrayRealVector(n);
+        
         for (int i = 0; i < n; i++) {
-            double posX = XMLHelper.getDouble(pillars.get(i), "PosX");
-            double posY = XMLHelper.getDouble(pillars.get(i), "PosY");
-            double posZ = XMLHelper.getDouble(pillars.get(i), "PosZ");
-            pillarPosList.add(new Vector3D(posX, posY, posZ));
+            posXVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "PosX"));
+            posYVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "PosY"));
+            posZVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "PosZ"));
             
-            double yawX = XMLHelper.getDouble(pillars.get(i), "YawX");
-            double yawY = XMLHelper.getDouble(pillars.get(i), "YawY");
-            double yawZ = XMLHelper.getDouble(pillars.get(i), "YawZ");
-            pillarYawList.add(new Vector3D(yawX, yawY, yawZ));
+            yawXVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "YawX"));
+            yawYVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "YawY"));
+            yawZVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "YawZ"));
             
-            double yawAngle = XMLHelper.getDouble(pillars.get(i), "YawAngle");
-            pillarYawAngleList.add(yawAngle);
+            yawAngleVector.setEntry(i, XMLHelper.getDouble(pillars.get(i), "YawAngle"));
         }
+        
+        sim.track = new SplineTrack(
+                new ClosedHermiteSpline(posXVector),
+                new ClosedHermiteSpline(posYVector),
+                new ClosedHermiteSpline(posZVector),
+                new ClosedHermiteSpline(yawXVector),
+                new ClosedHermiteSpline(yawYVector),
+                new ClosedHermiteSpline(yawZVector),
+                new ClosedHermiteSpline(yawAngleVector));
+                
         return sim;
     }
-    
 }
+
