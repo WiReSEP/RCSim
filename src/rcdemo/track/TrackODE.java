@@ -26,8 +26,8 @@ import rcdemo.physics.ZeroForceModel;
  * @author ezander
  */
 public class TrackODE implements SecondOrderDifferentialEquations {
-    Track track;
-    ForceModel forceModel;
+    private final Track track;
+    private final ForceModel forceModel;
 
     public TrackODE(Track track) {
         this.track = track;
