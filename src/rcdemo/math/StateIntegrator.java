@@ -34,6 +34,7 @@ public class StateIntegrator {
     private final FirstOrderDifferentialEquations ode;
     private double t;
     private ArrayRealVector y;
+    public int evals = 0;
 
     public StateIntegrator(FirstOrderDifferentialEquations ode, RealVector y, double t, FirstOrderIntegrator integrator) {
         this.ode = ode;
@@ -49,6 +50,7 @@ public class StateIntegrator {
     public StateIntegrator integrateTo(double t) {
         integrator.integrate(ode, this.t, y.toArray(), t, y.getDataRef());
         this.t = t;
+        this.evals += integrator.getEvaluations();
         return this;
     }
 
