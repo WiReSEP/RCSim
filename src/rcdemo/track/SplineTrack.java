@@ -47,6 +47,11 @@ public class SplineTrack implements Track {
         this.yawAngle = yawAngle;
     }
         
+    @Override
+    public double length() {
+        return posX.length();
+    }
+    
     public RealVector getPosAt(double s, int deriv) {
         double pos[] = {posX.compute(s, deriv), posY.compute(s, deriv), posZ.compute(s, deriv)};
         return new ArrayRealVector(pos);

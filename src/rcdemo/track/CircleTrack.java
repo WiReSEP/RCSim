@@ -28,6 +28,12 @@ public class CircleTrack implements Track {
     private final double omega = Math.PI * 2;
     private final double alpha = 0.1;
 
+    
+    @Override
+    public double length() {
+        return 1;
+    }
+    
     @Override
     public RealVector getx(double s) {
         double[] x = {Math.cos(omega * s), Math.sin(omega * s), 0};

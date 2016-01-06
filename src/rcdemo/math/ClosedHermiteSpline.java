@@ -39,11 +39,17 @@ public class ClosedHermiteSpline implements Spline {
     }
     
     @Override
+    public double length() {
+        return a.getColumnDimension();
+    }
+    
+    @Override
     public double compute(double t, int deriv) {
-        int n = a.getColumnDimension();
-        int k = (int)t;
+        int n = (int)length();
+        int k = (int)Math.floor(t);
         t = t - k;
-        k = k % n;
+        k = k % n; 
+        if (k<0) {k+=n;}
         
         double t2 = t * t;
         double t3 = t2 * t;

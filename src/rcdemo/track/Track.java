@@ -14,6 +14,7 @@ import org.apache.commons.math3.linear.RealVector;
  * @author ezander
  */
 public interface Track {
+    double length();
 
     RealVector getx(double s);
 

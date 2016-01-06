@@ -21,6 +21,7 @@ package rcdemo.math;
  * @author ezander
  */
 public interface Spline {
+    double length();
 
     double compute(double t, int deriv);
     
