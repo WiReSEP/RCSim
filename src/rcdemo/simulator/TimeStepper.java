@@ -109,7 +109,7 @@ public class TimeStepper {
         setPaused(true);
     }
 
-    void unpause() {
+    public void resume() {
         setPaused(false);
     }
     

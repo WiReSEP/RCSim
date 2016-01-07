@@ -37,19 +37,52 @@ import rcdemo.track.Track;
  * @author ezander
  */
 public class Java3dObserver implements Observer {
+
+    SimpleUniverse universe;
+    Canvas3D canvas;
+    BranchGroup branchGroup;
+    TransformGroup world;
     TransformGroup camera;
-    Camera camTransform;
     TransformGroup car;
+
+    Camera camTransform;
+
     SimulationState state;
     Track track;
+
+    public Camera getCamTransform() {
+        return camTransform;
+    }
+
+    public void setCanvas(Canvas3D canvas) {
+        assert this.canvas == null;
+        this.canvas = canvas;
+    }
+
+    public Canvas3D getCanvas() {
+        return canvas;
+    }
 
     @Override
     public void init(SimulationState state) {
         this.state = state;
         this.track = state.getTrack();
         assert (track != null);
+       
+        // Create the universe and add the group of objects
+        if (universe != null) {
+            universe.cleanup();
+        }
+        universe = new SimpleUniverse(canvas);
+        
+        if (canvas == null) {
+            canvas = universe.getCanvas();
+            canvas.setDoubleBufferEnable(true);
+            SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
+        }
+
         // Setup the branch group
-        TransformGroup world = new TransformGroup();
+        world = new TransformGroup();
         WorldCreator creator = new WorldCreator();
         TransformGroup trackGroup = creator.createTrack(state);
         world.addChild(trackGroup);
@@ -59,14 +92,12 @@ public class Java3dObserver implements Observer {
         world.addChild(ground);
         Node light = creator.createLight();
         world.addChild(light);
-        // Create the universe and add the group of objects
-        SimpleUniverse universe = new SimpleUniverse();
+        
         universe.getViewingPlatform().setNominalViewingTransform();
         camera = universe.getViewingPlatform().getViewPlatformTransform();
-        Canvas3D canvas = universe.getCanvas();
-        canvas.setDoubleBufferEnable(true);
-        SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
-        BranchGroup branchGroup = new BranchGroup();
+
+        //
+        branchGroup = new BranchGroup();
         branchGroup.addChild(world);
         universe.addBranchGraph(branchGroup);
         View view = canvas.getView();
@@ -104,5 +135,5 @@ public class Java3dObserver implements Observer {
         transform.invert();
         camera.setTransform(transform);
     }
-    
+
 }

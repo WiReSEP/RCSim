@@ -24,6 +24,7 @@ import java.util.List;
  * @author ezander
  */
 public abstract class Simulator {
+
     List<Observer> observers = new LinkedList<>();
     TimeStepper stepper = new TimeStepper();
     SimulationState state;
@@ -34,6 +35,10 @@ public abstract class Simulator {
 
     public void setState(SimulationState state) {
         this.state = state;
+    }
+
+    public TimeStepper getStepper() {
+        return stepper;
     }
 
     public void addObserver(Observer observer) {
@@ -55,7 +60,7 @@ public abstract class Simulator {
         }
     }
 
-    abstract void init();
+    protected abstract void reset();
 
     abstract double[] stepTo(double simTime);
 
@@ -65,11 +70,16 @@ public abstract class Simulator {
         notifyObservers(t, y);
     }
 
-    public final void run() {
-        init();
+    public final void init() {
+        stepper = new TimeStepper();
+        reset();
         for (Observer observer : observers) {
             observer.init(state);
         }
+    }
+    
+    public final void run() {
+        init();
         while (true) {
             update();
             sleep(0.01);

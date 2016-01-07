@@ -1,9 +1,21 @@
 package rcdemo;
 
-
+import com.sun.j3d.utils.universe.SimpleUniverse;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
+import javax.media.j3d.Canvas3D;
 import javax.swing.JFileChooser;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import rcdemo.graphics.Java3dObserver;
+import rcdemo.simulator.ODESimulator;
+import rcdemo.simulator.SimulationState;
+import rcdemo.simulator.Simulator;
+import rcdemo.simulator.TextBasedObserver;
 
 /*
  * Copyright (C) 2016 ezander
@@ -21,7 +33,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  *
  * @author ezander
@@ -29,12 +40,77 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class RCGui extends javax.swing.JFrame {
 
     String lastPath;
+    Java3dObserver java3dObserver;
+    Simulator sim;
+    Timer timer;
+
     /**
      * Creates new form RCGui
      */
     public RCGui() {
         initComponents();
         lastPath = System.getProperty("user.dir");
+
+        java3dObserver = new Java3dObserver();
+
+        //setLayout(new BorderLayout());
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        Canvas3D canvas = new Canvas3D(config);
+        //SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6)
+        canvas.setDoubleBufferEnable(true);
+        java3dObserver.setCanvas(canvas);
+        canvas.setSize(160 * 6, 90 * 6);
+        canvas.setPreferredSize(new Dimension(100, 100));
+
+        //jPanel1.add("Center", canvas);
+        getContentPane().add(canvas, BorderLayout.CENTER);
+        setSize(160 * 6, 90 * 6);
+        canvas.requestFocus();
+
+        sim = new ODESimulator();
+        sim.addObserver(java3dObserver);
+        //sim.addObserver(new TextBasedObserver());
+
+        canvas.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case ' ':
+                        sim.getStepper().setPaused(true);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case '+':
+                        sim.getStepper().accelerate(1.4142);
+                        System.out.println("+ " + sim.getStepper().getSimSpeed());
+                        break;
+                    case '-':
+                        sim.getStepper().decelerate(1.4142);
+                        System.out.println("- " + sim.getStepper().getSimSpeed());
+                        break;
+                    case 'p':
+                        sim.getStepper().pause();
+                        break;
+                    case 'c':
+                        sim.getStepper().resume();
+                        break;
+                    case ' ':
+                        //sim.getStepper().setPaused(!sim.getStepper().isPaused());
+                        sim.getStepper().setPaused(false);
+                        break;
+                        default:
+                            System.out.println("key:" + e.getKeyChar());
+                }
+            }
+        });
     }
 
     /**
@@ -46,7 +122,6 @@ public class RCGui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -63,17 +138,6 @@ public class RCGui extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 259, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 155, Short.MAX_VALUE)
-        );
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -143,23 +207,6 @@ public class RCGui extends javax.swing.JFrame {
 
         setJMenuBar(menuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -167,10 +214,29 @@ public class RCGui extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
-    
-    private void loadFile(File selected ){
-        
+    private void loadFile(File selected) {
+
+        //c.addKeyListener(this);
+        //timer = new Timer(100, this);
+        //timer.start();
+        //Panel p = new Panel();
+        //p.add(go);
+        //add("North", p);
+        //go.addActionListener(this);
+        //go.addKeyListener(this);
+        // Create a simple scene and attach it to the virtual universe
+        String filename = selected.getAbsolutePath();
+        SimulationState state = SimulationState.readFromXML(filename);
+
+        sim.setState(state);
+        sim.init();
+        if (timer != null) {
+            timer.stop();
+        }
+        timer = new Timer(10, e -> sim.update());
+        timer.start();
     }
+
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
         JFileChooser chooser = new JFileChooser(lastPath);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -229,7 +295,6 @@ public class RCGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;

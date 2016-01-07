@@ -33,7 +33,7 @@ public class ODESimulator extends Simulator {
     StateIntegrator stateInt;
 
     @Override
-    void init() {
+    protected void reset() {
         Track track = state.getTrack();
         TrackODE ode2 = new TrackODE(track, new CombinedForceModel().add(ConstantForceModel.createGravityForceModel(1, 9.81), 1).add(new FrictionForceModel(), 0 * 0.01));
         double v0 = state.getV0();
