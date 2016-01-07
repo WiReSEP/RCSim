@@ -20,11 +20,9 @@ import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.AmbientLight;
-import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
-import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
@@ -32,7 +30,6 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.vecmath.Color3f;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -75,12 +72,14 @@ public class RC3d {
     }
 
     static Vector3f trackToWorld(RealVector v) {
-        return trackToWorld2(v.mapSubtract(200));
+        //return trackToWorld2(v.mapSubtract(200));
+        return trackToWorld2(v);
     }
     
     static Vector3f trackToWorld2(RealVector v) {
-        double alpha = 0.003;
-        double x[] = v.mapMultiply(alpha).toArray();
+        //double alpha = 0.003;
+        //double x[] = v.mapMultiply(alpha).toArray();
+        double x[] = v.toArray();
         return toVector3f(x);
     }
 
@@ -94,7 +93,7 @@ public class RC3d {
         group.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
         for (double s = 0; s < state.track.length(); s += 0.01) {
-            Sphere sphere = new Sphere(0.005f);
+            Sphere sphere = new Sphere(0.5f);
             Vector3f vector = trackToWorld(state.track.getx(s));
             group.addChild(transform(sphere, vector));
         }
@@ -103,7 +102,7 @@ public class RC3d {
     
     static TransformGroup createCar(SimulationState state){
         Transform3D transform = new Transform3D();
-        Node node = new ColorCube(0.006);
+        Node node = new ColorCube(0.7);
         Vector3f vector = trackToWorld(state.track.getx(0));
         return transform(node, vector, true);
     }
@@ -118,7 +117,7 @@ public class RC3d {
     }
     
     static Node createLight() {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
         Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
         Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light
         Vector3f light1Direction = new Vector3f(4.0f, -7.0f, -12.0f);
@@ -209,18 +208,19 @@ public class RC3d {
             Point3d target = new Point3d(vector);
             Vector3d z = new Vector3d(up);
 
-            z.scale(0.001);
-            forward.scale(0.001f);
+            z.scale(2);
+            forward.scale(5f);
             right.scale(1.0f);
 
             //eye.sub(new Vector3d(right));
             //target.add(new Vector3d(right));
-            //eye.sub(new Vector3d(forward));
+            eye.sub(new Vector3d(forward));
             target.add(new Vector3d(forward));
             eye.add(z);
-            target.add(z);
+            //target.add(z);
+            
             //eye = new Point3d(-2,-2,-2);
-            //eye = new Point3d(2,2,2);
+            //eye = new Point3d(200,200,200);
             //target = new Point3d(vector);
             
             //z = new Vector3d(0,0,1);
@@ -246,9 +246,10 @@ public class RC3d {
     
     public static void run3() {
         // Load simulation stuff
-        String filename = "tracks/colossos.rct";
-        //String filename = "tracks/bigloop.rct";
+        //String filename = "tracks/colossos.rct";
+        String filename = "tracks/bigloop.rct";
         SimulationState state = SimulationState.readFromXML(filename);
+        state.v0 *= 10;
 
         // Setup the branch group
         TransformGroup world = new TransformGroup();
