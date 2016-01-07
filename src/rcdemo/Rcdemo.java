@@ -5,6 +5,7 @@
  */
 package rcdemo;
 
+import rcdemo.simulator.SimulationState;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 import org.apache.commons.math3.ode.nonstiff.AdamsBashforthIntegrator;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo;
+package rcdemo.simulator;
 
 import java.util.ArrayList;
 import org.apache.commons.math3.linear.ArrayRealVector;

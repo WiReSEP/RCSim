@@ -29,6 +29,7 @@ import org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegrator;
  * @author ezander
  */
 public class StateIntegrator {
+
     private static FirstOrderIntegrator defaultIntegrator = new ClassicalRungeKuttaIntegrator(0.1);
     private final FirstOrderIntegrator integrator;
     private final FirstOrderDifferentialEquations ode;
@@ -47,10 +48,19 @@ public class StateIntegrator {
         this(new FirstOrderConverter(ode2), y, 0, StateIntegrator.defaultIntegrator);
     }
 
-    public StateIntegrator integrateTo(double t) {
-        integrator.integrate(ode, this.t, y.toArray(), t, y.getDataRef());
-        this.t = t;
-        this.evals += integrator.getEvaluations();
+    public StateIntegrator integrateTo(double tNew) {
+        if (Math.abs(t - tNew) == 0) {
+            return this;
+        }
+        
+        try {
+            integrator.integrate(ode, t, y.toArray(), tNew, y.getDataRef());
+        } 
+        catch (org.apache.commons.math3.exception.NumberIsTooSmallException ex) {
+            // we can safely ignore that
+        }
+        evals += integrator.getEvaluations();
+        t = tNew;
         return this;
     }
 
@@ -91,5 +101,5 @@ public class StateIntegrator {
     public void setY(ArrayRealVector y) {
         this.y = y.copy();
     }
-    
+
 }

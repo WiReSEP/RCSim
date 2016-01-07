@@ -31,7 +31,7 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import rcdemo.SimulationState;
+import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
 
 /**

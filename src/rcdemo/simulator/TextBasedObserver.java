@@ -14,32 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo;
+package rcdemo.simulator;
 
-import rcdemo.simulator.SimulationState;
-import rcdemo.graphics.Java3dObserver;
-import rcdemo.simulator.ODESimulator;
-import rcdemo.simulator.Simulator;
-import rcdemo.simulator.TextBasedObserver;
-
+import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class RC3d {
+public class TextBasedObserver implements Observer {
+    SimulationState state;
+    Track track;
 
-    public static void run() {
-        // Load simulation stuff
-        String filename = "tracks/colossos.rct";
-        //String filename = "tracks/bigloop.rct";
-        SimulationState state = SimulationState.readFromXML(filename);
-        
-        Simulator sim = new ODESimulator();
-        sim.addObserver( new Java3dObserver());
-        sim.addObserver( new TextBasedObserver());
-        sim.setState(state);
-        sim.run();
+    @Override
+    public void init(SimulationState state) {
+        this.state = state;
+        this.track = state.getTrack();
     }
 
+    @Override
+    public void notify(double t, double[] y) {
+        System.out.format("%4.2f %4.2f \n", t, y[0]);
+    }
+    
 }
