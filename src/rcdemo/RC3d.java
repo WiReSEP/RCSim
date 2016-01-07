@@ -19,8 +19,6 @@ package rcdemo;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import java.awt.Container;
-import java.awt.Dimension;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
@@ -39,11 +37,10 @@ import javax.vecmath.Vector3f;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.ode.nonstiff.HighamHall54Integrator;
-import rcdemo.graphics.Camera;
-import rcdemo.graphics.CoachCamera;
-import rcdemo.graphics.StillCamera;
+import rcdemo.graphics.camera.Camera;
+import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.graphics.TrackHelper;
-import rcdemo.graphics.TrackingCamera;
+import rcdemo.graphics.WorldCreator;
 import rcdemo.math.StateIntegrator;
 import rcdemo.physics.CombinedForceModel;
 import rcdemo.physics.ConstantForceModel;
@@ -51,98 +48,7 @@ import rcdemo.physics.FrictionForceModel;
 import rcdemo.track.Track;
 import rcdemo.track.TrackODE;
 
-class CameraFactory {
 
-    enum CameraType {
-
-        TRACKING_FROM_ABOVE,
-        TRACKING_FROM_CENTER,
-        TRACKING_FROM_BELOW,
-        STILL_FROM_ABOVE,
-        STILL_FROM_STRAIGHT_ABOVE,
-        STILL_FROM_GROUND,
-        INSIDE_COACH,
-        LEFT_OF_COACH,
-        RIGHT_OF_COACH,
-        BEHIND_COACH,
-    }
-
-    static Camera buildCamera(CameraType type) {
-        switch (type) {
-            case INSIDE_COACH:
-                return new CoachCamera(CoachCamera.Position.INSIDE);
-            case LEFT_OF_COACH:
-                return new CoachCamera(CoachCamera.Position.LEFT);
-            case RIGHT_OF_COACH:
-                return new CoachCamera(CoachCamera.Position.RIGHT);
-            case BEHIND_COACH:
-                return new CoachCamera(CoachCamera.Position.BEHIND);
-
-            case TRACKING_FROM_ABOVE:
-                return new TrackingCamera(TrackingCamera.Position.MAX);
-            case TRACKING_FROM_BELOW:
-                return new TrackingCamera(TrackingCamera.Position.MIN);
-            case TRACKING_FROM_CENTER:
-                return new TrackingCamera(TrackingCamera.Position.MEAN);
-
-            case STILL_FROM_ABOVE:
-                return new StillCamera(StillCamera.Position.MAX);
-            case STILL_FROM_GROUND:
-                return new StillCamera(StillCamera.Position.MIN);
-            case STILL_FROM_STRAIGHT_ABOVE:
-                return new StillCamera(StillCamera.Position.MEAN);
-
-            default:
-                throw new RuntimeException("unknown camera type");
-        }
-    }
-}
-
-class WorldCreator extends TrackHelper {
-
-    TransformGroup createTrack(SimulationState state) {
-        TransformGroup group = new TransformGroup();
-        group.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-
-        for (double s = 0; s < state.track.length(); s += 0.01) {
-            Sphere sphere = new Sphere(0.5f);
-            Vector3d vector = trackToWorld(state.track.getx(s));
-            group.addChild(transform(sphere, vector));
-        }
-        return group;
-    }
-
-    static TransformGroup createCar(SimulationState state) {
-        Transform3D transform = new Transform3D();
-        Node node = new ColorCube(0.7);
-        Vector3d vector = trackToWorld(state.track.getx(0));
-        return transform(node, vector, true);
-    }
-
-    static TransformGroup createGround(SimulationState state) {
-        Transform3D transform = new Transform3D();
-        Node node = new com.sun.j3d.utils.geometry.Box(1000, 1000, 0.00001f, null);
-        RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
-        Vector3d vector = trackToWorld(v);
-        return transform(node, vector, true);
-    }
-
-    static Node createLight() {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
-        Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
-        Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light
-        Vector3d light1Direction = new Vector3d(4.0, -7.0, -12.0);
-        DirectionalLight light = new DirectionalLight(light1Color, new Vector3f(light1Direction));
-        light.setInfluencingBounds(bounds);
-
-        AmbientLight ambLight = new AmbientLight(lightColorGreen);
-        ambLight.setInfluencingBounds(bounds);
-        TransformGroup group = new TransformGroup();
-        group.addChild(light);
-        group.addChild(ambLight);
-        return group;
-    }
-}
 
 /**
  *
@@ -157,10 +63,11 @@ public class RC3d {
     }
 
     static void animateCarSimple(SimulationState state, TransformGroup car) {
+        Track track = state.getTrack();
         // Start animating the car
-        for (double s = 0; s < 10 * state.track.length(); s += 0.1) {
+        for (double s = 0; s < 10 * track.length(); s += 0.1) {
             System.out.println(s);
-            Vector3d vector = TrackHelper.getPosition(state.track, s);
+            Vector3d vector = TrackHelper.getPosition(track, s);
             Transform3D transform = new Transform3D();
             transform.setTranslation(vector);
             car.setTransform(transform);
@@ -175,6 +82,7 @@ public class RC3d {
     }
 
     static void animateCar(SimulationState state, TransformGroup car) {
+        Track track = state.getTrack();
         Camera camTransform;
         camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_ABOVE);
         camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_CENTER);
@@ -187,20 +95,20 @@ public class RC3d {
         camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.INSIDE_COACH);
         camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.LEFT_OF_COACH);
         camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.RIGHT_OF_COACH);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.BEHIND_COACH);
+        //camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.BEHIND_COACH);
 
-        camTransform.init(state.track);
+        camTransform.init(track);
 
         // Start animating the car
         TrackODE ode2 = new TrackODE(
-                state.track,
+                track,
                 new CombinedForceModel()
                 .add(ConstantForceModel.createGravityForceModel(1, 9.81), 100)
                 .add(new FrictionForceModel(), 0 * 0.01));
         //new ZeroForceModel());
 
-        double v0 = state.v0;
-        double dxds = state.track.getDxDs(0).getNorm();
+        double v0 = state.getV0();
+        double dxds = track.getDxDs(0).getNorm();
         double dsdt0 = v0 / dxds;
 
         ArrayRealVector y = new ArrayRealVector(new double[]{0, dsdt0});
@@ -221,20 +129,20 @@ public class RC3d {
             stateInt.integrateTo(tSim + dtSim);
 
             double s = y.getEntry(0);
-            Vector3d startPos = TrackHelper.getPosition(state.track, 0);
-            Vector3d currentPos = TrackHelper.getPosition(state.track, s);
+            Vector3d startPos = TrackHelper.getPosition(track, 0);
+            Vector3d currentPos = TrackHelper.getPosition(track, s);
             Transform3D transform = new Transform3D();
             transform.setTranslation(currentPos);
 
             Matrix3d rot = new Matrix3d();
-            Vector3d rhs[] = TrackHelper.getRHS(state.track, s);
+            Vector3d rhs[] = TrackHelper.getRHS(track, s);
             rot.setColumn(0, rhs[0]);
             rot.setColumn(1, rhs[2]);
             rot.setColumn(2, rhs[1]);
             transform.setRotation(rot);
             car.setTransform(transform);
 
-            transform = camTransform.getTransform(state.track, s, dsdt0);
+            transform = camTransform.getTransform(track, s, dsdt0);
             transform.invert();
             camera.setTransform(transform);
         }
@@ -255,18 +163,10 @@ public class RC3d {
         //String filename = "tracks/colossos.rct";
         String filename = "tracks/bigloop.rct";
         SimulationState state = SimulationState.readFromXML(filename);
-        state.v0 *= 10;
+        state.setV0(10 * state.getV0());
 
         // Setup the branch group
         TransformGroup world = new TransformGroup();
-        Transform3D transform = new Transform3D();
-//        Matrix3f rotMat = new Matrix3f(
-//                -1,0,0,
-//                0,0,1,
-//                0,1,0);
-//        rotMat.transpose();
-//        transform.set(rotMat);
-        //world.setTransform(transform);
         WorldCreator creator = new WorldCreator();
 
         TransformGroup track = creator.createTrack(state);

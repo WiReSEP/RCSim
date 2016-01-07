@@ -28,13 +28,37 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-class SimulationState {
-    String name;
-    String author;
-    String comments;
-    double v0;
-    Track track;
+public class SimulationState {
+    private String name;
+    private String author;
+    private String comments;
+    private double v0;
 
+    private Track track;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public double getV0() {
+        return v0;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
     public static SimulationState readFromXML(String filename) {
         SimulationState sim = new SimulationState();
         Element rootElement = XMLHelper.loadAndGetDocRoot(filename);

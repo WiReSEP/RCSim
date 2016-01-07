@@ -66,7 +66,7 @@ public class Rcdemo {
         String filename = "tracks/colossos.rct";
         SimulationState state = SimulationState.readFromXML(filename);
         TrackODE ode2 = new TrackODE(
-                state.track,
+                state.getTrack(),
                 new CombinedForceModel()
                         .add(ConstantForceModel.createGravityForceModel(1, 9.81), 1)
                 .add(new FrictionForceModel(), 0.01));
@@ -100,6 +100,7 @@ public class Rcdemo {
         //test2();
         //test3();
         RC3d.run();
+        //RCGui.main(new String []{});
     }
 
 

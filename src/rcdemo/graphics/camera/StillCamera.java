@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics;
+package rcdemo.graphics.camera;
 
+import rcdemo.graphics.camera.Camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
+import rcdemo.graphics.TrackHelper;
 import rcdemo.track.Track;
 
 /**
