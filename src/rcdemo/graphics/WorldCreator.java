@@ -40,7 +40,7 @@ import rcdemo.track.Track;
  */
 public class WorldCreator extends TrackHelper {
 
-    public static TransformGroup createTrack(SimulationState state) {
+    public TransformGroup createTrack(SimulationState state) {
         Track track = state.getTrack();
         TransformGroup group = new TransformGroup();
         group.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -52,7 +52,7 @@ public class WorldCreator extends TrackHelper {
         return group;
     }
 
-    public static TransformGroup createCar(SimulationState state) {
+    public TransformGroup createCar(SimulationState state) {
         Track track = state.getTrack();
         Transform3D transform = new Transform3D();
         Node node = new ColorCube(0.7);
@@ -60,7 +60,7 @@ public class WorldCreator extends TrackHelper {
         return transform(node, vector, true);
     }
 
-    public static TransformGroup createGround(SimulationState state) {
+    public TransformGroup createGround(SimulationState state) {
         Transform3D transform = new Transform3D();
         Node node = new Box(1000, 1000, 0.00001f, null);
         RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
@@ -68,7 +68,7 @@ public class WorldCreator extends TrackHelper {
         return transform(node, vector, true);
     }
 
-    public static TransformGroup createLight() {
+    public TransformGroup createLight() {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
         Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
         Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light
@@ -82,5 +82,4 @@ public class WorldCreator extends TrackHelper {
         group.addChild(ambLight);
         return group;
     }
-    
 }

@@ -7,32 +7,22 @@ import java.awt.GraphicsConfiguration;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import javax.media.j3d.Canvas3D;
 import javax.swing.JFileChooser;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import rcdemo.graphics.Java3dObserver;
+import rcdemo.graphics.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.SimulationState;
 import rcdemo.simulator.Simulator;
 import rcdemo.simulator.TextBasedObserver;
+import rcdemo.simulator.TimeStepper;
+import rcdemo.ui.KeyProcessor;
+import rcdemo.ui.KeyEventFunction;
 
-/*
- * Copyright (C) 2016 ezander
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 /**
  *
  * @author ezander
@@ -40,7 +30,7 @@ import rcdemo.simulator.TextBasedObserver;
 public class RCGui extends javax.swing.JFrame {
 
     String lastPath;
-    Java3dObserver java3dObserver;
+    Java3dObserverSimple java3dObserver;
     Simulator sim;
     Timer timer;
 
@@ -51,66 +41,35 @@ public class RCGui extends javax.swing.JFrame {
         initComponents();
         lastPath = System.getProperty("user.dir");
 
-        java3dObserver = new Java3dObserver();
 
         //setLayout(new BorderLayout());
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas = new Canvas3D(config);
-        //SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6)
         canvas.setDoubleBufferEnable(true);
-        java3dObserver.setCanvas(canvas);
-        canvas.setSize(160 * 6, 90 * 6);
-        canvas.setPreferredSize(new Dimension(100, 100));
-
-        //jPanel1.add("Center", canvas);
         getContentPane().add(canvas, BorderLayout.CENTER);
-        setSize(160 * 6, 90 * 6);
         canvas.requestFocus();
+        setSize(160 * 6, 90 * 6);
 
+        java3dObserver = new Java3dObserverSimple();
+        java3dObserver.setCanvas(canvas);
+        
         sim = new ODESimulator();
         sim.addObserver(java3dObserver);
         //sim.addObserver(new TextBasedObserver());
 
-        canvas.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyChar()) {
-                    case ' ':
-                        sim.getStepper().setPaused(true);
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyChar()) {
-                    case '+':
-                        sim.getStepper().accelerate(1.4142);
-                        System.out.println("+ " + sim.getStepper().getSimSpeed());
-                        break;
-                    case '-':
-                        sim.getStepper().decelerate(1.4142);
-                        System.out.println("- " + sim.getStepper().getSimSpeed());
-                        break;
-                    case 'p':
-                        sim.getStepper().pause();
-                        break;
-                    case 'c':
-                        sim.getStepper().resume();
-                        break;
-                    case ' ':
-                        //sim.getStepper().setPaused(!sim.getStepper().isPaused());
-                        sim.getStepper().setPaused(false);
-                        break;
-                        default:
-                            System.out.println("key:" + e.getKeyChar());
-                }
-            }
-        });
+        TimeStepper stepper = sim.getStepper();
+        canvas.addKeyListener(
+                new KeyProcessor()
+                .add(KeyEvent.VK_SHIFT, e -> sim.getStepper().pause(), e -> sim.getStepper().resume())
+                .add('+', e -> sim.getStepper().accelerate(1.4142))
+                .add('-', e -> sim.getStepper().decelerate(1.4142))
+                .add('p', e -> sim.getStepper().pause())
+                .add('c', e -> sim.getStepper().resume())
+                .add('q', e -> System.exit(0))
+                .add(KeyEvent.VK_LEFT, null, e -> java3dObserver.prevCam())
+                .add(KeyEvent.VK_RIGHT, null, e -> java3dObserver.nextCam())
+                //.add('')
+        );
     }
 
     /**

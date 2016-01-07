@@ -17,7 +17,7 @@
 package rcdemo;
 
 import rcdemo.simulator.SimulationState;
-import rcdemo.graphics.Java3dObserver;
+import rcdemo.graphics.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.Simulator;
 import rcdemo.simulator.TextBasedObserver;
@@ -36,7 +36,7 @@ public class RC3d {
         SimulationState state = SimulationState.readFromXML(filename);
         
         Simulator sim = new ODESimulator();
-        sim.addObserver( new Java3dObserver());
+        sim.addObserver(new Java3dObserverSimple());
         sim.addObserver( new TextBasedObserver());
         sim.setState(state);
         sim.run();

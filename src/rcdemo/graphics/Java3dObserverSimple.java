@@ -19,36 +19,27 @@ package rcdemo.graphics;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
-import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.swing.SwingUtilities;
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Vector3d;
 import rcdemo.graphics.camera.Camera;
 import rcdemo.graphics.camera.CameraFactory;
-import rcdemo.simulator.Observer;
 import rcdemo.simulator.SimulationState;
-import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class Java3dObserver implements Observer {
+public class Java3dObserverSimple extends Java3dObserverBase {
 
     SimpleUniverse universe;
     Canvas3D canvas;
-    BranchGroup branchGroup;
-    TransformGroup world;
     TransformGroup camera;
-    TransformGroup car;
 
+    int camNum = 0;
     Camera camTransform;
 
-    SimulationState state;
-    Track track;
 
     public Camera getCamTransform() {
         return camTransform;
@@ -62,7 +53,27 @@ public class Java3dObserver implements Observer {
     public Canvas3D getCanvas() {
         return canvas;
     }
+    
+    public int getCamNum() {
+        return camNum;
+    }
 
+    public void setCamNum(int camNumNew) {
+        int n = camList.size();
+        camNum = ((camNumNew % n) + n) % n;
+        if( track!= null ){
+            camTransform = CameraFactory.buildCamera( camList.get(camNum) );
+            camTransform.init(track);
+        }
+    }
+    
+    public void nextCam() {
+        setCamNum(getCamNum()+1);
+    }
+    public void prevCam() {
+        setCamNum(getCamNum()-1);
+    }
+    
     @Override
     public void init(SimulationState state) {
         this.state = state;
@@ -81,19 +92,8 @@ public class Java3dObserver implements Observer {
             SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
         }
 
-        // Setup the branch group
-        world = new TransformGroup();
-        WorldCreator creator = new WorldCreator();
-        TransformGroup trackGroup = creator.createTrack(state);
-        world.addChild(trackGroup);
-        car = creator.createCar(state);
-        world.addChild(car);
-        TransformGroup ground = creator.createGround(state);
-        world.addChild(ground);
-        Node light = creator.createLight();
-        world.addChild(light);
+        world = createWorld(state);
         
-        universe.getViewingPlatform().setNominalViewingTransform();
         camera = universe.getViewingPlatform().getViewPlatformTransform();
 
         //
@@ -102,38 +102,19 @@ public class Java3dObserver implements Observer {
         universe.addBranchGraph(branchGroup);
         View view = canvas.getView();
         view.setBackClipDistance(1000);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_ABOVE);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_CENTER);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_BELOW);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.STILL_FROM_ABOVE);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.STILL_FROM_GROUND);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.STILL_FROM_STRAIGHT_ABOVE);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.INSIDE_COACH);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.LEFT_OF_COACH);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.RIGHT_OF_COACH);
-        camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.BEHIND_COACH);
-        //camTransform = CameraFactory.buildCamera(CameraFactory.CameraType.TRACKING_FROM_ABOVE);
-        camTransform.init(track);
+        
+        setCamNum(camNum);
     }
 
-    @Override
     public void notify(double t, double[] y) {
-        assert track != null;
+        super.notify(t, y);
+        
         double s = y[0];
         double dsdt = y[1];
-        Vector3d currentPos = TrackHelper.getPosition(track, s);
-        Transform3D transform = new Transform3D();
-        transform.setTranslation(currentPos);
-        Matrix3d rot = new Matrix3d();
-        Vector3d[] rhs = TrackHelper.getRHS(track, s);
-        rot.setColumn(0, rhs[0]);
-        rot.setColumn(1, rhs[2]);
-        rot.setColumn(2, rhs[1]);
-        transform.setRotation(rot);
-        car.setTransform(transform);
-        transform = camTransform.getTransform(track, s, dsdt);
+        Transform3D transform = camTransform.getTransform(track, s, dsdt);
         transform.invert();
         camera.setTransform(transform);
     }
+
 
 }
