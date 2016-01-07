@@ -13,6 +13,8 @@ import javax.media.j3d.Canvas3D;
 import javax.swing.JFileChooser;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import rcdemo.graphics.Java3dObserverBase;
+import rcdemo.graphics.Java3dObserverMulti;
 import rcdemo.graphics.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.SimulationState;
@@ -22,7 +24,6 @@ import rcdemo.simulator.TimeStepper;
 import rcdemo.ui.KeyProcessor;
 import rcdemo.ui.KeyEventFunction;
 
-
 /**
  *
  * @author ezander
@@ -30,7 +31,7 @@ import rcdemo.ui.KeyEventFunction;
 public class RCGui extends javax.swing.JFrame {
 
     String lastPath;
-    Java3dObserverSimple java3dObserver;
+    Java3dObserverBase java3dObserver;
     Simulator sim;
     Timer timer;
 
@@ -40,8 +41,55 @@ public class RCGui extends javax.swing.JFrame {
     public RCGui() {
         initComponents();
         lastPath = System.getProperty("user.dir");
+        initSimple();
+        //initMulti();
+    }
 
+    void initMulti() {
+        //setLayout(new BorderLayout());
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        Canvas3D canvas1 = new Canvas3D(config);
+        canvas1.setDoubleBufferEnable(true);
+        //getContentPane().add(canvas1, BorderLayout.CENTER);
+        getContentPane().add(canvas1);
+        canvas1.requestFocus();
 
+        Canvas3D canvas2 = new Canvas3D(config);
+        canvas2.setDoubleBufferEnable(true);
+        //getContentPane().add(canvas2, BorderLayout.SOUTH);
+        getContentPane().add(canvas2);
+        canvas2.requestFocus();
+        
+        setSize(160 * 6, 90 * 6);
+        
+        Java3dObserverMulti observer = new Java3dObserverMulti();
+        java3dObserver = observer;
+        Java3dObserverMulti.MyView view1 = observer.addView(canvas1);
+        Java3dObserverMulti.MyView view2 = observer.addView(canvas2);
+        view1.setCamNum(-1);
+
+        sim = new ODESimulator();
+        sim.addObserver(observer);
+        //sim.addObserver(new TextBasedObserver());
+
+        TimeStepper stepper = sim.getStepper();
+        canvas2.addKeyListener(
+                new KeyProcessor()
+                .add(KeyEvent.VK_SHIFT, e -> sim.getStepper().pause(), e -> sim.getStepper().resume())
+                .add('+', e -> sim.getStepper().accelerate(1.4142))
+                .add('-', e -> sim.getStepper().decelerate(1.4142))
+                .add('p', e -> sim.getStepper().pause())
+                .add('c', e -> sim.getStepper().resume())
+                .add('q', e -> System.exit(0))
+                .add(KeyEvent.VK_LEFT, null, e -> view1.prevCam())
+                .add(KeyEvent.VK_RIGHT, null, e -> view1.nextCam())
+                .add(KeyEvent.VK_UP, null, e -> view2.prevCam())
+                .add(KeyEvent.VK_DOWN, null, e -> view2.nextCam())
+        //.add('')
+        );
+    }
+    
+    void initSimple() {
         //setLayout(new BorderLayout());
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas = new Canvas3D(config);
@@ -50,12 +98,12 @@ public class RCGui extends javax.swing.JFrame {
         canvas.requestFocus();
         setSize(160 * 6, 90 * 6);
 
-        java3dObserver = new Java3dObserverSimple();
-        java3dObserver.setCanvas(canvas);
-        
+        Java3dObserverSimple observer = new Java3dObserverSimple();
+        java3dObserver = observer;
+        observer.setCanvas(canvas);
+
         sim = new ODESimulator();
-        sim.addObserver(java3dObserver);
-        //sim.addObserver(new TextBasedObserver());
+        sim.addObserver(observer);
 
         TimeStepper stepper = sim.getStepper();
         canvas.addKeyListener(
@@ -66,9 +114,9 @@ public class RCGui extends javax.swing.JFrame {
                 .add('p', e -> sim.getStepper().pause())
                 .add('c', e -> sim.getStepper().resume())
                 .add('q', e -> System.exit(0))
-                .add(KeyEvent.VK_LEFT, null, e -> java3dObserver.prevCam())
-                .add(KeyEvent.VK_RIGHT, null, e -> java3dObserver.nextCam())
-                //.add('')
+                .add(KeyEvent.VK_LEFT, null, e -> observer.prevCam())
+                .add(KeyEvent.VK_RIGHT, null, e -> observer.nextCam())
+        //.add('')
         );
     }
 
@@ -97,6 +145,7 @@ public class RCGui extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");

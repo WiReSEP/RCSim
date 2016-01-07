@@ -61,6 +61,7 @@ public class WorldCreator extends TrackHelper {
     }
 
     public TransformGroup createGround(SimulationState state) {
+        // see here: http://www.javaworld.com/article/2076745/learn-java/3d-graphic-java--render-fractal-landscapes.html
         Transform3D transform = new Transform3D();
         Node node = new Box(1000, 1000, 0.00001f, null);
         RealVector v = new ArrayRealVector(new double[]{0, 0, -40});

@@ -107,6 +107,7 @@ public class Java3dObserverSimple extends Java3dObserverBase {
     }
 
     public void notify(double t, double[] y) {
+        canvas.stopRenderer();
         super.notify(t, y);
         
         double s = y[0];
@@ -114,6 +115,7 @@ public class Java3dObserverSimple extends Java3dObserverBase {
         Transform3D transform = camTransform.getTransform(track, s, dsdt);
         transform.invert();
         camera.setTransform(transform);
+        canvas.startRenderer();
     }
 
 

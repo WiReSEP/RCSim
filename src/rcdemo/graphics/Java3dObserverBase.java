@@ -19,7 +19,6 @@ package rcdemo.graphics;
 import java.util.ArrayList;
 import java.util.List;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
