@@ -19,7 +19,6 @@ package rcdemo.graphics;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.commons.math3.linear.RealVector;
 import rcdemo.track.Track;
@@ -46,25 +45,13 @@ public class TrackHelper {
         return tg;
     }
 
-    public static Vector3d trackToWorld(RealVector v) {
-        //return trackToWorld2(v.mapSubtract(200));
-        return trackToWorld2(v);
-    }
-
-    public static Vector3d trackToWorld2(RealVector v) {
-        //double alpha = 0.003;
-        //double x[] = v.mapMultiply(alpha).toArray();
+    public static Vector3d toVector3d(RealVector v) {
         double[] x = v.toArray();
-        return toVector3d(x);
-    }
-
-    public static Vector3d toVector3d(double[] x) {
-        //return new Vector3d(x[0], x[2], x[1]);
-        return new Vector3d(x[0], x[1], x[2]);
+        return new Vector3d(x);
     }
 
     public static Vector3d[] getRHS(Track track, double s) {
-        Vector3d[] rhs = {trackToWorld2(track.getDxDs(s)), new Vector3d(), trackToWorld2(track.getYaw(s))};
+        Vector3d[] rhs = {toVector3d(track.getDxDs(s)), new Vector3d(), toVector3d(track.getYaw(s))};
         rhs[1].cross(rhs[0], rhs[2]);
         rhs[2].cross(rhs[1], rhs[0]);
         //right.scale(-1);
@@ -74,16 +61,48 @@ public class TrackHelper {
         return rhs;
     }
 
-    public static Vector3d getPosition(Track track, double s) {
-        return trackToWorld2(track.getx(s));
+    public static Vector3d addScaled(Vector3d v1, Vector3d v2, double alpha2) {
+        Vector3d res = new Vector3d(v2);
+        res.scaleAdd(alpha2, v1);
+        return res;
+    }
+
+    public static Vector3d addScaled(Vector3d v1, double alpha1, Vector3d v2, double alpha2) {
+        Vector3d c1 = new Vector3d(v1);
+        c1.scale(alpha1);
+        return addScaled(c1, v2, alpha2);
     }
     
+    public static Vector3d getShiftedPos(Vector3d pos, Vector3d rhs[], double f, double r, double z) {
+        Vector3d res = pos;
+        if( f!=0 ) res = addScaled(res, rhs[0], f);
+        if( r!=0 ) res = addScaled(res, rhs[1], -r);
+        if( z!=0 ) res = addScaled(res, rhs[2], z);
+        return res;
+    }
+    
+    public static Vector3d getRailPos(Track track, double s, double dist) {
+        Vector3d pos = getPosition(track, s);
+        Vector3d rhs[] = getRHS(track, s);
+
+        Vector3d left = rhs[1];
+        left.scale(-dist);
+
+        pos.add(left);
+        //return pos;
+        return addScaled(pos, left, -dist);
+    }
+
+    public static Vector3d getPosition(Track track, double s) {
+        return toVector3d(track.getx(s));
+    }
+
     public static double[] getDoubles(Vector3d v) {
-        double d[]=new double[3];
+        double d[] = new double[3];
         v.get(d);
         return d;
     }
-    
+
     public static Vector3d[] getStatistics(Track track) {
         double big = 100000, small = -big;
         double[] min = {big, big, big};
@@ -94,20 +113,20 @@ public class TrackHelper {
         double ds = 0.01;
         double n = track.length();
         double inv_n = ds / n;
-        
+
         for (double s = 0; s <= n; s += ds) {
             double[] pos = getDoubles(getPosition(track, s));
-            for( int i=0; i<3; i++){
+            for (int i = 0; i < 3; i++) {
                 min[i] = Math.min(min[i], pos[i]);
                 max[i] = Math.max(max[i], pos[i]);
                 mean[i] = mean[i] + pos[i] * inv_n;
                 dim[i] = max[i] - min[i];
             }
         }
-        return new Vector3d[]{ 
-            new Vector3d(min), 
-            new Vector3d(max), 
-            new Vector3d(mean), 
+        return new Vector3d[]{
+            new Vector3d(min),
+            new Vector3d(max),
+            new Vector3d(mean),
             new Vector3d(dim)};
     }
 

@@ -102,6 +102,7 @@ public class Java3dObserverSimple extends Java3dObserverBase {
         universe.addBranchGraph(branchGroup);
         View view = canvas.getView();
         view.setBackClipDistance(1000);
+        view.setSceneAntialiasingEnable(true);
         
         setCamNum(camNum);
     }

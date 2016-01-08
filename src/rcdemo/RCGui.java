@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import javax.media.j3d.Canvas3D;
+import javax.media.j3d.GraphicsConfigTemplate3D;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -47,12 +48,25 @@ public class RCGui extends javax.swing.JFrame {
         initMulti();
     }
 
+    
+    
     void initMulti() {
         //setLayout(new BorderLayout());
         Dimension minimumSize = new Dimension(10, 10);
         
-        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        //GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        //config.set
+        
+        
+        GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
+        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
+                getDefaultScreenDevice().
+                //getDefaultConfiguration();
+                getBestConfiguration(gct3D);
+        
         Canvas3D canvas1 = new Canvas3D(config);
+        //canvas1.se
         canvas1.setDoubleBufferEnable(true);
         //getContentPane().add(canvas1, BorderLayout.CENTER);
         //getContentPane().add(canvas1);

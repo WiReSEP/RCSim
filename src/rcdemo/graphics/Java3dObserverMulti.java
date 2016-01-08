@@ -16,7 +16,6 @@
  */
 package rcdemo.graphics;
 
-import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.util.ArrayList;
 import java.util.List;
 import javax.media.j3d.BranchGroup;
@@ -29,7 +28,6 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.media.j3d.ViewPlatform;
 import javax.media.j3d.VirtualUniverse;
-import javax.swing.SwingUtilities;
 import rcdemo.graphics.camera.Camera;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.SimulationState;
@@ -109,6 +107,8 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         xview.setPhysicalEnvironment(new PhysicalEnvironment());
         xview.attachViewPlatform(viewPlatform);
         xview.setBackClipDistance(1000);
+        xview.setSceneAntialiasingEnable(true);
+        //assert canvas.getSceneAntialiasingAvailable();
         
 //        camera = universe.getViewingPlatform().getViewPlatformTransform();
 //
