@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.media.j3d.Canvas3D;
 import javax.swing.JFileChooser;
+import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import rcdemo.graphics.Java3dObserverBase;
@@ -39,28 +40,38 @@ public class RCGui extends javax.swing.JFrame {
      * Creates new form RCGui
      */
     public RCGui() {
+        JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         initComponents();
         lastPath = System.getProperty("user.dir");
-        initSimple();
-        //initMulti();
+        //initSimple();
+        initMulti();
     }
 
     void initMulti() {
         //setLayout(new BorderLayout());
+        Dimension minimumSize = new Dimension(10, 10);
+        
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas1 = new Canvas3D(config);
         canvas1.setDoubleBufferEnable(true);
         //getContentPane().add(canvas1, BorderLayout.CENTER);
-        getContentPane().add(canvas1);
+        //getContentPane().add(canvas1);
+        canvas1.setMinimumSize(minimumSize);
+        jSplitPane1.setLeftComponent(canvas1);
         canvas1.requestFocus();
 
         Canvas3D canvas2 = new Canvas3D(config);
         canvas2.setDoubleBufferEnable(true);
         //getContentPane().add(canvas2, BorderLayout.SOUTH);
-        getContentPane().add(canvas2);
+        //getContentPane().add(canvas2);
+        canvas2.setMinimumSize(minimumSize);
+        jSplitPane1.setRightComponent(canvas2);
         canvas2.requestFocus();
         
         setSize(160 * 6, 90 * 6);
+        jSplitPane1.setDividerLocation(0.5);
+        jSplitPane1.setOneTouchExpandable(true);
+        
         
         Java3dObserverMulti observer = new Java3dObserverMulti();
         java3dObserver = observer;
@@ -87,6 +98,7 @@ public class RCGui extends javax.swing.JFrame {
                 .add(KeyEvent.VK_DOWN, null, e -> view2.nextCam())
         //.add('')
         );
+        
     }
     
     void initSimple() {
@@ -129,6 +141,7 @@ public class RCGui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSplitPane1 = new javax.swing.JSplitPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -146,6 +159,10 @@ public class RCGui extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setResizeWeight(0.5);
+        getContentPane().add(jSplitPane1);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -235,6 +252,7 @@ public class RCGui extends javax.swing.JFrame {
         // Create a simple scene and attach it to the virtual universe
         String filename = selected.getAbsolutePath();
         SimulationState state = SimulationState.readFromXML(filename);
+        jSplitPane1.setDividerLocation(0.5);
 
         sim.setState(state);
         sim.init();
@@ -303,6 +321,7 @@ public class RCGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;

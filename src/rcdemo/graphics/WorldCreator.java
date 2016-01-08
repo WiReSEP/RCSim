@@ -45,8 +45,20 @@ public class WorldCreator extends TrackHelper {
         TransformGroup group = new TransformGroup();
         group.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         for (double s = 0; s < track.length(); s += 0.01) {
-            Sphere sphere = new Sphere(0.5f);
-            Vector3d vector = trackToWorld(track.getx(s));
+            Sphere sphere;
+            Vector3d vector = getPosition(track, s);
+            Vector3d rhs[] = getRHS(track, s);
+            
+            Vector3d left = rhs[1];
+            left.scale(0.4);
+            
+            sphere = new Sphere(0.5f/3);
+            vector.add(left);
+            group.addChild(transform(sphere, vector));
+            
+            sphere = new Sphere(0.5f/3);
+            vector.sub(left);
+            vector.sub(left);
             group.addChild(transform(sphere, vector));
         }
         return group;
@@ -54,8 +66,15 @@ public class WorldCreator extends TrackHelper {
 
     public TransformGroup createCar(SimulationState state) {
         Track track = state.getTrack();
+        
         Transform3D transform = new Transform3D();
         Node node = new ColorCube(0.7);
+        transform.setScale(new Vector3d(2, 0.6, 1));
+        TransformGroup tg = new TransformGroup();
+        tg.setTransform(transform);
+        tg.addChild(node);
+        node = tg;
+        
         Vector3d vector = trackToWorld(track.getx(0));
         return transform(node, vector, true);
     }

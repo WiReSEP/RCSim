@@ -35,8 +35,11 @@ public class RC3d {
         //String filename = "tracks/bigloop.rct";
         SimulationState state = SimulationState.readFromXML(filename);
         
+        Java3dObserverSimple observer3d = new Java3dObserverSimple();
+        observer3d.setCamNum(-1);
+        
         Simulator sim = new ODESimulator();
-        sim.addObserver(new Java3dObserverSimple());
+        sim.addObserver(observer3d);
         sim.addObserver( new TextBasedObserver());
         sim.setState(state);
         sim.run();
