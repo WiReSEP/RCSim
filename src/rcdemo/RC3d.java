@@ -21,6 +21,8 @@ import rcdemo.graphics.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.Simulator;
 import rcdemo.simulator.TextBasedObserver;
+import rcdemo.ui.DefaultKeyListener;
+import rcdemo.ui.KeyProcessor;
 
 
 /**
@@ -42,6 +44,9 @@ public class RC3d {
         sim.addObserver(observer3d);
         sim.addObserver( new TextBasedObserver());
         sim.setState(state);
+
+        observer3d.init(sim.getState());
+        observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d));
         sim.run();
     }
 

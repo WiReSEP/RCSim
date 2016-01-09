@@ -62,8 +62,11 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         int n = camList.size();
         camNum = ((camNumNew % n) + n) % n;
         if( track!= null ){
-            camTransform = CameraFactory.buildCamera( camList.get(camNum) );
-            camTransform.init(track);
+            // Note: this MUST be done in two steps, otherwise a screen update 
+            // could occur in between before the camera is initialised
+            Camera camTransformNew = CameraFactory.buildCamera( camList.get(camNum) );
+            camTransformNew.init(track);
+            camTransform = camTransformNew;
         }
     }
     

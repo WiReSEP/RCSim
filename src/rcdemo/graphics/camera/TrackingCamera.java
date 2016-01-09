@@ -52,6 +52,8 @@ public class TrackingCamera implements Camera {
             case MEAN:
                 eye = new Point3d(stats[2]);
                 break;
+            default:
+                assert false;
         }
     }
     
