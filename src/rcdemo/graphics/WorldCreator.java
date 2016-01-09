@@ -182,6 +182,8 @@ public class WorldCreator extends TrackHelper {
         Node node = new Box(1000, 1000, 0.00001f, null);
         RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
         Vector3d vector = toVector3d(v);
+        CheckeredPlane p = new CheckeredPlane();
+        node = p;
         return transform(node, vector, true);
     }
 

@@ -32,6 +32,7 @@ import rcdemo.graphics.camera.Camera;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.SimulationState;
 
+
 /**
  *
  * @author ezander
@@ -41,7 +42,7 @@ public class Java3dObserverMulti extends Java3dObserverBase {
     VirtualUniverse universe;
     List<MyView> views = new ArrayList<>();
     
-    public class MyView {
+    public class MyView implements ViewController {
 
         Canvas3D canvas;
         TransformGroup camera;

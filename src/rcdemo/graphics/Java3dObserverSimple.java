@@ -31,7 +31,7 @@ import rcdemo.simulator.SimulationState;
  *
  * @author ezander
  */
-public class Java3dObserverSimple extends Java3dObserverBase {
+public class Java3dObserverSimple extends Java3dObserverBase implements ViewController {
 
     SimpleUniverse universe;
     Canvas3D canvas;

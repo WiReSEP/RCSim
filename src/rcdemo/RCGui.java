@@ -23,13 +23,11 @@ import rcdemo.simulator.SimulationState;
 import rcdemo.simulator.Simulator;
 import rcdemo.simulator.TextBasedObserver;
 import rcdemo.simulator.TimeStepper;
+import rcdemo.ui.DefaultKeyListener;
 import rcdemo.ui.KeyProcessor;
 import rcdemo.ui.KeyEventFunction;
 
-/**
- *
- * @author ezander
- */
+
 public class RCGui extends javax.swing.JFrame {
 
     String lastPath;
@@ -59,7 +57,7 @@ public class RCGui extends javax.swing.JFrame {
         
         
         GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
-        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
         GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
@@ -84,6 +82,7 @@ public class RCGui extends javax.swing.JFrame {
         
         setSize(160 * 6, 90 * 6);
         jSplitPane1.setDividerLocation(0.5);
+        jSplitPane1.setResizeWeight(0.5);
         jSplitPane1.setOneTouchExpandable(true);
         
         
@@ -96,23 +95,8 @@ public class RCGui extends javax.swing.JFrame {
         sim = new ODESimulator();
         sim.addObserver(observer);
         //sim.addObserver(new TextBasedObserver());
-
-        TimeStepper stepper = sim.getStepper();
-        canvas2.addKeyListener(
-                new KeyProcessor()
-                .add(KeyEvent.VK_SHIFT, e -> sim.getStepper().pause(), e -> sim.getStepper().resume())
-                .add('+', e -> sim.getStepper().accelerate(1.4142))
-                .add('-', e -> sim.getStepper().decelerate(1.4142))
-                .add('p', e -> sim.getStepper().pause())
-                .add('c', e -> sim.getStepper().resume())
-                .add('q', e -> System.exit(0))
-                .add(KeyEvent.VK_LEFT, null, e -> view1.prevCam())
-                .add(KeyEvent.VK_RIGHT, null, e -> view1.nextCam())
-                .add(KeyEvent.VK_UP, null, e -> view2.prevCam())
-                .add(KeyEvent.VK_DOWN, null, e -> view2.nextCam())
-        //.add('')
-        );
-        
+        canvas1.addKeyListener( DefaultKeyListener.getDefaultKeyListener(sim, view1) );
+        canvas2.addKeyListener( DefaultKeyListener.getDefaultKeyListener(sim, view2) );
     }
     
     void initSimple() {
