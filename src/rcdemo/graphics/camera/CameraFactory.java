@@ -21,17 +21,20 @@ import rcdemo.graphics.camera.Camera;
 /**
  *
  * @author ezander
- */
-public class CameraFactory {
+ */public class CameraFactory {
 
     public enum CameraType {
         TRACKING_FROM_ABOVE, TRACKING_FROM_CENTER, TRACKING_FROM_BELOW, 
         STILL_FROM_ABOVE, STILL_FROM_STRAIGHT_ABOVE, STILL_FROM_GROUND, 
-        INSIDE_COACH, LEFT_OF_COACH, RIGHT_OF_COACH, BEHIND_COACH
+        INSIDE_COACH, LEFT_OF_COACH, RIGHT_OF_COACH, BEHIND_COACH,
+        MOVING1
     }
 
     public static Camera buildCamera(CameraFactory.CameraType type) {
+        System.out.println(type);
         switch (type) {
+            case MOVING1:
+                return new TrackingCamera(TrackingCamera.Position.MOVING);
             case INSIDE_COACH:
                 return new CoachCamera(CoachCamera.Position.INSIDE);
             case LEFT_OF_COACH:

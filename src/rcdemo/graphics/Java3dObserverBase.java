@@ -50,7 +50,7 @@ public abstract class Java3dObserverBase implements Observer {
         car = creator.createCar(state1);
         worldNode.addChild(car);
         TransformGroup ground = creator.createGround(state1);
-        worldNode.addChild(ground);
+        //worldNode.addChild(ground);
         Node light = creator.createLight();
         worldNode.addChild(light);
         return worldNode;
@@ -85,6 +85,7 @@ public abstract class Java3dObserverBase implements Observer {
         camList.add(CameraFactory.CameraType.LEFT_OF_COACH);
         camList.add(CameraFactory.CameraType.RIGHT_OF_COACH);
         camList.add(CameraFactory.CameraType.BEHIND_COACH);
+        camList.add(CameraFactory.CameraType.MOVING1);
     }
 
 }

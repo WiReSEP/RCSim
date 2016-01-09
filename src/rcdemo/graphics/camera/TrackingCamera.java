@@ -29,7 +29,7 @@ import rcdemo.track.Track;
  */
 public class TrackingCamera implements Camera {
     public enum Position {
-        MIN, MAX, MEAN
+        MIN, MAX, MEAN, MOVING
     }
     Point3d eye;
     Position pos;
@@ -52,6 +52,9 @@ public class TrackingCamera implements Camera {
             case MEAN:
                 eye = new Point3d(stats[2]);
                 break;
+            case MOVING:
+                eye = new Point3d(stats[2]);
+                break;
             default:
                 assert false;
         }
@@ -62,6 +65,17 @@ public class TrackingCamera implements Camera {
         Transform3D transform = new Transform3D();
         Vector3d currentPos = TrackHelper.getPosition(track, s);
         Point3d target = new Point3d(currentPos);
+        if (pos == Position.MOVING){
+            Point3d pos = new Point3d(currentPos);
+            double l = eye.distance(pos);
+            double mdist = 100.0d;
+            if (l>mdist) {
+                eye = pos;
+                Vector3d[] rhs = TrackHelper.getRHS(track, s);
+                eye = new Point3d(TrackHelper.addScaled(new Vector3d(pos), rhs[0], Math.signum(dsdt)*mdist*0.95f));
+                eye = new Point3d(TrackHelper.addScaled(new Vector3d(eye), rhs[2], 10));
+            }
+        }
         Vector3d z = new Vector3d(0, 0, 1);
         transform.lookAt(eye, target, z);
         return transform;

@@ -27,16 +27,22 @@ import rcdemo.simulator.Simulator;
 public class DefaultKeyListener {
 
     public static KeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc) {
-        return new KeyProcessor()
-                .add(KeyEvent.VK_SHIFT, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume())
-                .add(KeyEvent.VK_SPACE, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume())
-                .add('+', (KeyEvent e) -> sim.getStepper().accelerate(1.4142))
-                .add('-', (KeyEvent e) -> sim.getStepper().decelerate(1.4142))
-                .add('p', (KeyEvent e) -> sim.getStepper().pause())
-                .add('c', (KeyEvent e) -> sim.getStepper().resume())
-                //.add('q', (KeyEvent e) -> System.exit(0))
-                .add(KeyEvent.VK_LEFT, null, (KeyEvent e) -> vc.prevCam())
-                .add(KeyEvent.VK_RIGHT, null, (KeyEvent e) -> vc.nextCam());
+        return getDefaultKeyListener(sim, vc, false);
     }
     
+    public static KeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc, boolean withQuit) {
+        KeyProcessor kp = new KeyProcessor();
+        kp.add(KeyEvent.VK_SHIFT, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume());
+        kp.add(KeyEvent.VK_SPACE, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume());
+        kp.add('+', (KeyEvent e) -> sim.getStepper().accelerate(1.4142));
+        kp.add('-', (KeyEvent e) -> sim.getStepper().decelerate(1.4142));
+        kp.add('p', (KeyEvent e) -> sim.getStepper().pause());
+        kp.add('c', (KeyEvent e) -> sim.getStepper().resume());
+        kp.add(KeyEvent.VK_LEFT, null, (KeyEvent e) -> vc.prevCam());
+        kp.add(KeyEvent.VK_RIGHT, null, (KeyEvent e) -> vc.nextCam());
+        if (withQuit)
+            kp.add('q', (KeyEvent e) -> System.exit(0));
+        return kp;
+    }
+
 }

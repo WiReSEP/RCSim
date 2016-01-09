@@ -42,11 +42,11 @@ public class RC3d {
         
         Simulator sim = new ODESimulator();
         sim.addObserver(observer3d);
-        sim.addObserver( new TextBasedObserver());
+        //sim.addObserver( new TextBasedObserver());
         sim.setState(state);
 
         observer3d.init(sim.getState());
-        observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d));
+        observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
         sim.run();
     }
 

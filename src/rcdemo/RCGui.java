@@ -57,28 +57,24 @@ public class RCGui extends javax.swing.JFrame {
         
         
         GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
-        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
         GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
                 getBestConfiguration(gct3D);
         
         Canvas3D canvas1 = new Canvas3D(config);
-        //canvas1.se
         canvas1.setDoubleBufferEnable(true);
-        //getContentPane().add(canvas1, BorderLayout.CENTER);
-        //getContentPane().add(canvas1);
         canvas1.setMinimumSize(minimumSize);
-        jSplitPane1.setLeftComponent(canvas1);
-        canvas1.requestFocus();
 
         Canvas3D canvas2 = new Canvas3D(config);
         canvas2.setDoubleBufferEnable(true);
-        //getContentPane().add(canvas2, BorderLayout.SOUTH);
-        //getContentPane().add(canvas2);
         canvas2.setMinimumSize(minimumSize);
-        jSplitPane1.setRightComponent(canvas2);
+        
+        jSplitPane1.setLeftComponent(canvas2);
+        jSplitPane1.setRightComponent(canvas1);
         canvas2.requestFocus();
+
         
         setSize(160 * 6, 90 * 6);
         jSplitPane1.setDividerLocation(0.5);
@@ -114,20 +110,6 @@ public class RCGui extends javax.swing.JFrame {
 
         sim = new ODESimulator();
         sim.addObserver(observer);
-
-        TimeStepper stepper = sim.getStepper();
-        canvas.addKeyListener(
-                new KeyProcessor()
-                .add(KeyEvent.VK_SHIFT, e -> sim.getStepper().pause(), e -> sim.getStepper().resume())
-                .add('+', e -> sim.getStepper().accelerate(1.4142))
-                .add('-', e -> sim.getStepper().decelerate(1.4142))
-                .add('p', e -> sim.getStepper().pause())
-                .add('c', e -> sim.getStepper().resume())
-                .add('q', e -> System.exit(0))
-                .add(KeyEvent.VK_LEFT, null, e -> observer.prevCam())
-                .add(KeyEvent.VK_RIGHT, null, e -> observer.nextCam())
-        //.add('')
-        );
     }
 
     /**
