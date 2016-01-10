@@ -50,6 +50,12 @@ public class ODESimulator extends Simulator {
         return stateInt.getY().toArray();
     }
     
+    public void reverse() {
+        ArrayRealVector y = stateInt.getY();
+        y.setEntry(1, -y.getEntry(1));
+        stateInt.setY(y);
+    }
+    
 }
 //class SimpleSimulator extends Simulator {
 //        for (double s = 0; s < 10 * track.length(); s += 0.1) {

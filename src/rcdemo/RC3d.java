@@ -33,8 +33,9 @@ public class RC3d {
 
     public static void run() {
         // Load simulation stuff
-        String filename = "tracks/colossos.rct";
+        //String filename = "tracks/colossos.rct";
         //String filename = "tracks/bigloop.rct";
+        String filename = "tracks/foo.rct";
         SimulationState state = SimulationState.readFromXML(filename);
         
         Java3dObserverSimple observer3d = new Java3dObserverSimple();

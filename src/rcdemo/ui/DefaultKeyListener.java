@@ -18,6 +18,7 @@ package rcdemo.ui;
 
 import java.awt.event.KeyEvent;
 import rcdemo.graphics.ViewController;
+import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.Simulator;
 
 /**
@@ -40,6 +41,7 @@ public class DefaultKeyListener {
         kp.add('c', (KeyEvent e) -> sim.getStepper().resume());
         kp.add(KeyEvent.VK_LEFT, null, (KeyEvent e) -> vc.prevCam());
         kp.add(KeyEvent.VK_RIGHT, null, (KeyEvent e) -> vc.nextCam());
+        kp.add('r', (e) -> ((ODESimulator)sim).reverse());
         if (withQuit)
             kp.add('q', (KeyEvent e) -> System.exit(0));
         return kp;

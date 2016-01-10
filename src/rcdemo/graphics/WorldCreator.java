@@ -16,14 +16,20 @@
  */
 package rcdemo.graphics;
 
+import com.jogamp.graph.geom.Vertex;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
 import javax.media.j3d.AmbientLight;
+import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.GeometryArray;
+import javax.media.j3d.Material;
 import javax.media.j3d.Node;
+import javax.media.j3d.QuadArray;
+import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
@@ -107,6 +113,64 @@ public class WorldCreator extends TrackHelper {
         tg.addChild(cylinder);
         return tg;
     }
+
+    TransformGroup makeCylinder2(Vector3d pos0, Vector3d[] rhs0, Vector3d pos1, Vector3d[] rhs1, 
+            double radius, double dist, double zdist) {
+        
+        int N=20;
+        QuadArray quads = new QuadArray(N*4, 
+                GeometryArray.COORDINATES | 
+                        GeometryArray.COLOR_3 | 
+                        GeometryArray.NORMALS);
+        int ind=0;
+        Color3f c = new Color3f(1.0f, 1.0f, 1.0f);
+        Vector3d orig = new Vector3d();
+        for(int i=0; i<N; i++){
+            double alpha0 = i * 2 * Math.PI / N;
+            double alpha1 = (i+1) * 2 * Math.PI / N;
+            double sn0 = Math.sin(alpha0);
+            double cn0 = Math.cos(alpha0);
+            double sn1 = Math.sin(alpha1);
+            double cn1 = Math.cos(alpha1);
+            double s0 = zdist+radius * Math.sin(alpha0);
+            double c0 = dist+radius * Math.cos(alpha0);
+            double s1 = zdist+radius * Math.sin(alpha1);
+            double c1 = dist+radius * Math.cos(alpha1);
+            quads.setColor(ind, c);
+            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos0, rhs0, 0, c0, s0)));
+            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs0, 0, cn0, sn0)));
+            ind++;
+            quads.setColor(ind, c);
+            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos0, rhs0, 0, c1, s1)));
+            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs0, 0, cn1, sn1)));
+            ind++;
+            quads.setColor(ind, c);
+            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos1, rhs1, 0, c1, s1)));
+            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs1, 0, cn1, sn1)));
+            ind++;
+            quads.setColor(ind, c);
+            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos1, rhs1, 0, c0, s0)));
+            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs1, 0, cn0, sn0)));
+            ind++;
+
+        }
+        TransformGroup tg = new TransformGroup();
+        Shape3D shape = new Shape3D(quads);
+        tg.addChild(shape);
+        Appearance appearance = new Appearance();
+        Material material = new Material();
+        material.setLightingEnable(true);
+        //material.setEmissiveColor(new Color3f(0.6f, 0.6f, 0));
+        material.setAmbientColor(new Color3f(1.3f, 0.0f, 1));
+        material.setDiffuseColor(new Color3f(3.0f, 0.0f, 0));
+        //material.setSpecularColor(new Color3f(10.6f, 10.6f, 10));
+        //material.setShininess(3);
+        //material.
+        
+        appearance.setMaterial(material);
+        shape.setAppearance(appearance);
+        return tg;
+    }
     
     //public Node makeCylinder
     public Node getRailCylinders(Track track, double s0, double s1){
@@ -118,10 +182,10 @@ public class WorldCreator extends TrackHelper {
         Vector3d rhs0[] = getRHS(track, s0);
         Vector3d rhs1[] = getRHS(track, s1);
 
-        TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
+        TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
         group.addChild(tg);
         
-        tg = makeCylinder(pos0, rhs0, pos1, rhs1, rail_radius, -rail_dist, 0);
+        tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, -rail_dist, 0);
         group.addChild(tg);
 
         return group;
@@ -136,7 +200,8 @@ public class WorldCreator extends TrackHelper {
         Vector3d rhs0[] = getRHS(track, s0);
         Vector3d rhs1[] = getRHS(track, s1);
 
-        TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
+        //TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
+        TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
         group.addChild(tg);
 
         return group;
@@ -146,15 +211,18 @@ public class WorldCreator extends TrackHelper {
         Track track = state.getTrack();
         TransformGroup group = new TransformGroup();
         double ds = 0.01; //0.01;
-        double dds = ds / 10;
         for (double s = 0; s < track.length(); s += ds) {
             Node node;
             //node = getRailBalls(track, s, s + ds);
-            node = getRailCylinders(track, s - dds, s + ds + dds);
+            node = getRailCylinders(track, s, s + ds);
             group.addChild(node);
+        }
             
-            //node = getCenterCylinders(track, s - dds, s + ds + dds);
-            node = getCenterBalls(track, s - dds, s + ds + dds);
+        ds = 0.01; //0.01;
+        for (double s = 0; s < track.length(); s += ds) {
+            Node node;
+            //node = getCenterCylinders(track, s, s + ds);
+            node = getCenterBalls(track, s, s + ds);
             group.addChild(node);
         }
         return group;
@@ -182,9 +250,22 @@ public class WorldCreator extends TrackHelper {
         Node node = new Box(1000, 1000, 0.00001f, null);
         RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
         Vector3d vector = toVector3d(v);
-        CheckeredPlane p = new CheckeredPlane();
-        node = p;
-        return transform(node, vector, true);
+        CheckeredPlane plane = new CheckeredPlane();
+        node = plane;
+        TransformGroup t = transform(node, vector, true);
+        t = new TransformGroup();
+        //Vector3d[] stats = TrackHelper.getStatistics(state.track);
+        for (int i = 0; i < 6000; i++) {
+            double x[] = new double[3];
+            x[0] = Math.random()*2000.0;
+            x[1] = Math.random()*2000.0;
+            x[2] = Math.random()*1000.0-500;
+            Vector3d p = new Vector3d(x);
+            Node s = new Sphere(3);
+            t.addChild(transform(s, p));
+        }
+        
+        return t;
     }
 
     public TransformGroup createLight() {
