@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics;
+package rcdemo.graphics.java3d;
 
 import com.jogamp.graph.geom.Vertex;
 import com.sun.j3d.utils.geometry.Box;

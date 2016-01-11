@@ -14,14 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics;
+package rcdemo.graphics.javaFX;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Node;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
+import javafx.scene.Group;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 import rcdemo.graphics.camera.CameraFactory;
@@ -33,26 +30,25 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public abstract class Java3dObserverBase implements Observer {
+public abstract class JavaFXObserverBase implements Observer {
 
-    BranchGroup branchGroup;
-    TransformGroup world;
-    TransformGroup car;
+    Group world;
+    Group car;
     SimulationState state;
     Track track;
 
-    TransformGroup createWorld(SimulationState state1) {
+    Group createWorld(SimulationState state1) {
         // Setup the branch group
-        TransformGroup worldNode = new TransformGroup();
+        Group worldNode = new Group();
         WorldCreator creator = new WorldCreator();
-        TransformGroup trackGroup = creator.createTrack(state1);
-        worldNode.addChild(trackGroup);
-        car = creator.createCar(state1);
-        worldNode.addChild(car);
-        TransformGroup ground = creator.createGround(state1);
-        worldNode.addChild(ground);
-        Node light = creator.createLight();
-        worldNode.addChild(light);
+        Group trackGroup = creator.createTrack(state1);
+        worldNode.getChildren().add(trackGroup);
+        //car = creator.createCar(state1);
+        //worldNode.getChildren().add(car);
+        //Group ground = creator.createGround(state1);
+        //worldNode.getChildren().add(ground);
+        //Node light = creator.createLight();
+        //worldNode.getChildren().add(light);
         return worldNode;
     }
 
@@ -60,16 +56,16 @@ public abstract class Java3dObserverBase implements Observer {
         assert track != null;
         double s = y[0];
         double dsdt = y[1];
-        Vector3d currentPos = TrackHelper.getPosition(track, s);
-        Transform3D transform = new Transform3D();
-        transform.setTranslation(currentPos);
-        Matrix3d rot = new Matrix3d();
-        Vector3d[] rhs = TrackHelper.getRHS(track, s);
-        rot.setColumn(0, rhs[0]);
-        rot.setColumn(1, rhs[2]);
-        rot.setColumn(2, rhs[1]);
-        transform.setRotation(rot);
-        car.setTransform(transform);
+//        Vector3d currentPos = TrackHelper.getPosition(track, s);
+//        Transform3D transform = new Transform3D();
+//        transform.setTranslation(currentPos);
+//        Matrix3d rot = new Matrix3d();
+//        Vector3d[] rhs = TrackHelper.getRHS(track, s);
+//        rot.setColumn(0, rhs[0]);
+//        rot.setColumn(1, rhs[2]);
+//        rot.setColumn(2, rhs[1]);
+//        transform.setRotation(rot);
+//        car.setTransform(transform);
     }
 
     static final List<CameraFactory.CameraType> camList = new ArrayList<>();

@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics;
+package rcdemo.graphics.java3d;
 
+import rcdemo.graphics.ViewController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.media.j3d.BranchGroup;

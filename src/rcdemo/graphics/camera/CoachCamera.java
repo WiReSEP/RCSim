@@ -20,7 +20,7 @@ import rcdemo.graphics.camera.Camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-import rcdemo.graphics.TrackHelper;
+import rcdemo.graphics.java3d.TrackHelper;
 import rcdemo.track.Track;
 
 /**

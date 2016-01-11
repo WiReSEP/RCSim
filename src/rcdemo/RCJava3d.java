@@ -17,19 +17,17 @@
 package rcdemo;
 
 import rcdemo.simulator.SimulationState;
-import rcdemo.graphics.Java3dObserverSimple;
+import rcdemo.graphics.java3d.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.Simulator;
-import rcdemo.simulator.TextBasedObserver;
 import rcdemo.ui.DefaultKeyListener;
-import rcdemo.ui.KeyProcessor;
 
 
 /**
  *
  * @author ezander
  */
-public class RC3d {
+public class RCJava3d {
 
     public static void run() {
         // Load simulation stuff
@@ -49,6 +47,10 @@ public class RC3d {
         observer3d.init(sim.getState());
         observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
         sim.run();
+    }
+    
+    public static void main(String[] args) {
+        run();
     }
 
 }

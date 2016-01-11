@@ -1,4 +1,4 @@
-package rcdemo.graphics;
+package rcdemo.graphics.javaFX;
 
 import javax.media.j3d.QuadArray;
 import javax.media.j3d.Shape3D;

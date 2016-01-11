@@ -4,31 +4,23 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.GraphicsConfigTemplate3D;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import rcdemo.graphics.Java3dObserverBase;
-import rcdemo.graphics.Java3dObserverMulti;
-import rcdemo.graphics.Java3dObserverSimple;
+import rcdemo.graphics.java3d.Java3dObserverBase;
+import rcdemo.graphics.java3d.Java3dObserverMulti;
+import rcdemo.graphics.java3d.Java3dObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.SimulationState;
 import rcdemo.simulator.Simulator;
-import rcdemo.simulator.TextBasedObserver;
-import rcdemo.simulator.TimeStepper;
 import rcdemo.ui.DefaultKeyListener;
-import rcdemo.ui.KeyProcessor;
-import rcdemo.ui.KeyEventFunction;
 
 
-public class RCGui extends javax.swing.JFrame {
+public class RCSwing extends javax.swing.JFrame {
 
     String lastPath;
     Java3dObserverBase java3dObserver;
@@ -38,7 +30,7 @@ public class RCGui extends javax.swing.JFrame {
     /**
      * Creates new form RCGui
      */
-    public RCGui() {
+    public RCSwing() {
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         initComponents();
         lastPath = System.getProperty("user.dir");
@@ -273,20 +265,21 @@ public class RCGui extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RCGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RCSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RCGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RCSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RCGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RCSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RCGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RCSwing.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RCGui().setVisible(true);
+                new RCSwing().setVisible(true);
             }
         });
     }
