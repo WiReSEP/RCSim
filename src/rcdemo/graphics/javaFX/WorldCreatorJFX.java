@@ -23,9 +23,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Vector3d;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import rcdemo.graphics.RHS;
+import rcdemo.graphics.SceneCreator;
+import rcdemo.graphics.TrackHelper;
+import rcdemo.graphics.WorldCreator;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
 
@@ -33,34 +38,38 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreatorJFX extends TrackHelperJFX {
+public class WorldCreatorJFX 
+extends WorldCreator<Point3D, Node, Group> {
+
+    public WorldCreatorJFX() {
+        super(new TrackHelperJFX(), new SceneCreatorJFX());
+    }
+    
+    
 
     
-//    public connectWithCylinder(Track track, double s0, double s1) {
-//        
-//    }
     static final float rail_radius = 0.5f / 3;
     static final float center_radius = 0.5f / 10;
     static final float rail_dist = 0.4f;
     static final float center_dist = 0.15f;
     
-    public Node getRailBalls(Track track, double s0, double s1){
-        double s = 0.5 * (s0 + s1);
-        Group group = new Group();
-        Sphere sphere;
-        Point3D pos = getPosition(track, s);
-        RHS<Point3D> rhs = getRHS(track, s);
-        Point3D vector;
-
-        sphere = new Sphere(rail_radius, 10);
-        vector = getShiftedPos(pos, rhs, 0, rail_dist, 0);
-        group.getChildren().add(transform(sphere, vector));
-
-        sphere = new Sphere(rail_radius, 10);
-        vector = getShiftedPos(pos, rhs, 0, -rail_dist, 0);
-        group.getChildren().add(transform(sphere, vector));
-        return group;
-    }
+//    public Node getRailBalls(Track track, double s0, double s1){
+//        double s = 0.5 * (s0 + s1);
+//        Group group = new Group();
+//        Sphere sphere;
+//        Point3D pos = getPosition(track, s);
+//        RHS<Point3D> rhs = getRHS(track, s);
+//        Point3D vector;
+//
+//        sphere = new Sphere(rail_radius, 10);
+//        vector = getShiftedPos(pos, rhs, 0, rail_dist, 0);
+//        group.getChildren().add(transform(sphere, vector));
+//
+//        sphere = new Sphere(rail_radius, 10);
+//        vector = getShiftedPos(pos, rhs, 0, -rail_dist, 0);
+//        group.getChildren().add(transform(sphere, vector));
+//        return group;
+//    }
     
 //    public Node getCenterBalls(Track track, double s0, double s1){
 //        double s = 0.5 * (s0 + s1);
@@ -199,8 +208,8 @@ public class WorldCreatorJFX extends TrackHelperJFX {
         Group group = new Group();
         double ds = 0.01; //0.01;
         for (double s = 0; s < track.length(); s += ds) {
-            Node node;
-            node = getRailBalls(track, s, s + ds);
+            Node node=null;
+            //node = getRailBalls(track, s, s + ds);
             //node = getRailCylinders(track, s, s + ds);
             group.getChildren().add(node);
             
@@ -257,14 +266,14 @@ public class WorldCreatorJFX extends TrackHelperJFX {
             x[0] = Math.random()*2000.0;
             x[1] = Math.random()*2000.0;
             x[2] = Math.random()*1000.0-500;
-            Point3D p = super.va.fromDouble(x);
-            Sphere s = new Sphere(3, 20);
-            s.setMaterial(new PhongMaterial(Color.CRIMSON));
-            t.getChildren().add(transform(s, p));
+//            Point3D p = super.va.fromDouble(x);
+//            Sphere s = new Sphere(3, 20);
+//            s.setMaterial(new PhongMaterial(Color.CRIMSON));
+//            t.getChildren().add(transform(s, p));
         }
-        
         return t;
     }
+    
 //
 //    public TransformGroup createLight() {
 //        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);

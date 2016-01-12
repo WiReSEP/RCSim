@@ -51,10 +51,16 @@ public abstract class Java3dObserverBase implements Observer {
         worldNode.addChild(trackGroup);
         car = creator.createCar(state1);
         worldNode.addChild(car);
+        
+        
         TransformGroup ground = creator.createGround(state1);
         worldNode.addChild(ground);
         Node light = creator.createLight();
         worldNode.addChild(light);
+        
+        //Node n = car;
+        //creator.foo;
+        
         return worldNode;
     }
 

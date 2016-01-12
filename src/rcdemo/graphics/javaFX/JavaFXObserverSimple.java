@@ -16,14 +16,12 @@
  */
 package rcdemo.graphics.javaFX;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import rcdemo.graphics.ViewController;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -32,7 +30,6 @@ import rcdemo.graphics.camera.CameraTransform;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.graphics.camera.CameraView;
 import rcdemo.simulator.SimulationState;
-import rcdemo.ui.DefaultKeyListener;
 
 /**
  *

@@ -16,7 +16,7 @@
  */
 package rcdemo.graphics.java3d;
 
-import com.sun.j3d.utils.geometry.Box;
+import rcdemo.graphics.WorldCreator;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
 import com.sun.j3d.utils.geometry.Sphere;
@@ -36,8 +36,6 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
 import rcdemo.graphics.RHS;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
@@ -46,7 +44,14 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreatorJ3d extends TrackHelperJ3d {
+public class WorldCreatorJ3d 
+extends WorldCreator<Vector3d, Node, TransformGroup> {
+
+    public WorldCreatorJ3d() {
+        super(new TrackHelperJ3d(), new SceneCreatorJ3d());
+    }
+    
+    
 
     
 //    public connectWithCylinder(Track track, double s0, double s1) {
@@ -61,17 +66,17 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
         Sphere sphere;
-        Vector3d pos = getPosition(track, s);
-        RHS<Vector3d> rhs= getRHS(track, s);
+        Vector3d pos = helper.getPosition(track, s);
+        RHS<Vector3d> rhs= helper.getRHS(track, s);
         Vector3d vector;
 
         sphere = new Sphere(rail_radius);
-        vector = getShiftedPos(pos, rhs, 0, rail_dist, 0);
-        group.addChild(transform(sphere, vector));
+        vector = helper.getShiftedPos(pos, rhs, 0, rail_dist, 0);
+        group.addChild(sc.translate(sphere, vector));
 
         sphere = new Sphere(rail_radius);
-        vector = getShiftedPos(pos, rhs, 0, -rail_dist, 0);
-        group.addChild(transform(sphere, vector));
+        vector = helper.getShiftedPos(pos, rhs, 0, -rail_dist, 0);
+        group.addChild(sc.translate(sphere, vector));
         return group;
     }
     
@@ -79,13 +84,13 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
         Sphere sphere;
-        Vector3d pos = getPosition(track, s);
-        RHS<Vector3d> rhs = getRHS(track, s);
+        Vector3d pos = helper.getPosition(track, s);
+        RHS<Vector3d> rhs = helper.getRHS(track, s);
         Vector3d vector;
 
         sphere = new Sphere(center_radius);
-        vector = getShiftedPos(pos, rhs, 0, 0, -center_dist);
-        group.addChild(transform(sphere, vector));
+        vector = helper.getShiftedPos(pos, rhs, 0, 0, -center_dist);
+        group.addChild(sc.translate(sphere, vector));
         
         return group;
     }
@@ -97,11 +102,11 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
             double radius, double dist, double zdist) {
         Cylinder cylinder;
         Vector3d v0, v1;
-        v0 = getShiftedPos(pos0, rhs0, 0, dist, zdist);
-        v1 = getShiftedPos(pos1, rhs1, 0, dist, zdist);
+        v0 = helper.getShiftedPos(pos0, rhs0, 0, dist, zdist);
+        v1 = helper.getShiftedPos(pos1, rhs1, 0, dist, zdist);
         double l = new Point3d(v0).distance(new Point3d(v1));
-        Vector3d m = addScaled(v0,  0.5, v1, 0.5);
-        Vector3d d = addScaled(v0, -1.0, v1, 1.0);
+        Vector3d m = helper.addScaled(v0,  0.5, v1, 0.5);
+        Vector3d d = helper.addScaled(v0, -1.0, v1, 1.0);
         cylinder = new Cylinder((float)(radius), 1.0f);
         Transform3D trans = new Transform3D();
         trans.setTranslation(m);
@@ -141,20 +146,20 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
             double s1 = zdist+radius * Math.sin(alpha1);
             double c1 = dist+radius * Math.cos(alpha1);
             quads.setColor(ind, c);
-            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos0, rhs0, 0, c0, s0)));
-            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs0, 0, cn0, sn0)));
+            quads.setCoordinate(ind, new Point3d(helper.getShiftedPos(pos0, rhs0, 0, c0, s0)));
+            quads.setNormal(ind, new Vector3f(helper.getShiftedPos(orig, rhs0, 0, cn0, sn0)));
             ind++;
             quads.setColor(ind, c);
-            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos0, rhs0, 0, c1, s1)));
-            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs0, 0, cn1, sn1)));
+            quads.setCoordinate(ind, new Point3d(helper.getShiftedPos(pos0, rhs0, 0, c1, s1)));
+            quads.setNormal(ind, new Vector3f(helper.getShiftedPos(orig, rhs0, 0, cn1, sn1)));
             ind++;
             quads.setColor(ind, c);
-            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos1, rhs1, 0, c1, s1)));
-            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs1, 0, cn1, sn1)));
+            quads.setCoordinate(ind, new Point3d(helper.getShiftedPos(pos1, rhs1, 0, c1, s1)));
+            quads.setNormal(ind, new Vector3f(helper.getShiftedPos(orig, rhs1, 0, cn1, sn1)));
             ind++;
             quads.setColor(ind, c);
-            quads.setCoordinate(ind, new Point3d(getShiftedPos(pos1, rhs1, 0, c0, s0)));
-            quads.setNormal(ind, new Vector3f(getShiftedPos(orig, rhs1, 0, cn0, sn0)));
+            quads.setCoordinate(ind, new Point3d(helper.getShiftedPos(pos1, rhs1, 0, c0, s0)));
+            quads.setNormal(ind, new Vector3f(helper.getShiftedPos(orig, rhs1, 0, cn0, sn0)));
             ind++;
 
         }
@@ -181,10 +186,10 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
         Cylinder cylinder;
-        Vector3d pos0 = getPosition(track, s0);
-        Vector3d pos1 = getPosition(track, s1);
-        RHS<Vector3d> rhs0= getRHS(track, s0);
-        RHS<Vector3d> rhs1= getRHS(track, s1);
+        Vector3d pos0 = helper.getPosition(track, s0);
+        Vector3d pos1 = helper.getPosition(track, s1);
+        RHS<Vector3d> rhs0= helper.getRHS(track, s0);
+        RHS<Vector3d> rhs1= helper.getRHS(track, s1);
 
         TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
         group.addChild(tg);
@@ -198,10 +203,10 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
     public Node getCenterCylinders(Track track, double s0, double s1){
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
-        Vector3d pos0 = getPosition(track, s0);
-        Vector3d pos1 = getPosition(track, s1);
-        RHS<Vector3d> rhs0= getRHS(track, s0);
-        RHS<Vector3d> rhs1= getRHS(track, s1);
+        Vector3d pos0 = helper.getPosition(track, s0);
+        Vector3d pos1 = helper.getPosition(track, s1);
+        RHS<Vector3d> rhs0= helper.getRHS(track, s0);
+        RHS<Vector3d> rhs1= helper.getRHS(track, s1);
 
         //TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
         TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
@@ -231,58 +236,40 @@ public class WorldCreatorJ3d extends TrackHelperJ3d {
         return group;
     }
 
-    
+    public Node foo;
     public TransformGroup createCar(SimulationState state) {
         Track track = state.getTrack();
         
-        Transform3D transform = new Transform3D();
-        Node node = new ColorCube(0.7);
-        transform.setScale(new Vector3d(2, 0.6, 1));
-        transform.setTranslation(new Vector3d(0, 1, 0));
+        Node node = new ColorCube(-.7);
+        foo = node;
         
         TransformGroup tg = new TransformGroup();
-        tg.setTransform(transform);
-        //tg.addChild(node);
+        tg.addChild(node);
         tg.addChild(new Sphere(0.9f));
-        node = tg;
-        
-        Vector3d vector = getPosition(track, 0);
-        return transform(node, vector, true);
+
+        Transform3D transform = new Transform3D();
+        transform.setScale(new Vector3d(2, 0.6, 1));
+        transform.setTranslation(new Vector3d(0, 0.3, 0));
+        tg.setTransform(transform);
+
+        Vector3d vector = helper.getPosition(track, 0);
+        return sc.translate(tg, vector, true);
     }
 
-    public TransformGroup createGround(SimulationState state) {
-        // see here: http://www.javaworld.com/article/2076745/learn-java/3d-graphic-java--render-fractal-landscapes.html
-        Transform3D transform = new Transform3D();
-        Node node = new Box(1000, 1000, 0.00001f, null);
-        RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
-        Vector3d vector = toVector(v);
-        CheckeredPlane plane = new CheckeredPlane();
-        node = plane;
-        TransformGroup t = transform(node, vector, true);
-        t = new TransformGroup();
-        //Vector3d[] stats = TrackHelperJ3d.getStatistics(state.track);
-        for (int i = 0; i < 6000; i++) {
-            double x[] = new double[3];
-            x[0] = Math.random()*2000.0;
-            x[1] = Math.random()*2000.0;
-            x[2] = Math.random()*1000.0-500;
-            Vector3d p = new Vector3d(x);
-            Node s = new Sphere(3);
-            t.addChild(transform(s, p));
-        }
-        
-        return t;
-    }
+    
 
     public TransformGroup createLight() {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
-        Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
+        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 10000.0);
+        
         Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light
         Vector3d light1Direction = new Vector3d(4.0, -7.0, -12.0);
         DirectionalLight light = new DirectionalLight(light1Color, new Vector3f(light1Direction));
         light.setInfluencingBounds(bounds);
+        
+        Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
         AmbientLight ambLight = new AmbientLight(lightColorGreen);
         ambLight.setInfluencingBounds(bounds);
+        
         TransformGroup group = new TransformGroup();
         group.addChild(light);
         group.addChild(ambLight);
