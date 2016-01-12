@@ -18,7 +18,9 @@ package rcdemo.graphics.javaFX;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import rcdemo.graphics.RHS;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.Observer;
 import rcdemo.simulator.SimulationState;
@@ -35,19 +37,25 @@ public abstract class JavaFXObserverBase implements Observer {
     Group car;
     SimulationState state;
     Track track;
+    TrackHelperJFX helper = new TrackHelperJFX();
 
     Group createWorld(SimulationState state1) {
         // Setup the branch group
-        Group worldNode = new Group();
         WorldCreatorJFX creator = new WorldCreatorJFX();
+
+        Group worldNode = new Group();
+
         Group trackGroup = creator.createTrack(state1);
         worldNode.getChildren().add(trackGroup);
-        //car = creator.createCar(state1);
-        //worldNode.getChildren().add(car);
+        
+        car = creator.createCar(state1);
+        worldNode.getChildren().add(car);
+        
         Group ground = creator.createGround(state1);
         worldNode.getChildren().add(ground);
-        //Node light = creator.createLight();
-        //worldNode.getChildren().add(light);
+        
+        Group light = creator.createLight(state1);
+        worldNode.getChildren().add(light);
         return worldNode;
     }
 
@@ -55,16 +63,11 @@ public abstract class JavaFXObserverBase implements Observer {
         assert track != null;
         double s = y[0];
         double dsdt = y[1];
-//        Point3D currentPos = TrackHelper.getPosition(track, s);
-//        Transform3D transform = new Transform3D();
-//        transform.setTranslation(currentPos);
-//        Matrix3d rot = new Matrix3d();
-//        Point3D[] rhs = TrackHelper.getRHS(track, s);
-//        rot.setColumn(0, rhs[0]);
-//        rot.setColumn(1, rhs[2]);
-//        rot.setColumn(2, rhs[1]);
-//        transform.setRotation(rot);
-//        car.setTransform(transform);
+        Point3D currentPos = helper.getPosition(track, s);
+        RHS<Point3D> rhs = helper.getRHS(track, s);
+        
+        WorldCreatorJFX creator = new WorldCreatorJFX();
+        creator.setCarState(car, currentPos, rhs);
     }
 
     static final List<CameraFactory.CameraType> camList = new ArrayList<>();

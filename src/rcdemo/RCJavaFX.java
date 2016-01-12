@@ -37,7 +37,8 @@ public class RCJavaFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        String filename = "tracks/colossos.rct";
+        //String filename = "tracks/colossos.rct";
+        String filename = "tracks/foo.rct";
         SimulationState state = SimulationState.readFromXML(filename);
 
         JavaFXObserverSimple observer3d = new JavaFXObserverSimple(primaryStage);

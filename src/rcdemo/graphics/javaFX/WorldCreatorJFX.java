@@ -19,20 +19,7 @@ package rcdemo.graphics.javaFX;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Material;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Sphere;
-import javax.media.j3d.TransformGroup;
-import javax.vecmath.Vector3d;
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
-import rcdemo.graphics.RHS;
-import rcdemo.graphics.SceneCreator;
-import rcdemo.graphics.TrackHelper;
 import rcdemo.graphics.WorldCreator;
-import rcdemo.simulator.SimulationState;
-import rcdemo.track.Track;
 
 /**
  *
@@ -203,35 +190,6 @@ extends WorldCreator<Point3D, Node, Group> {
 //        return group;
 //    }
     
-    public Group createTrack(SimulationState state) {
-        Track track = state.getTrack();
-        Group group = new Group();
-        double ds = 0.01; //0.01;
-        for (double s = 0; s < track.length(); s += ds) {
-            Node node=null;
-            //node = getRailBalls(track, s, s + ds);
-            //node = getRailCylinders(track, s, s + ds);
-            group.getChildren().add(node);
-            
-
-            
-            //Point3D p = toPoint3D(track.getx(s));
-            //p.multiply(10);
-            //Node sphere = new Sphere(3.0);
-            //group.getChildren().add(transform(sphere, p));
-            //System.out.println(p);
-            
-        }
-            
-        ds = 0.01; //0.01;
-        for (double s = 0; s < track.length(); s += ds) {
-            Node node;
-            //node = getCenterCylinders(track, s, s + ds);
-            //node = getCenterBalls(track, s, s + ds);
-            //group.getChildren().add(node);
-        }
-        return group;
-    }
 
     
 //    public TransformGroup createCar(SimulationState state) {
@@ -248,31 +206,6 @@ extends WorldCreator<Point3D, Node, Group> {
 //        Point3D vector = toPoint3D(track.getx(0));
 //        return transform(node, vector, true);
 //    }
-
-    public Group createGround(SimulationState state) {
-        // see here: http://www.javaworld.com/article/2076745/learn-java/3d-graphic-java--render-fractal-landscapes.html
-//        Transform3D transform = new Transform3D();
-//        Node node = new Box(1000, 1000, 0.00001f, null);
-//        RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
-//        Point3D vector = toPoint3D(v);
-//        CheckeredPlane plane = new CheckeredPlane();
-//        node = plane;
-//        TransformGroup t = transform(node, vector, true);
-//        t = new TransformGroup();
-        Group t = new Group();
-        //Point3D[] stats = TrackHelperJFX.getStatistics(state.track);
-        for (int i = 0; i < 1000; i++) {
-            double x[] = new double[3];
-            x[0] = Math.random()*2000.0;
-            x[1] = Math.random()*2000.0;
-            x[2] = Math.random()*1000.0-500;
-//            Point3D p = super.va.fromDouble(x);
-//            Sphere s = new Sphere(3, 20);
-//            s.setMaterial(new PhongMaterial(Color.CRIMSON));
-//            t.getChildren().add(transform(s, p));
-        }
-        return t;
-    }
     
 //
 //    public TransformGroup createLight() {

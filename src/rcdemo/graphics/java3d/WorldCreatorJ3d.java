@@ -51,49 +51,6 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
         super(new TrackHelperJ3d(), new SceneCreatorJ3d());
     }
     
-    
-
-    
-//    public connectWithCylinder(Track track, double s0, double s1) {
-//        
-//    }
-    static final float rail_radius = 0.5f / 3;
-    static final float center_radius = 0.5f / 10;
-    static final float rail_dist = 0.4f;
-    static final float center_dist = 0.15f;
-    
-    public Node getRailBalls(Track track, double s0, double s1){
-        double s = 0.5 * (s0 + s1);
-        TransformGroup group = new TransformGroup();
-        Sphere sphere;
-        Vector3d pos = helper.getPosition(track, s);
-        RHS<Vector3d> rhs= helper.getRHS(track, s);
-        Vector3d vector;
-
-        sphere = new Sphere(rail_radius);
-        vector = helper.getShiftedPos(pos, rhs, 0, rail_dist, 0);
-        group.addChild(sc.translate(sphere, vector));
-
-        sphere = new Sphere(rail_radius);
-        vector = helper.getShiftedPos(pos, rhs, 0, -rail_dist, 0);
-        group.addChild(sc.translate(sphere, vector));
-        return group;
-    }
-    
-    public Node getCenterBalls(Track track, double s0, double s1){
-        double s = 0.5 * (s0 + s1);
-        TransformGroup group = new TransformGroup();
-        Sphere sphere;
-        Vector3d pos = helper.getPosition(track, s);
-        RHS<Vector3d> rhs = helper.getRHS(track, s);
-        Vector3d vector;
-
-        sphere = new Sphere(center_radius);
-        vector = helper.getShiftedPos(pos, rhs, 0, 0, -center_dist);
-        group.addChild(sc.translate(sphere, vector));
-        
-        return group;
-    }
 
 
     TransformGroup makeCylinder(
@@ -215,50 +172,10 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
         return group;
     }
     
-    public TransformGroup createTrack(SimulationState state) {
-        Track track = state.getTrack();
-        TransformGroup group = new TransformGroup();
-        double ds = 0.01; //0.01;
-        for (double s = 0; s < track.length(); s += ds) {
-            Node node;
-            node = getRailBalls(track, s, s + ds);
-            //node = getRailCylinders(track, s, s + ds);
-            group.addChild(node);
-        }
-            
-        ds = 0.01; //0.01;
-        for (double s = 0; s < track.length(); s += ds) {
-            Node node;
-            //node = getCenterCylinders(track, s, s + ds);
-            node = getCenterBalls(track, s, s + ds);
-            group.addChild(node);
-        }
-        return group;
-    }
-
-    public Node foo;
-    public TransformGroup createCar(SimulationState state) {
-        Track track = state.getTrack();
-        
-        Node node = new ColorCube(-.7);
-        foo = node;
-        
-        TransformGroup tg = new TransformGroup();
-        tg.addChild(node);
-        tg.addChild(new Sphere(0.9f));
-
-        Transform3D transform = new Transform3D();
-        transform.setScale(new Vector3d(2, 0.6, 1));
-        transform.setTranslation(new Vector3d(0, 0.3, 0));
-        tg.setTransform(transform);
-
-        Vector3d vector = helper.getPosition(track, 0);
-        return sc.translate(tg, vector, true);
-    }
 
     
 
-    public TransformGroup createLight() {
+    public TransformGroup createLight(SimulationState state) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 10000.0);
         
         Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light

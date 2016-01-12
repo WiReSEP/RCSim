@@ -16,11 +16,14 @@
  */
 package rcdemo.graphics.java3d;
 
+import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
+import rcdemo.graphics.RHS;
 import rcdemo.graphics.SceneCreator;
 
 /**
@@ -42,6 +45,25 @@ class SceneCreatorJ3d extends SceneCreator<Vector3d, Node, TransformGroup> {
         group.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         return group;
     }
+    
+    @Override
+    public TransformGroup translate(Node node, double d1, double d2, double d3) {
+        return translate(node, new Vector3d(d1, d2, d3));
+    }
+    
+    @Override
+    public TransformGroup scale(Node node, Vector3d vector) {
+        Transform3D transform = new Transform3D();
+        transform.setScale(vector);
+        TransformGroup group = add(new TransformGroup(transform), node);
+        return group;
+    }
+    
+    @Override
+    public TransformGroup scale(Node node, double d1, double d2, double d3) {
+        return scale(node, new Vector3d(d1, d2, d3));
+    }
+    
 
     @Override
     public TransformGroup add(TransformGroup group, Node node) {
@@ -72,6 +94,24 @@ class SceneCreatorJ3d extends SceneCreator<Vector3d, Node, TransformGroup> {
             System.out.println(trans);
             n=n.getParent();
         }
+    }
+
+
+    @Override
+    public Node createColorCube() {
+        return new ColorCube(-1);
+    }
+
+    @Override
+    public void setAffineTransform(TransformGroup group, Vector3d pos, RHS<Vector3d> rhs) {
+        Transform3D transform = new Transform3D();
+        transform.setTranslation(pos);
+        Matrix3d rot = new Matrix3d();
+        rot.setColumn(0, rhs.getForward());
+        rot.setColumn(1, rhs.getUp());
+        rot.setColumn(2, rhs.getLeft());
+        transform.setRotation(rot);
+        group.setTransform(transform);
     }
     
 }

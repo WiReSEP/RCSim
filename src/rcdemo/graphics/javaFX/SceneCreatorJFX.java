@@ -19,7 +19,12 @@ package rcdemo.graphics.javaFX;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
+import rcdemo.graphics.RHS;
 import rcdemo.graphics.SceneCreator;
 
 /**
@@ -27,20 +32,6 @@ import rcdemo.graphics.SceneCreator;
  * @author ezander
  */
 class SceneCreatorJFX extends SceneCreator<Point3D, Node, Group> {
-
-    @Override
-    public Group translate(Node node, Point3D vector) {
-        return translate(node, vector, false);
-    }
-
-    @Override
-    public Group translate(Node node, Point3D vector, boolean modifiable) {
-        Group group = new Group(node);
-        group.setTranslateX(vector.getX());
-        group.setTranslateY(vector.getY());
-        group.setTranslateZ(vector.getZ());
-        return group;
-    }
 
     @Override
     public Group add(Group group, Node node) {
@@ -55,6 +46,64 @@ class SceneCreatorJFX extends SceneCreator<Point3D, Node, Group> {
 
     @Override
     public Node createSphere(double d) {
-        return new Sphere((float) d);
+        return new Sphere((float) d, 32);
+    }
+
+    @Override
+    public Node createColorCube() {
+        return new Box();
+    }
+
+    @Override
+    public Group translate(Node node, Point3D vector, boolean modifiable) {
+        if (modifiable) {
+            Group group = newGroup();
+            add(group, node);
+            group.getTransforms().add(new Translate(vector.getX(), vector.getY(), vector.getZ()));
+            return group;
+        } else {
+            return translate(node, vector);
+        }
+    }
+
+    @Override
+    public Group translate(Node node, Point3D vector) {
+        return translate(node, vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    @Override
+    public Group translate(Node node, double d1, double d2, double d3) {
+        Group group = new Group(node);
+        group.setTranslateX(d1);
+        group.setTranslateY(d2);
+        group.setTranslateZ(d3);
+        return group;
+    }
+
+    @Override
+    public Group scale(Node node, double d1, double d2, double d3) {
+        Group group = new Group(node);
+        group.setScaleX(d1);
+        group.setScaleY(d2);
+        group.setScaleZ(d3);
+        return group;
+    }
+
+    @Override
+    public Group scale(Node node, Point3D vector) {
+        return scale(node, vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    @Override
+    public void setAffineTransform(Group group, Point3D pos, RHS<Point3D> rhs) {
+        Point3D xVec = rhs.getForward();
+        Point3D yVec = rhs.getUp();
+        Point3D zVec = rhs.getLeft();
+        Affine affine = new Affine(
+                xVec.getX(), yVec.getX(), zVec.getX(), pos.getX(),
+                xVec.getY(), yVec.getY(), zVec.getY(), pos.getY(),
+                xVec.getZ(), yVec.getZ(), zVec.getZ(), pos.getZ());
+        Transform t;
+        group.getTransforms().set(0, affine);
     }
 }

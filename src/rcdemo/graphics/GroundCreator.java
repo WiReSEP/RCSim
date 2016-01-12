@@ -14,10 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.creators;
+package rcdemo.graphics;
 
-import rcdemo.graphics.SceneCreator;
-import rcdemo.graphics.TrackHelper;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
 
@@ -38,11 +36,13 @@ public class GroundCreator<Vector, Node, Group extends Node> {
         Track track = state.getTrack();
         Group t = sc.newGroup();
         TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
-        for (int i = 0; i < 6000; i++) {
+        double mean[] = helper.va.toDouble(stats.mean);
+        double dim[] = helper.va.toDouble(stats.dim);
+        for (int i = 0; i < 300; i++) {
             double[] x = new double[3];
-            x[0] = Math.random() * 2000.0;
-            x[1] = Math.random() * 2000.0;
-            x[2] = Math.random() * 1000.0 - 500;
+            x[0] = mean[0] + 3 * dim[0] * (Math.random()-0.5);
+            x[1] = mean[1] + 3 * dim[1] * (Math.random()-0.5);
+            x[2] = mean[2] + 3 * dim[2] * (Math.random()-0.5);
             Vector p = helper.va.fromDouble(x);
             Node s = sc.createSphere(3);
             sc.add(t, sc.translate(s, p));

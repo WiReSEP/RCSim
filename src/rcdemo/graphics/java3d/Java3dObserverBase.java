@@ -45,21 +45,21 @@ public abstract class Java3dObserverBase implements Observer {
 
     TransformGroup createWorld(SimulationState state1) {
         // Setup the branch group
-        TransformGroup worldNode = new TransformGroup();
         WorldCreatorJ3d creator = new WorldCreatorJ3d();
+        
+        TransformGroup worldNode = new TransformGroup();
+        
         TransformGroup trackGroup = creator.createTrack(state1);
         worldNode.addChild(trackGroup);
+        
         car = creator.createCar(state1);
         worldNode.addChild(car);
         
-        
         TransformGroup ground = creator.createGround(state1);
         worldNode.addChild(ground);
-        Node light = creator.createLight();
-        worldNode.addChild(light);
         
-        //Node n = car;
-        //creator.foo;
+        Node light = creator.createLight(state1);
+        worldNode.addChild(light);
         
         return worldNode;
     }
@@ -69,15 +69,11 @@ public abstract class Java3dObserverBase implements Observer {
         double s = y[0];
         double dsdt = y[1];
         Vector3d currentPos = helper.getPosition(track, s);
-        Transform3D transform = new Transform3D();
-        transform.setTranslation(currentPos);
-        Matrix3d rot = new Matrix3d();
         RHS<Vector3d> rhs = helper.getRHS(track, s);
-        rot.setColumn(0, rhs.getForward());
-        rot.setColumn(1, rhs.getUp());
-        rot.setColumn(2, rhs.getLeft());
-        transform.setRotation(rot);
-        car.setTransform(transform);
+        
+        WorldCreatorJ3d creator = new WorldCreatorJ3d();
+        creator.setCarState(car, currentPos, rhs);
+        
     }
 
     static final List<CameraFactory.CameraType> camList = new ArrayList<>();

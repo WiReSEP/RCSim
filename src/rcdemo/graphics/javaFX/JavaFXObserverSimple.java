@@ -103,19 +103,11 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         assert (track != null);
 
         world = createWorld(state);
+        root.getChildren().clear();
         root.getChildren().add(world);
 
-//        camera = universe.getViewingPlatform().getViewPlatformTransform();
-//
-//        //
-//        branchGroup = new BranchGroup();
-//        branchGroup.addChild(world);
-//        universe.addBranchGraph(branchGroup);
-//        View view = canvas.getView();
-//        view.setBackClipDistance(1000);
-//        view.setSceneAntialiasingEnable(true);
         setCamNum(camNum);
-        setCamNum(-3);
+        setCamNum(-1);
     }
 
     public static Affine lookAt(Point3D from, Point3D to, Point3D ydir) {

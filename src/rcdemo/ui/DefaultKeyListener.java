@@ -41,6 +41,8 @@ public class DefaultKeyListener {
         kp.add('c', d -> sim.getStepper().resume());
         kp.add(KeyEvent.VK_LEFT, null, d -> vc.prevCam());
         kp.add(KeyEvent.VK_RIGHT, null, d -> vc.nextCam());
+        kp.add('w', d -> vc.prevCam());
+        kp.add('e', d -> vc.nextCam());
         kp.add('r', d -> ((ODESimulator)sim).reverse());
         if (withQuit)
             kp.add('q', d -> System.exit(0));
