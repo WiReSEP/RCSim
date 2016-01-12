@@ -20,39 +20,63 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.event.EventHandler;
 
 /**
  *
  * @author ezander
  */
-public class KeyProcessor implements KeyListener {
+public class KeyProcessor implements KeyListener, EventHandler<javafx.scene.input.KeyEvent> {
+
 
     static class KeyEventMap {
 
-        Map<Character, KeyEventFunction> charToFunction = new HashMap<>();
-        Map<Integer, KeyEventFunction> keycodeToFunction = new HashMap<>();
+        Map<Character, HandlerFunction> charToFunction = new HashMap<>();
+        Map<Integer, HandlerFunction> keycodeToFunction = new HashMap<>();
 
-        void add(char c, KeyEventFunction func) {
+        void add(char c, HandlerFunction func) {
             if (func != null) {
                 charToFunction.put(c, func);
             }
         }
 
-        void add(int i, KeyEventFunction func) {
+        void add(int i, HandlerFunction func) {
             if (func != null) {
                 keycodeToFunction.put(i, func);
             }
         }
 
         void processEvent(KeyEvent e) {
-            KeyEventFunction function = null;
+            HandlerFunction function = null;
             if (keycodeToFunction.containsKey(e.getKeyCode())) {
                 function = keycodeToFunction.get(e.getKeyCode());
             } else if (charToFunction.containsKey(e.getKeyChar())) {
                 function = charToFunction.get(e.getKeyChar());
             }
             if (function != null) {
-                function.process(e);
+                EventDetails details = new EventDetails();
+                // maybe fill with details from e
+                function.process(details);
+            }
+        }
+
+        void processEvent(javafx.scene.input.KeyEvent t) {
+            int code = t.getCode().ordinal();
+            char ch = t.getCharacter().charAt(0);
+            System.out.println(t.getCharacter());
+            System.out.println(t.getCode());
+            System.out.println(code);
+            
+            HandlerFunction function = null;
+            if (keycodeToFunction.containsKey(code)) {
+                function = keycodeToFunction.get(code);
+            } else if (charToFunction.containsKey(ch)) {
+                function = charToFunction.get(ch);
+            }
+            if (function != null) {
+                EventDetails details = new EventDetails();
+                // maybe fill with details from t
+                function.process(details);
             }
         }
     }
@@ -60,33 +84,33 @@ public class KeyProcessor implements KeyListener {
     KeyProcessor.KeyEventMap pressedKeyFunctions = new KeyProcessor.KeyEventMap();
     KeyProcessor.KeyEventMap releasedKeyFunctions = new KeyProcessor.KeyEventMap();
 
-    public KeyProcessor add(char c, KeyEventFunction typedFunc) {
+    public KeyProcessor add(char c, HandlerFunction typedFunc) {
         typedKeyFunctions.add(c, typedFunc);
         return this;
     }
 
-//    public KeyProcessor add(char c, KeyEventFunction pressedFunc, KeyEventFunction releasedFunc) {
+//    public KeyProcessor add(char c, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
 //        return add(c, null, pressedFunc, releasedFunc);
 //    }
 //
-//    public KeyProcessor add(char c, KeyEventFunction typedFunc, KeyEventFunction pressedFunc, KeyEventFunction releasedFunc) {
+//    public KeyProcessor add(char c, HandlerFunction typedFunc, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
 //        typedKeyFunctions.add(c, typedFunc);
 //        pressedKeyFunctions.add(c, pressedFunc);
 //        releasedKeyFunctions.add(c, releasedFunc);
 //        return this;
 //    }
 
-//    public KeyProcessor add(int i, KeyEventFunction typedFunc) {
+//    public KeyProcessor add(int i, HandlerFunction typedFunc) {
 //        return add(i, typedFunc, null, null);
 //    }
 
-    public KeyProcessor add(int i, KeyEventFunction pressedFunc, KeyEventFunction releasedFunc) {
+    public KeyProcessor add(int i, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
         pressedKeyFunctions.add(i, pressedFunc);
         releasedKeyFunctions.add(i, releasedFunc);
         return this;
     }
 
-//    public KeyProcessor add(int i, KeyEventFunction typedFunc, KeyEventFunction pressedFunc, KeyEventFunction releasedFunc) {
+//    public KeyProcessor add(int i, HandlerFunction typedFunc, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
 //        typedKeyFunctions.add(i, typedFunc);
 //        pressedKeyFunctions.add(i, pressedFunc);
 //        releasedKeyFunctions.add(i, releasedFunc);
@@ -106,6 +130,11 @@ public class KeyProcessor implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         releasedKeyFunctions.processEvent(e);
+    }
+
+    @Override
+    public void handle(javafx.scene.input.KeyEvent t) {
+        typedKeyFunctions.processEvent(t);
     }
     
 }

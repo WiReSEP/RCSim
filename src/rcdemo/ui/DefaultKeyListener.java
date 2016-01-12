@@ -33,18 +33,17 @@ public class DefaultKeyListener {
     
     public static KeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc, boolean withQuit) {
         KeyProcessor kp = new KeyProcessor();
-        kp.add(KeyEvent.VK_SHIFT, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume());
-        kp.add(KeyEvent.VK_SPACE, (KeyEvent e) -> sim.getStepper().pause(), (KeyEvent e) -> sim.getStepper().resume());
-        kp.add('+', (KeyEvent e) -> sim.getStepper().accelerate(1.4142));
-        kp.add('-', (KeyEvent e) -> sim.getStepper().decelerate(1.4142));
-        kp.add('p', (KeyEvent e) -> sim.getStepper().pause());
-        kp.add('c', (KeyEvent e) -> sim.getStepper().resume());
-        kp.add(KeyEvent.VK_LEFT, null, (KeyEvent e) -> vc.prevCam());
-        kp.add(KeyEvent.VK_RIGHT, null, (KeyEvent e) -> vc.nextCam());
-        kp.add('r', (e) -> ((ODESimulator)sim).reverse());
+        kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
+        kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
+        kp.add('+', d -> sim.getStepper().accelerate(1.4142));
+        kp.add('-', d -> sim.getStepper().decelerate(1.4142));
+        kp.add('p', d -> sim.getStepper().pause());
+        kp.add('c', d -> sim.getStepper().resume());
+        kp.add(KeyEvent.VK_LEFT, null, d -> vc.prevCam());
+        kp.add(KeyEvent.VK_RIGHT, null, d -> vc.nextCam());
+        kp.add('r', d -> ((ODESimulator)sim).reverse());
         if (withQuit)
-            kp.add('q', (KeyEvent e) -> System.exit(0));
+            kp.add('q', d -> System.exit(0));
         return kp;
     }
-
 }

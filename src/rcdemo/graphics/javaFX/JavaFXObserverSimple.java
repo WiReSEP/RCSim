@@ -16,12 +16,14 @@
  */
 package rcdemo.graphics.javaFX;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
 import rcdemo.graphics.ViewController;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -30,6 +32,7 @@ import rcdemo.graphics.camera.CameraTransform;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.graphics.camera.CameraView;
 import rcdemo.simulator.SimulationState;
+import rcdemo.ui.DefaultKeyListener;
 
 /**
  *
@@ -47,11 +50,6 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 
     public JavaFXObserverSimple(Stage primaryStage) {
         stage = primaryStage;
-        //buildScene();
-        //buildCamera();
-        //buildAxes();
-        //buildMolecule();
-
         root = new Group();
 
         Scene scene = new Scene(root, 1024, 768, true, SceneAntialiasing.BALANCED);
@@ -59,6 +57,8 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         scene.setFill(Color.AQUAMARINE);
         //handleKeyboard(scene, world);
         //handleMouse(scene, world);
+        
+        
 
         Group camGroup = new Group();
         camGroup.getChildren().add(camera);
@@ -67,7 +67,6 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         root.getChildren().add(camGroup);
         camera.setNearClip(0.1);
         camera.setFarClip(10000);
-        //camera.setTranslateZ(-450); //cameraDistance);
         scene.setCamera(camera);
         primaryStage.setScene(scene);
     }

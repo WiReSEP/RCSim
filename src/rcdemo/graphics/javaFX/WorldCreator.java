@@ -52,11 +52,11 @@ public class WorldCreator extends TrackHelperJFX {
         RHS<Point3D> rhs = getRHS(track, s);
         Point3D vector;
 
-        sphere = new Sphere(rail_radius, 5);
+        sphere = new Sphere(rail_radius, 10);
         vector = getShiftedPos(pos, rhs, 0, rail_dist, 0);
         group.getChildren().add(transform(sphere, vector));
 
-        sphere = new Sphere(rail_radius, 5);
+        sphere = new Sphere(rail_radius, 10);
         vector = getShiftedPos(pos, rhs, 0, -rail_dist, 0);
         group.getChildren().add(transform(sphere, vector));
         return group;

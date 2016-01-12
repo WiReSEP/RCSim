@@ -24,12 +24,14 @@ import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Application;
 import javafx.event.EventType;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import rcdemo.graphics.javaFX.JavaFXObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.SimulationState;
 import rcdemo.simulator.Simulator;
+import rcdemo.ui.DefaultKeyListener;
 
 /**
  *
@@ -72,6 +74,18 @@ public class RCJavaFX extends Application {
         
         primaryStage.setTitle("Rollercoaster Simulator");
         primaryStage.show();
+        
+        Scene scene = primaryStage.getScene();
+        //scene.setOnKeyPressed(
+        scene.setOnKeyTyped(
+                DefaultKeyListener.getDefaultKeyListener(sim, observer3d));
+//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                System.out.println(event);
+//            }
+//        });
+        
 
         Animation animation = new Transition() {
             {
