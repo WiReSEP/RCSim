@@ -19,40 +19,47 @@ package rcdemo.graphics.camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-import rcdemo.graphics.java3d.TrackHelper;
+import rcdemo.graphics.RHS;
+import rcdemo.graphics.TrackHelper;
+import rcdemo.graphics.VectorArithmetic;
+import rcdemo.graphics.java3d.TrackHelperJ3d;
 import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class TrackingCamera implements CameraTransform {
+public class TrackingCamera<Vector> extends BaseCamera<Vector> {
     public enum Position {
         MIN, MAX, MEAN, MOVING
     }
-    Point3d eye;
     Position pos;
-
-    public TrackingCamera(Position pos) {
+    Vector eye;
+    
+    public TrackingCamera(Position pos, TrackHelper<Vector> helper) {
+        super(helper);
         this.pos = pos;
     }
     
     @Override
     public void init(Track track) {
-        Vector3d[] stats = TrackHelper.getStatistics(track);
-        //eye = new Point3d(200, 200, 200);
+        super.init(track);
+        
+        TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
+        VectorArithmetic<Vector> va = helper.va;
+
         switch (pos) {
             case MIN:
-                eye = new Point3d(stats[0]);
+                eye = va.copy(stats.min);
                 break;
             case MAX:
-                eye = new Point3d(stats[1]);
+                eye = va.copy(stats.max);
                 break;
             case MEAN:
-                eye = new Point3d(stats[2]);
+                eye = va.copy(stats.mean);
                 break;
             case MOVING:
-                eye = new Point3d(stats[2]);
+                eye = va.copy(stats.mean);
                 break;
             default:
                 assert false;
@@ -60,25 +67,23 @@ public class TrackingCamera implements CameraTransform {
     }
     
     @Override
-    public Transform3D getTransform(Track track, double s, double dsdt) {
-        Transform3D transform = new Transform3D();
-        Vector3d currentPos = TrackHelper.getPosition(track, s);
-        Point3d target = new Point3d(currentPos);
+    public CameraView<Vector> getTransform(double s, double dsdt) {
+        VectorArithmetic<Vector> va = helper.va;
+
+        Vector currentPos = helper.getPosition(track, s);
+        Vector target = va.copy(currentPos);
         if (pos == Position.MOVING){
-            Point3d pos = new Point3d(currentPos);
-            double l = eye.distance(pos);
+            double l = va.distance(eye, currentPos);
             double mdist = 100.0d;
             if (l>mdist) {
-                eye = pos;
-                Vector3d[] rhs = TrackHelper.getRHS(track, s);
-                eye = new Point3d(TrackHelper.addScaled(new Vector3d(pos), rhs[0], Math.signum(dsdt)*mdist*0.95f));
-                eye = new Point3d(TrackHelper.addScaled(new Vector3d(eye), rhs[2], 10));
+                eye = currentPos;
+                RHS<Vector> rhs = helper.getRHS(track, s);
+                eye = helper.addScaled(currentPos, rhs.getForward(), Math.signum(dsdt)*mdist*0.95);
+                eye = helper.addScaled(eye, rhs.getUp(), 10);
             }
         }
-        Vector3d z = new Vector3d(0, 0, 1);
-        transform.lookAt(eye, target, z);
-        transform.lookAt(target, eye, z);
-        return transform;
+        Vector z = va.unit(2);
+        return new CameraView<>(eye, target, z);
     }
 
 }

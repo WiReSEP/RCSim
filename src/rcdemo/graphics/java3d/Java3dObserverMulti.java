@@ -76,7 +76,7 @@ public class Java3dObserverMulti extends Java3dObserverBase {
             int n = camList.size();
             camNum = ((camNumNew % n) + n) % n;
             if (track != null) {
-                camTransform = CameraFactory.buildCamera(camList.get(camNum));
+                camTransform = CameraFactory.buildCamera(camList.get(camNum), helper);
                 camTransform.init(track);
             }
         }
@@ -155,10 +155,11 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         double dsdt = y[1];
         
         for (MyView view : views) {
-            Transform3D transform = view.camTransform.getTransform(track, s, dsdt);
-            transform.invert();
-            view.camera.setTransform(transform);
-            view.canvas.startRenderer();
+            assert false;
+            //Transform3D transform = view.camTransform.getTransform(track, s, dsdt);
+            //transform.invert();
+            //view.camera.setTransform(transform);
+            //view.canvas.startRenderer();
         }
     }
     

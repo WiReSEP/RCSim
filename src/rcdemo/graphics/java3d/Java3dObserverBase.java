@@ -24,6 +24,7 @@ import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
+import rcdemo.graphics.RHS;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.Observer;
 import rcdemo.simulator.SimulationState;
@@ -40,6 +41,7 @@ public abstract class Java3dObserverBase implements Observer {
     TransformGroup car;
     SimulationState state;
     Track track;
+    TrackHelperJ3d helper = new TrackHelperJ3d();
 
     TransformGroup createWorld(SimulationState state1) {
         // Setup the branch group
@@ -60,14 +62,14 @@ public abstract class Java3dObserverBase implements Observer {
         assert track != null;
         double s = y[0];
         double dsdt = y[1];
-        Vector3d currentPos = TrackHelper.getPosition(track, s);
+        Vector3d currentPos = helper.getPosition(track, s);
         Transform3D transform = new Transform3D();
         transform.setTranslation(currentPos);
         Matrix3d rot = new Matrix3d();
-        Vector3d[] rhs = TrackHelper.getRHS(track, s);
-        rot.setColumn(0, rhs[0]);
-        rot.setColumn(1, rhs[2]);
-        rot.setColumn(2, rhs[1]);
+        RHS<Vector3d> rhs = helper.getRHS(track, s);
+        rot.setColumn(0, rhs.getForward());
+        rot.setColumn(1, rhs.getUp());
+        rot.setColumn(2, rhs.getLeft());
         transform.setRotation(rot);
         car.setTransform(transform);
     }

@@ -16,62 +16,55 @@
  */
 package rcdemo.graphics.camera;
 
-import javax.media.j3d.Transform3D;
-import javax.vecmath.Point3d;
-import javax.vecmath.Vector3d;
-import rcdemo.graphics.java3d.TrackHelper;
+import rcdemo.graphics.TrackHelper;
+import rcdemo.graphics.VectorArithmetic;
 import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class StillCamera implements CameraTransform {
+public class StillCamera<Vector> extends BaseCamera<Vector>{
     public enum Position {
         MIN, MAX, MEAN
     }
-    Point3d eye, target;
-    Vector3d z;
+    Vector eye, target, z;
     Position pos;
 
-    public StillCamera(Position pos) {
-        this.pos = pos;
+    public StillCamera(Position pos, TrackHelper<Vector> helper) {
+        super(helper);
     }
+    
     
     @Override
     public void init(Track track) {
-        Vector3d[] stats = TrackHelper.getStatistics(track);
-        //eye = new Point3d(200, 200, 200);
-        Vector3d dim = stats[3];
+        super.init(track);
+        
+        TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
+        VectorArithmetic<Vector> va = helper.va;
+        
         switch (pos) {
             case MIN:
-                eye = new Point3d(stats[0]);
-                dim.scale(-0.5);
-                eye.add(dim);
-                eye.setZ(stats[0].getZ());
-                z = new Vector3d(0, 0, 1);
+                eye = va.add(stats.min, va.multiply(stats.dim, -0.5));
+                eye = va.setEntry(eye, 2, va.getEntry(stats.min, 2));
+                z = helper.va.fromDouble(new double[]{0,0,1});
                 break;
             case MAX:
-                eye = new Point3d(stats[1]);
-                dim.scale(0.5);
-                eye.add(dim);
-                z = new Vector3d(0, 0, 1);
+                eye = va.add(stats.max, va.multiply(stats.dim, 0.5));
+                z = helper.va.fromDouble(new double[]{0,0,1});
                 break;
             case MEAN:
-                eye = new Point3d(stats[2]);
-                eye.setZ(eye.getZ() + 1000);
-                z = new Vector3d(0, 1, 0);
+                eye = va.add(stats.mean, va.multiply(stats.dim, 0.5));
+                eye = va.setEntry(eye, 2, va.getEntry(eye, 2)+1000);
+                z = helper.va.fromDouble(new double[]{0,1,0});
                 break;
         }
-        target = new Point3d(stats[2]);
+        target = stats.mean;
     }
 
     @Override
-    public Transform3D getTransform(Track track, double s, double dsdt) {
-        Transform3D transform = new Transform3D();
-        transform.lookAt(eye, target, z);
-        transform.lookAt(target, eye, z);
-        return transform;
+    public CameraView<Vector> getTransform(double s, double dsdt) {
+        return new CameraView<Vector>(eye, target, z);
     }
     
 

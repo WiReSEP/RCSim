@@ -16,7 +16,6 @@
  */
 package rcdemo.graphics.java3d;
 
-import com.jogamp.graph.geom.Vertex;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
@@ -39,6 +38,7 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import rcdemo.graphics.RHS;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
 
@@ -46,7 +46,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreator extends TrackHelper {
+public class WorldCreator extends TrackHelperJ3d {
 
     
 //    public connectWithCylinder(Track track, double s0, double s1) {
@@ -62,7 +62,7 @@ public class WorldCreator extends TrackHelper {
         TransformGroup group = new TransformGroup();
         Sphere sphere;
         Vector3d pos = getPosition(track, s);
-        Vector3d rhs[] = getRHS(track, s);
+        RHS<Vector3d> rhs= getRHS(track, s);
         Vector3d vector;
 
         sphere = new Sphere(rail_radius);
@@ -80,7 +80,7 @@ public class WorldCreator extends TrackHelper {
         TransformGroup group = new TransformGroup();
         Sphere sphere;
         Vector3d pos = getPosition(track, s);
-        Vector3d rhs[] = getRHS(track, s);
+        RHS<Vector3d> rhs = getRHS(track, s);
         Vector3d vector;
 
         sphere = new Sphere(center_radius);
@@ -91,7 +91,9 @@ public class WorldCreator extends TrackHelper {
     }
 
 
-    TransformGroup makeCylinder(Vector3d pos0, Vector3d[] rhs0, Vector3d pos1, Vector3d[] rhs1, 
+    TransformGroup makeCylinder(
+            Vector3d pos0, RHS<Vector3d> rhs0, 
+            Vector3d pos1, RHS<Vector3d> rhs1, 
             double radius, double dist, double zdist) {
         Cylinder cylinder;
         Vector3d v0, v1;
@@ -104,8 +106,8 @@ public class WorldCreator extends TrackHelper {
         Transform3D trans = new Transform3D();
         trans.setTranslation(m);
         Matrix3d mat = new Matrix3d();
-        mat.setColumn(2, rhs0[2]);
-        mat.setColumn(0, rhs0[1]);
+        mat.setColumn(2, rhs0.getUp());
+        mat.setColumn(0, rhs0.getLeft());
         mat.setColumn(1, d);
         trans.setRotation(mat);
         TransformGroup tg = new TransformGroup();
@@ -114,7 +116,9 @@ public class WorldCreator extends TrackHelper {
         return tg;
     }
 
-    TransformGroup makeCylinder2(Vector3d pos0, Vector3d[] rhs0, Vector3d pos1, Vector3d[] rhs1, 
+    TransformGroup makeCylinder2(
+            Vector3d pos0, RHS<Vector3d> rhs0, 
+            Vector3d pos1, RHS<Vector3d> rhs1, 
             double radius, double dist, double zdist) {
         
         int N=20;
@@ -179,8 +183,8 @@ public class WorldCreator extends TrackHelper {
         Cylinder cylinder;
         Vector3d pos0 = getPosition(track, s0);
         Vector3d pos1 = getPosition(track, s1);
-        Vector3d rhs0[] = getRHS(track, s0);
-        Vector3d rhs1[] = getRHS(track, s1);
+        RHS<Vector3d> rhs0= getRHS(track, s0);
+        RHS<Vector3d> rhs1= getRHS(track, s1);
 
         TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
         group.addChild(tg);
@@ -194,11 +198,10 @@ public class WorldCreator extends TrackHelper {
     public Node getCenterCylinders(Track track, double s0, double s1){
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
-        Cylinder cylinder;
         Vector3d pos0 = getPosition(track, s0);
         Vector3d pos1 = getPosition(track, s1);
-        Vector3d rhs0[] = getRHS(track, s0);
-        Vector3d rhs1[] = getRHS(track, s1);
+        RHS<Vector3d> rhs0= getRHS(track, s0);
+        RHS<Vector3d> rhs1= getRHS(track, s1);
 
         //TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
         TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
@@ -213,8 +216,8 @@ public class WorldCreator extends TrackHelper {
         double ds = 0.01; //0.01;
         for (double s = 0; s < track.length(); s += ds) {
             Node node;
-            //node = getRailBalls(track, s, s + ds);
-            node = getRailCylinders(track, s, s + ds);
+            node = getRailBalls(track, s, s + ds);
+            //node = getRailCylinders(track, s, s + ds);
             group.addChild(node);
         }
             
@@ -240,7 +243,7 @@ public class WorldCreator extends TrackHelper {
         tg.addChild(node);
         node = tg;
         
-        Vector3d vector = toVector3d(track.getx(0));
+        Vector3d vector = getPosition(track, 0);
         return transform(node, vector, true);
     }
 
@@ -249,12 +252,12 @@ public class WorldCreator extends TrackHelper {
         Transform3D transform = new Transform3D();
         Node node = new Box(1000, 1000, 0.00001f, null);
         RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
-        Vector3d vector = toVector3d(v);
+        Vector3d vector = toVector(v);
         CheckeredPlane plane = new CheckeredPlane();
         node = plane;
         TransformGroup t = transform(node, vector, true);
         t = new TransformGroup();
-        //Vector3d[] stats = TrackHelper.getStatistics(state.track);
+        //Vector3d[] stats = TrackHelperJ3d.getStatistics(state.track);
         for (int i = 0; i < 6000; i++) {
             double x[] = new double[3];
             x[0] = Math.random()*2000.0;

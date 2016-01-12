@@ -18,11 +18,14 @@ package rcdemo.graphics.javaFX;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import rcdemo.graphics.camera.CameraFactory;
+import rcdemo.graphics.VectorArithmetic;
 import rcdemo.simulator.Observer;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
+
 
 /**
  *

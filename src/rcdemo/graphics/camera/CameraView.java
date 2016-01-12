@@ -16,11 +16,31 @@
  */
 package rcdemo.graphics.camera;
 
-import rcdemo.track.Track;
+/**
+ *
+ * @author ezander
+ */
+public class CameraView<Vector> {
 
+    private final Vector eye;
+    private final Vector target;
+    private final Vector up;
 
-public interface CameraTransform<Vector> {
-    void init(Track track);
+    public CameraView(Vector eye, Vector target, Vector up) {
+        this.eye = eye;
+        this.target = target;
+        this.up = up;
+    }
     
-    CameraView<Vector> getTransform(double s, double dsdt);
+    public Vector getEye() {
+        return eye;
+    }
+
+    public Vector getTarget() {
+        return target;
+    }
+
+    public Vector getUp() {
+        return up;
+    }
 }

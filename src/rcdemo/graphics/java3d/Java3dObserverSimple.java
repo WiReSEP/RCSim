@@ -18,18 +18,17 @@ package rcdemo.graphics.java3d;
 
 import rcdemo.graphics.ViewController;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import rcdemo.graphics.camera.CameraTransform;
 import rcdemo.graphics.camera.CameraFactory;
+import rcdemo.graphics.camera.CameraView;
 import rcdemo.simulator.SimulationState;
 
 /**
@@ -43,10 +42,10 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     TransformGroup camera;
 
     int camNum = 0;
-    CameraTransform camTransform;
+    CameraTransform<Vector3d> camTransform;
 
 
-    public CameraTransform getCamTransform() {
+    public CameraTransform<Vector3d> getCamTransform() {
         return camTransform;
     }
 
@@ -69,7 +68,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         if( track!= null ){
             // Note: this MUST be done in two steps, otherwise a screen update 
             // could occur in between before the camera is initialised
-            CameraTransform camTransformNew = CameraFactory.buildCamera( camList.get(camNum) );
+            CameraTransform<Vector3d> camTransformNew = CameraFactory.buildCamera( camList.get(camNum), helper );
             camTransformNew.init(track);
             camTransform = camTransformNew;
         }
@@ -121,7 +120,11 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         
         double s = y[0];
         double dsdt = y[1];
-        Transform3D transform = camTransform.getTransform(track, s, dsdt);
+        CameraView<Vector3d> camView = camTransform.getTransform(s, dsdt);
+        Transform3D transform = new Transform3D();
+        transform.lookAt(
+                new Point3d(camView.getEye()), 
+                new Point3d(camView.getTarget()), camView.getUp());
         transform.invert();
         camera.setTransform(transform);
         canvas.startRenderer();

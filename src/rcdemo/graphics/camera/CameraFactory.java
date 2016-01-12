@@ -16,6 +16,8 @@
  */
 package rcdemo.graphics.camera;
 
+import rcdemo.graphics.TrackHelper;
+
 /**
  *
  * @author ezander
@@ -28,31 +30,32 @@ package rcdemo.graphics.camera;
         MOVING1
     }
 
-    public static CameraTransform buildCamera(CameraFactory.CameraType type) {
+    public static <Vector> CameraTransform<Vector> buildCamera(CameraFactory.CameraType type,
+            TrackHelper<Vector> helper) {
         System.out.println(type);
         switch (type) {
             case MOVING1:
-                return new TrackingCamera(TrackingCamera.Position.MOVING);
+                return new TrackingCamera<>(TrackingCamera.Position.MOVING, helper);
             case INSIDE_COACH:
-                return new CoachCamera(CoachCamera.Position.INSIDE);
+                return new CoachCamera<>(CoachCamera.Position.INSIDE, helper);
             case LEFT_OF_COACH:
-                return new CoachCamera(CoachCamera.Position.LEFT);
+                return new CoachCamera<>(CoachCamera.Position.LEFT, helper);
             case RIGHT_OF_COACH:
-                return new CoachCamera(CoachCamera.Position.RIGHT);
+                return new CoachCamera<>(CoachCamera.Position.RIGHT, helper);
             case BEHIND_COACH:
-                return new CoachCamera(CoachCamera.Position.BEHIND);
+                return new CoachCamera<>(CoachCamera.Position.BEHIND, helper);
             case TRACKING_FROM_ABOVE:
-                return new TrackingCamera(TrackingCamera.Position.MAX);
+                return new TrackingCamera<>(TrackingCamera.Position.MAX, helper);
             case TRACKING_FROM_BELOW:
-                return new TrackingCamera(TrackingCamera.Position.MIN);
+                return new TrackingCamera<>(TrackingCamera.Position.MIN, helper);
             case TRACKING_FROM_CENTER:
-                return new TrackingCamera(TrackingCamera.Position.MEAN);
+                return new TrackingCamera<>(TrackingCamera.Position.MEAN, helper);
             case STILL_FROM_ABOVE:
-                return new StillCamera(StillCamera.Position.MAX);
+                return new StillCamera<>(StillCamera.Position.MAX, helper);
             case STILL_FROM_GROUND:
-                return new StillCamera(StillCamera.Position.MIN);
+                return new StillCamera<>(StillCamera.Position.MIN, helper);
             case STILL_FROM_STRAIGHT_ABOVE:
-                return new StillCamera(StillCamera.Position.MEAN);
+                return new StillCamera<>(StillCamera.Position.MEAN, helper);
             default:
                 throw new RuntimeException("unknown camera type");
         }

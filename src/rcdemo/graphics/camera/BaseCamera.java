@@ -16,11 +16,28 @@
  */
 package rcdemo.graphics.camera;
 
+import rcdemo.graphics.TrackHelper;
 import rcdemo.track.Track;
 
+/**
+ *
+ * @author ezander
+ */
+public abstract class BaseCamera<Vector> implements CameraTransform<Vector> {
+    protected TrackHelper<Vector> helper;
+    protected Track track;
 
-public interface CameraTransform<Vector> {
-    void init(Track track);
-    
-    CameraView<Vector> getTransform(double s, double dsdt);
+    public BaseCamera(TrackHelper<Vector> helper) {
+        this(helper, null);
+    }
+
+    public BaseCamera(TrackHelper<Vector> helper, Track track) {
+        this.helper = helper;
+        this.track = track;
+    }
+
+    @Override
+    public void init(Track track) {
+        this.track = track;
+    }
 }

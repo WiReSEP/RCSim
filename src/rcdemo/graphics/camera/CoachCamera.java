@@ -19,78 +19,64 @@ package rcdemo.graphics.camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-import rcdemo.graphics.java3d.TrackHelper;
+import rcdemo.graphics.RHS;
+import rcdemo.graphics.TrackHelper;
+import rcdemo.graphics.java3d.TrackHelperJ3d;
+import rcdemo.graphics.VectorArithmetic;
 import rcdemo.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class CoachCamera implements CameraTransform {
-
+public class CoachCamera<Vector> extends BaseCamera<Vector> {
     public enum Position {
-
         INSIDE, BEHIND, LEFT, RIGHT
     }
     Position pos;
 
-    public CoachCamera(Position pos) {
+    public CoachCamera(Position pos, TrackHelper<Vector> helper) {
+        super(helper);
         this.pos = pos;
     }
 
     @Override
-    public void init(Track track) {
-    }
+    public CameraView<Vector> getTransform(double s, double dsdt) {
+        Vector currentPos = helper.getPosition(track, s);
+        RHS<Vector> rhs = helper.getRHS(track, s);
+        Vector up = rhs.getUp();
 
-    @Override
-    public Transform3D getTransform(Track track, double s, double dsdt) {
-        Transform3D transform = new Transform3D();
-        Vector3d currentPos = TrackHelper.getPosition(track, s);
-        Vector3d[] rhs = TrackHelper.getRHS(track, s);
-        Vector3d forward = rhs[0];
-        Vector3d right = rhs[1];
-        Vector3d up = rhs[2];
-
-        Point3d eye = new Point3d(currentPos);
-        Point3d target = new Point3d(currentPos);
-        Vector3d z;
+        double fe, re, ue;
+        double ft, rt, ut;
+        Vector z;
 
         switch (pos) {
             case BEHIND:
-                up.scale(2);
-                forward.scale(5f);
-                right.scale(1.0f);
-                eye.sub(new Vector3d(forward));
-                target.add(new Vector3d(forward));
-                eye.add(up);
-                z = new Vector3d(up);
+                fe=-5.0; re=0.0; ue=2.0;
+                ft= 5.0; rt=0.0; ut=0.0;
+                z = helper.va.copy(up);
                 break;
             case INSIDE:
-                up.scale(1);
-                forward.scale(5f);
-                right.scale(1.0f);
-                target.add(new Vector3d(forward));
-                eye.add(up);
-                z = new Vector3d(up);
+                fe= 0.0; re=0.0; ue=1.0;
+                ft= 5.0; rt=0.0; ut=0.0;
+                z = helper.va.copy(up);
                 break;
             case LEFT:
-                right.scale(10.0f);
-                eye.sub(right);
-                target.add(right);
-                z = new Vector3d(0,0,1);
+                fe= 0.0; re=-10.0; ue=0.0;
+                ft= 0.0; rt= 10.0; ut=0.0;
+                z = helper.va.fromDouble(new double[]{0,0,1});
                 break;
             case RIGHT:
-                right.scale(10.0f);
-                eye.add(right);
-                target.sub(right);
-                z = new Vector3d(0,0,1);
+                fe= 0.0; re= 10.0; ue=0.0;
+                ft= 0.0; rt=-10.0; ut=0.0;
+                z = helper.va.fromDouble(new double[]{0,0,1});
                 break;
             default:
                 throw new RuntimeException("this cannot happen");
         }
-        //transform.lookAt(eye, target, z);
-        transform.lookAt(target, eye, z);
-        return transform;
+        Vector eye = helper.getShiftedPos(currentPos, rhs, fe, re, ue);
+        Vector target = helper.getShiftedPos(currentPos, rhs, ft, rt, ut);
+        return new CameraView<Vector>(eye, target, z);
     }
 
 }

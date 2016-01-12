@@ -25,6 +25,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import rcdemo.graphics.RHS;
 import rcdemo.simulator.SimulationState;
 import rcdemo.track.Track;
 
@@ -32,7 +33,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreator extends TrackHelper {
+public class WorldCreator extends TrackHelperJFX {
 
     
 //    public connectWithCylinder(Track track, double s0, double s1) {
@@ -48,7 +49,7 @@ public class WorldCreator extends TrackHelper {
         Group group = new Group();
         Sphere sphere;
         Point3D pos = getPosition(track, s);
-        Point3D rhs[] = getRHS(track, s);
+        RHS<Point3D> rhs = getRHS(track, s);
         Point3D vector;
 
         sphere = new Sphere(rail_radius, 5);
@@ -250,13 +251,13 @@ public class WorldCreator extends TrackHelper {
 //        TransformGroup t = transform(node, vector, true);
 //        t = new TransformGroup();
         Group t = new Group();
-        //Point3D[] stats = TrackHelper.getStatistics(state.track);
+        //Point3D[] stats = TrackHelperJFX.getStatistics(state.track);
         for (int i = 0; i < 1000; i++) {
             double x[] = new double[3];
             x[0] = Math.random()*2000.0;
             x[1] = Math.random()*2000.0;
             x[2] = Math.random()*1000.0-500;
-            Point3D p = toPoint3D(x);
+            Point3D p = super.va.fromDouble(x);
             Sphere s = new Sphere(3, 20);
             s.setMaterial(new PhongMaterial(Color.CRIMSON));
             t.getChildren().add(transform(s, p));
