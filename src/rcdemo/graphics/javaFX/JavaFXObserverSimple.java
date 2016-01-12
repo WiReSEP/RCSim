@@ -119,7 +119,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 //        view.setBackClipDistance(1000);
 //        view.setSceneAntialiasingEnable(true);
         setCamNum(camNum);
-        setCamNum(5);
+        setCamNum(-3);
     }
 
     public static Affine lookAt(Point3D from, Point3D to, Point3D ydir) {
