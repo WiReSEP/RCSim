@@ -16,8 +16,6 @@
  */
 package rcdemo.graphics.camera;
 
-import rcdemo.graphics.camera.Camera;
-
 /**
  *
  * @author ezander
@@ -30,7 +28,7 @@ import rcdemo.graphics.camera.Camera;
         MOVING1
     }
 
-    public static Camera buildCamera(CameraFactory.CameraType type) {
+    public static CameraTransform buildCamera(CameraFactory.CameraType type) {
         System.out.println(type);
         switch (type) {
             case MOVING1:

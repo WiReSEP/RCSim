@@ -19,6 +19,9 @@ package rcdemo.graphics.javaFX;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Material;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
@@ -48,11 +51,11 @@ public class WorldCreator extends TrackHelper {
         Point3D rhs[] = getRHS(track, s);
         Point3D vector;
 
-        sphere = new Sphere(rail_radius);
+        sphere = new Sphere(rail_radius, 5);
         vector = getShiftedPos(pos, rhs, 0, rail_dist, 0);
         group.getChildren().add(transform(sphere, vector));
 
-        sphere = new Sphere(rail_radius);
+        sphere = new Sphere(rail_radius, 5);
         vector = getShiftedPos(pos, rhs, 0, -rail_dist, 0);
         group.getChildren().add(transform(sphere, vector));
         return group;
@@ -199,6 +202,15 @@ public class WorldCreator extends TrackHelper {
             node = getRailBalls(track, s, s + ds);
             //node = getRailCylinders(track, s, s + ds);
             group.getChildren().add(node);
+            
+
+            
+            //Point3D p = toPoint3D(track.getx(s));
+            //p.multiply(10);
+            //Node sphere = new Sphere(3.0);
+            //group.getChildren().add(transform(sphere, p));
+            //System.out.println(p);
+            
         }
             
         ds = 0.01; //0.01;
@@ -227,8 +239,8 @@ public class WorldCreator extends TrackHelper {
 //        return transform(node, vector, true);
 //    }
 
-//    public TransformGroup createGround(SimulationState state) {
-//        // see here: http://www.javaworld.com/article/2076745/learn-java/3d-graphic-java--render-fractal-landscapes.html
+    public Group createGround(SimulationState state) {
+        // see here: http://www.javaworld.com/article/2076745/learn-java/3d-graphic-java--render-fractal-landscapes.html
 //        Transform3D transform = new Transform3D();
 //        Node node = new Box(1000, 1000, 0.00001f, null);
 //        RealVector v = new ArrayRealVector(new double[]{0, 0, -40});
@@ -237,19 +249,21 @@ public class WorldCreator extends TrackHelper {
 //        node = plane;
 //        TransformGroup t = transform(node, vector, true);
 //        t = new TransformGroup();
-//        //Point3D[] stats = TrackHelper.getStatistics(state.track);
-//        for (int i = 0; i < 6000; i++) {
-//            double x[] = new double[3];
-//            x[0] = Math.random()*2000.0;
-//            x[1] = Math.random()*2000.0;
-//            x[2] = Math.random()*1000.0-500;
-//            Point3D p = new Point3D(x);
-//            Node s = new Sphere(3);
-//            t.getChildren().add(transform(s, p));
-//        }
-//        
-//        return t;
-//    }
+        Group t = new Group();
+        //Point3D[] stats = TrackHelper.getStatistics(state.track);
+        for (int i = 0; i < 1000; i++) {
+            double x[] = new double[3];
+            x[0] = Math.random()*2000.0;
+            x[1] = Math.random()*2000.0;
+            x[2] = Math.random()*1000.0-500;
+            Point3D p = toPoint3D(x);
+            Sphere s = new Sphere(3, 20);
+            s.setMaterial(new PhongMaterial(Color.CRIMSON));
+            t.getChildren().add(transform(s, p));
+        }
+        
+        return t;
+    }
 //
 //    public TransformGroup createLight() {
 //        BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);

@@ -28,7 +28,7 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import rcdemo.graphics.camera.Camera;
+import rcdemo.graphics.camera.CameraTransform;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.SimulationState;
 
@@ -43,10 +43,10 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     TransformGroup camera;
 
     int camNum = 0;
-    Camera camTransform;
+    CameraTransform camTransform;
 
 
-    public Camera getCamTransform() {
+    public CameraTransform getCamTransform() {
         return camTransform;
     }
 
@@ -69,7 +69,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         if( track!= null ){
             // Note: this MUST be done in two steps, otherwise a screen update 
             // could occur in between before the camera is initialised
-            Camera camTransformNew = CameraFactory.buildCamera( camList.get(camNum) );
+            CameraTransform camTransformNew = CameraFactory.buildCamera( camList.get(camNum) );
             camTransformNew.init(track);
             camTransform = camTransformNew;
         }

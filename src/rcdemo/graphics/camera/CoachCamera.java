@@ -16,7 +16,6 @@
  */
 package rcdemo.graphics.camera;
 
-import rcdemo.graphics.camera.Camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -27,7 +26,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class CoachCamera implements Camera {
+public class CoachCamera implements CameraTransform {
 
     public enum Position {
 
@@ -89,7 +88,8 @@ public class CoachCamera implements Camera {
             default:
                 throw new RuntimeException("this cannot happen");
         }
-        transform.lookAt(eye, target, z);
+        //transform.lookAt(eye, target, z);
+        transform.lookAt(target, eye, z);
         return transform;
     }
 

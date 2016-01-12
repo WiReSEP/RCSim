@@ -16,7 +16,6 @@
  */
 package rcdemo.graphics.camera;
 
-import rcdemo.graphics.camera.Camera;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -27,7 +26,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class StillCamera implements Camera {
+public class StillCamera implements CameraTransform {
     public enum Position {
         MIN, MAX, MEAN
     }
@@ -71,6 +70,7 @@ public class StillCamera implements Camera {
     public Transform3D getTransform(Track track, double s, double dsdt) {
         Transform3D transform = new Transform3D();
         transform.lookAt(eye, target, z);
+        transform.lookAt(target, eye, z);
         return transform;
     }
     

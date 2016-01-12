@@ -29,7 +29,7 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.media.j3d.ViewPlatform;
 import javax.media.j3d.VirtualUniverse;
-import rcdemo.graphics.camera.Camera;
+import rcdemo.graphics.camera.CameraTransform;
 import rcdemo.graphics.camera.CameraFactory;
 import rcdemo.simulator.SimulationState;
 
@@ -48,14 +48,14 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         Canvas3D canvas;
         TransformGroup camera;
         int camNum = 0;
-        Camera camTransform;
+        CameraTransform camTransform;
         BranchGroup viewBranch;
         
         public MyView(Canvas3D canvas) {
             this.canvas = canvas;
         }
         
-        public Camera getCamTransform() {
+        public CameraTransform getCamTransform() {
             return camTransform;
         }
         

@@ -23,7 +23,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public interface Camera {
+public interface CameraTransform {
 
     void init(Track track);
     

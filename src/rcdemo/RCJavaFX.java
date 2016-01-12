@@ -16,19 +16,20 @@
  */
 package rcdemo;
 
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.animation.Animation;
+import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
-import javafx.scene.paint.Color;
+import javafx.event.EventType;
 import javafx.stage.Stage;
-import rcdemo.graphics.java3d.Java3dObserverSimple;
+import javafx.util.Duration;
 import rcdemo.graphics.javaFX.JavaFXObserverSimple;
 import rcdemo.simulator.ODESimulator;
-import rcdemo.simulator.Observer;
 import rcdemo.simulator.SimulationState;
 import rcdemo.simulator.Simulator;
-import rcdemo.ui.DefaultKeyListener;
 
 /**
  *
@@ -42,7 +43,7 @@ public class RCJavaFX extends Application {
         
         
         
-        String filename = "tracks/foo.rct";
+        String filename = "tracks/colossos.rct";
         SimulationState state = SimulationState.readFromXML(filename);
         
         JavaFXObserverSimple observer3d = new JavaFXObserverSimple(primaryStage);
@@ -55,7 +56,39 @@ public class RCJavaFX extends Application {
 
         observer3d.init(sim.getState());
         //observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
-        sim.run();
+        //sim.run();
+        //sim.
+        //primaryStage.addEventHandler(EventType., null);
+        //Timeline tl  = new Timeline(d)
+        sim.init();
+//        new Timer().scheduleAtFixedRate(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//                //System.out.println("foo");
+//                //sim.update();
+//            }
+//        }, 10, 100);
+        
+        primaryStage.setTitle("Rollercoaster Simulator");
+        primaryStage.show();
+
+        Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(200000));
+            }
+
+            protected void interpolate(double frac) {
+         //final int length = content.length();
+                //final int n = Math.round(length * (float) frac);
+                //text.setText(content.substring(0, n));
+                System.out.println(frac);
+                sim.update();
+            }
+
+        };
+        animation.play();
+        
     }
 
     
