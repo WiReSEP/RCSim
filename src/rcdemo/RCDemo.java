@@ -15,11 +15,7 @@ public class RCDemo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //test1();
-        //test2();
-        //test3();
         RCJava3d.run();
-        //RCGui.main(new String []{});
     }
 
 

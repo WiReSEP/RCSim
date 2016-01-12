@@ -16,14 +16,9 @@
  */
 package rcdemo;
 
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.animation.Animation;
-import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Application;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -41,16 +36,13 @@ public class RCJavaFX extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        
-        
-        
-        
+
         String filename = "tracks/colossos.rct";
         SimulationState state = SimulationState.readFromXML(filename);
-        
+
         JavaFXObserverSimple observer3d = new JavaFXObserverSimple(primaryStage);
         //observer3d.setCamNum(-1);
-        
+
         Simulator sim = new ODESimulator();
         sim.addObserver(observer3d);
         //sim.addObserver( new TextBasedObserver());
@@ -71,10 +63,10 @@ public class RCJavaFX extends Application {
 //                //sim.update();
 //            }
 //        }, 10, 100);
-        
+
         primaryStage.setTitle("Rollercoaster Simulator");
         primaryStage.show();
-        
+
         Scene scene = primaryStage.getScene();
         //scene.setOnKeyPressed(
         scene.setOnKeyTyped(
@@ -85,7 +77,6 @@ public class RCJavaFX extends Application {
 //                System.out.println(event);
 //            }
 //        });
-        
 
         Animation animation = new Transition() {
             {
@@ -93,20 +84,15 @@ public class RCJavaFX extends Application {
             }
 
             protected void interpolate(double frac) {
-         //final int length = content.length();
-                //final int n = Math.round(length * (float) frac);
-                //text.setText(content.substring(0, n));
-                System.out.println(frac);
                 sim.update();
             }
 
         };
         animation.play();
-        
+
     }
 
-    
-   /**
+    /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be
      * launched through deployment artifacts, e.g., in IDEs with limited FX
@@ -117,5 +103,5 @@ public class RCJavaFX extends Application {
     public static void main(String[] args) {
         //System.setProperty("prism.dirtyopts", "false");
         launch(args);
-    }    
+    }
 }

@@ -105,7 +105,7 @@ public class TrackHelper<Vector> {
                 dim[i] = max[i] - min[i];
             }
         }
-        return new TrackStats<Vector>(min, max, mean, dim, va);
+        return new TrackStats<>(min, max, mean, dim, va);
     }
 
 }

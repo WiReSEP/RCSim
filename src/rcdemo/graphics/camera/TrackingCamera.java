@@ -16,13 +16,9 @@
  */
 package rcdemo.graphics.camera;
 
-import javax.media.j3d.Transform3D;
-import javax.vecmath.Point3d;
-import javax.vecmath.Vector3d;
 import rcdemo.graphics.RHS;
 import rcdemo.graphics.TrackHelper;
 import rcdemo.graphics.VectorArithmetic;
-import rcdemo.graphics.java3d.TrackHelperJ3d;
 import rcdemo.track.Track;
 
 /**

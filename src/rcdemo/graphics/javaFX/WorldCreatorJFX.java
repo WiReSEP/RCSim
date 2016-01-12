@@ -33,7 +33,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreator extends TrackHelperJFX {
+public class WorldCreatorJFX extends TrackHelperJFX {
 
     
 //    public connectWithCylinder(Track track, double s0, double s1) {

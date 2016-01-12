@@ -46,7 +46,7 @@ import rcdemo.track.Track;
  *
  * @author ezander
  */
-public class WorldCreator extends TrackHelperJ3d {
+public class WorldCreatorJ3d extends TrackHelperJ3d {
 
     
 //    public connectWithCylinder(Track track, double s0, double s1) {
@@ -238,9 +238,12 @@ public class WorldCreator extends TrackHelperJ3d {
         Transform3D transform = new Transform3D();
         Node node = new ColorCube(0.7);
         transform.setScale(new Vector3d(2, 0.6, 1));
+        transform.setTranslation(new Vector3d(0, 1, 0));
+        
         TransformGroup tg = new TransformGroup();
         tg.setTransform(transform);
-        tg.addChild(node);
+        //tg.addChild(node);
+        tg.addChild(new Sphere(0.9f));
         node = tg;
         
         Vector3d vector = getPosition(track, 0);

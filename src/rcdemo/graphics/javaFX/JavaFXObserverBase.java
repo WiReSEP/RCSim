@@ -41,7 +41,7 @@ public abstract class JavaFXObserverBase implements Observer {
     Group createWorld(SimulationState state1) {
         // Setup the branch group
         Group worldNode = new Group();
-        WorldCreator creator = new WorldCreator();
+        WorldCreatorJFX creator = new WorldCreatorJFX();
         Group trackGroup = creator.createTrack(state1);
         worldNode.getChildren().add(trackGroup);
         //car = creator.createCar(state1);

@@ -46,7 +46,7 @@ public abstract class Java3dObserverBase implements Observer {
     TransformGroup createWorld(SimulationState state1) {
         // Setup the branch group
         TransformGroup worldNode = new TransformGroup();
-        WorldCreator creator = new WorldCreator();
+        WorldCreatorJ3d creator = new WorldCreatorJ3d();
         TransformGroup trackGroup = creator.createTrack(state1);
         worldNode.addChild(trackGroup);
         car = creator.createCar(state1);

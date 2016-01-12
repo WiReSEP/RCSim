@@ -33,6 +33,7 @@ public class StillCamera<Vector> extends BaseCamera<Vector>{
 
     public StillCamera(Position pos, TrackHelper<Vector> helper) {
         super(helper);
+        this.pos = pos;
     }
     
     
