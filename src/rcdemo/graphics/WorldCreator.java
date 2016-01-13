@@ -67,15 +67,22 @@ public class WorldCreator<Vector, Node, Group extends Node> {
         return createSphereAt(null, center_radius, pos, rhs, 0, 0, -center_dist);
     }
     
-    
+    public Node getRailPiece(Track track, double s0, double s1) {
+        Group group = sc.newGroup();
+        double ds = 0.01; //0.01;
+        for( double s=s0; s<s1; s+=ds ) {
+            sc.add(group, getRailBalls(track, s, s+ds));
+        }
+        return group;
+    }
     
     public Group createTrack(SimulationState state) {
         Track track = state.getTrack();
         Group group = sc.newGroup();
         double ds = 0.01; //0.01;
-        for (double s = 0; s < track.length(); s += ds) {
+        for (double s = 0; s < track.length(); s += 1) {
             //node = getRailCylinders(track, s, s + ds);
-            sc.add(group, getRailBalls(track, s, s + ds));
+            sc.add(group, getRailPiece(track, s, s+1));
         }
             
         ds = 0.01; //0.01;
@@ -86,6 +93,7 @@ public class WorldCreator<Vector, Node, Group extends Node> {
         }
         return group;
     }
+
     
     
     public Group createCar(SimulationState state) {

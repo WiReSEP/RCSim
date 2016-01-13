@@ -36,12 +36,6 @@ public class TrackHelper<Vector> {
         return va.fromDouble(x);
     }
     
-    public RHS<Vector> getRHS(Track track, double s) {
-        Vector forward = va.fromDouble(track.getDxDs(s).toArray());
-        Vector up = va.fromDouble(track.getYaw(s).toArray());
-        return RHS.createRHS(forward, up, va);
-    }
-
     public Vector addScaled(Vector v1, Vector v2, double alpha2) {
         return va.add(v1, va.multiply(v2, alpha2));
     }
@@ -58,14 +52,30 @@ public class TrackHelper<Vector> {
         return res;
     }
     
+
+    public Vector getPosition(Track track, double s) {
+        return toVector(track.getx(s));
+    }
+
+    public Vector getForward(Track track, double s) {
+        return va.normalize(toVector(track.getDxDs(s)));
+    }
+
+    public Vector getYaw(Track track, double s) {
+        return va.normalize(toVector(track.getYaw(s)));
+    }
+    
+    public RHS<Vector> getRHS(Track track, double s) {
+        Vector forward = getForward(track, s);
+        Vector up = getYaw(track, s);
+        return RHS.createRHS(forward, up, va);
+    }
+
+
     public Vector getRailPos(Track track, double s, double dist) {
         Vector pos = getPosition(track, s);
         RHS<Vector> rhs = getRHS(track, s);
         return addScaled(pos, rhs.getLeft(), -dist);
-    }
-
-    public Vector getPosition(Track track, double s) {
-        return toVector(track.getx(s));
     }
 
     public double[] getDoubles(Vector v) {

@@ -17,9 +17,7 @@
 package rcdemo.graphics.java3d;
 
 import rcdemo.graphics.WorldCreator;
-import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
-import com.sun.j3d.utils.geometry.Sphere;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
@@ -47,38 +45,12 @@ import rcdemo.track.Track;
 public class WorldCreatorJ3d 
 extends WorldCreator<Vector3d, Node, TransformGroup> {
 
+
     public WorldCreatorJ3d() {
         super(new TrackHelperJ3d(), new ToolkitJ3d());
     }
     
-
-
     TransformGroup makeCylinder(
-            Vector3d pos0, RHS<Vector3d> rhs0, 
-            Vector3d pos1, RHS<Vector3d> rhs1, 
-            double radius, double dist, double zdist) {
-        Cylinder cylinder;
-        Vector3d v0, v1;
-        v0 = helper.getShiftedPos(pos0, rhs0, 0, dist, zdist);
-        v1 = helper.getShiftedPos(pos1, rhs1, 0, dist, zdist);
-        double l = new Point3d(v0).distance(new Point3d(v1));
-        Vector3d m = helper.addScaled(v0,  0.5, v1, 0.5);
-        Vector3d d = helper.addScaled(v0, -1.0, v1, 1.0);
-        cylinder = new Cylinder((float)(radius), 1.0f);
-        Transform3D trans = new Transform3D();
-        trans.setTranslation(m);
-        Matrix3d mat = new Matrix3d();
-        mat.setColumn(2, rhs0.getUp());
-        mat.setColumn(0, rhs0.getLeft());
-        mat.setColumn(1, d);
-        trans.setRotation(mat);
-        TransformGroup tg = new TransformGroup();
-        tg.setTransform(trans);
-        tg.addChild(cylinder);
-        return tg;
-    }
-
-    TransformGroup makeCylinder2(
             Vector3d pos0, RHS<Vector3d> rhs0, 
             Vector3d pos1, RHS<Vector3d> rhs1, 
             double radius, double dist, double zdist) {
@@ -142,16 +114,15 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
     public Node getRailCylinders(Track track, double s0, double s1){
         double s = 0.5 * (s0 + s1);
         TransformGroup group = new TransformGroup();
-        Cylinder cylinder;
         Vector3d pos0 = helper.getPosition(track, s0);
         Vector3d pos1 = helper.getPosition(track, s1);
         RHS<Vector3d> rhs0= helper.getRHS(track, s0);
         RHS<Vector3d> rhs1= helper.getRHS(track, s1);
 
-        TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
+        TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, rail_radius, rail_dist, 0);
         group.addChild(tg);
         
-        tg = makeCylinder2(pos0, rhs0, pos1, rhs1, rail_radius, -rail_dist, 0);
+        tg = makeCylinder(pos0, rhs0, pos1, rhs1, rail_radius, -rail_dist, 0);
         group.addChild(tg);
 
         return group;
@@ -165,13 +136,34 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
         RHS<Vector3d> rhs0= helper.getRHS(track, s0);
         RHS<Vector3d> rhs1= helper.getRHS(track, s1);
 
-        //TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
-        TransformGroup tg = makeCylinder2(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
+        TransformGroup tg = makeCylinder(pos0, rhs0, pos1, rhs1, center_radius, 0, -center_dist);
         group.addChild(tg);
 
         return group;
     }
     
+    public void makeRailPiece(Track track, double s0, double s1, TransformGroup group) {
+        Vector3d f0 = helper.getForward(track, s0);
+        Vector3d f1 = helper.getForward(track, s1);
+        double cosAlpha = helper.va.dotProduct(f0, f1);
+        double alpha = Math.acos(cosAlpha) * 180 / Math.PI;
+        double middist = 0.5 * alpha / 180 * Math.PI * (s1 - s0);
+        if (alpha<0.5 && middist < 0.01){
+            System.out.println("Alpha:" + alpha + "  middist: " + middist + "  ds: " + (s1-s0));
+            group.addChild(getRailCylinders(track, s0, s1));
+        }
+        else {
+            makeRailPiece(track, s0, (s0+s1)/2, group);
+            makeRailPiece(track, (s0+s1)/2, s1, group);
+        }
+    }
+    
+    @Override
+    public Node getRailPiece(Track track, double s0, double s1) {
+        TransformGroup group = new TransformGroup();
+        makeRailPiece(track, s0, s1, group);
+        return group;
+    }
 
     
 
