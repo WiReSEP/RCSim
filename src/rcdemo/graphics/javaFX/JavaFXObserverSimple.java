@@ -119,8 +119,6 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         CameraView<Point3D> camView = camTransform.getTransform(s, dsdt);
 
         Transform tr = ToolkitJFX.lookAt(camView.getEye(), camView.getTarget(), camView.getUp());
-        System.out.println("detFx:"+tr.determinant());
-        System.out.println(tr);       
         cameraTransform.setToTransform(tr);
     }
 

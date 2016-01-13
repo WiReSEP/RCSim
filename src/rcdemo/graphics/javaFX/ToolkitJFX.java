@@ -111,8 +111,8 @@ class ToolkitJFX extends Toolkit<Point3D, Node, Group> {
     @Override
     public void setAffineTransform(Group group, Point3D pos, RHS<Point3D> rhs) {
         Point3D xVec = rhs.getForward();
-        Point3D yVec = rhs.getUp();
-        Point3D zVec = rhs.getLeft();
+        Point3D yVec = rhs.getLeft();
+        Point3D zVec = rhs.getUp();
         Affine affine = createAffine(pos, xVec, yVec, zVec);
         group.getTransforms().set(0, affine);
     }

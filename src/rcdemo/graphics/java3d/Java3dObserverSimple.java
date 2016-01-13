@@ -16,6 +16,7 @@
  */
 package rcdemo.graphics.java3d;
 
+import com.sun.j3d.utils.geometry.ColorCube;
 import rcdemo.graphics.ViewController;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.BranchGroup;
@@ -126,8 +127,6 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
                 new Point3d(camView.getEye()), 
                 new Point3d(camView.getTarget()), camView.getUp());
         transform.invert();
-        System.out.println("det3d:"+transform.determinant());
-        System.out.println(transform);
         camera.setTransform(transform);
         canvas.startRenderer();
     }

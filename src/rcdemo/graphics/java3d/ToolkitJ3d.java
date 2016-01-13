@@ -99,7 +99,7 @@ class ToolkitJ3d extends Toolkit<Vector3d, Node, TransformGroup> {
 
     @Override
     public Node createColorCube() {
-        return new ColorCube(-1);
+        return new ColorCube(1);
     }
 
     @Override
@@ -108,8 +108,8 @@ class ToolkitJ3d extends Toolkit<Vector3d, Node, TransformGroup> {
         transform.setTranslation(pos);
         Matrix3d rot = new Matrix3d();
         rot.setColumn(0, rhs.getForward());
-        rot.setColumn(1, rhs.getUp());
-        rot.setColumn(2, rhs.getLeft());
+        rot.setColumn(1, rhs.getLeft());
+        rot.setColumn(2, rhs.getUp());
         transform.setRotation(rot);
         group.setTransform(transform);
     }

@@ -92,8 +92,8 @@ public class WorldCreator<Vector, Node, Group extends Node> {
         Track track = state.getTrack();
         
         Node node = sc.createColorCube();
-        Group group = sc.scale(node, 10, 0.3, 1);
-        group = sc.translate(group, 0, 0.3, 0);
+        Group group = sc.scale(node, 4, 1, 0.3);
+        group = sc.translate(group, 0, 0, 0.2);
 
         Vector vector = helper.getPosition(track, 0);
         return sc.translate(group, vector, true);
