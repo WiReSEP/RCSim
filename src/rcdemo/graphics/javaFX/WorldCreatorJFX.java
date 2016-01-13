@@ -29,7 +29,7 @@ public class WorldCreatorJFX
 extends WorldCreator<Point3D, Node, Group> {
 
     public WorldCreatorJFX() {
-        super(new TrackHelperJFX(), new SceneCreatorJFX());
+        super(new TrackHelperJFX(), new ToolkitJFX());
     }
     
     

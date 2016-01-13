@@ -22,10 +22,10 @@ import rcdemo.track.Track;
 
 public class WorldCreator<Vector, Node, Group extends Node> {
     protected TrackHelper<Vector> helper;
-    protected SceneCreator<Vector, Node, Group> sc;
+    protected Toolkit<Vector, Node, Group> sc;
     protected GroundCreator<Vector, Node, Group> groundCreator;
 
-    public WorldCreator(TrackHelper<Vector> helper, SceneCreator<Vector, Node, Group> sc) {
+    public WorldCreator(TrackHelper<Vector> helper, Toolkit<Vector, Node, Group> sc) {
         this.helper = helper;
         this.sc = sc;
         this.groundCreator = new GroundCreator<>(helper, sc);

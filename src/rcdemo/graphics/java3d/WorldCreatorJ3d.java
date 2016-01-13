@@ -48,7 +48,7 @@ public class WorldCreatorJ3d
 extends WorldCreator<Vector3d, Node, TransformGroup> {
 
     public WorldCreatorJ3d() {
-        super(new TrackHelperJ3d(), new SceneCreatorJ3d());
+        super(new TrackHelperJ3d(), new ToolkitJ3d());
     }
     
 

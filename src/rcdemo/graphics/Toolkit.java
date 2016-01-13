@@ -20,7 +20,7 @@ package rcdemo.graphics;
  *
  * @author ezander
  */
-public abstract class SceneCreator<Vector, Node, Group extends Node> {
+public abstract class Toolkit<Vector, Node, Group extends Node> {
 
     public abstract Group newGroup();
 

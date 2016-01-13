@@ -24,13 +24,13 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 import rcdemo.graphics.RHS;
-import rcdemo.graphics.SceneCreator;
+import rcdemo.graphics.Toolkit;
 
 /**
  *
  * @author ezander
  */
-class SceneCreatorJ3d extends SceneCreator<Vector3d, Node, TransformGroup> {
+class ToolkitJ3d extends Toolkit<Vector3d, Node, TransformGroup> {
 
     @Override
     public TransformGroup translate(Node node, Vector3d vector) {

@@ -25,13 +25,13 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import rcdemo.graphics.RHS;
-import rcdemo.graphics.SceneCreator;
+import rcdemo.graphics.Toolkit;
 
 /**
  *
  * @author ezander
  */
-class SceneCreatorJFX extends SceneCreator<Point3D, Node, Group> {
+class ToolkitJFX extends Toolkit<Point3D, Node, Group> {
 
     @Override
     public Group add(Group group, Node node) {

@@ -25,9 +25,9 @@ import rcdemo.track.Track;
  */
 public class GroundCreator<Vector, Node, Group extends Node> {
     TrackHelper<Vector> helper;
-    SceneCreator<Vector, Node, Group> sc;
+    Toolkit<Vector, Node, Group> sc;
 
-    public GroundCreator(TrackHelper<Vector> helper, SceneCreator<Vector, Node, Group> sc) {
+    public GroundCreator(TrackHelper<Vector> helper, Toolkit<Vector, Node, Group> sc) {
         this.helper = helper;
         this.sc = sc;
     }
