@@ -94,16 +94,26 @@ class SceneCreatorJFX extends SceneCreator<Point3D, Node, Group> {
         return scale(node, vector.getX(), vector.getY(), vector.getZ());
     }
 
+    public static Affine createAffine(Point3D pos, Point3D xVec, Point3D yVec, Point3D zVec) {
+        return new Affine(
+                xVec.getX(), yVec.getX(), zVec.getX(), pos.getX(),
+                xVec.getY(), yVec.getY(), zVec.getY(), pos.getY(),
+                xVec.getZ(), yVec.getZ(), zVec.getZ(), pos.getZ());
+    };
+    
+    public static Affine lookAt(Point3D from, Point3D to, Point3D upDir) {
+        Point3D zVec = to.subtract(from).normalize();
+        Point3D xVec = zVec.normalize().crossProduct(upDir).normalize();
+        Point3D yVec = zVec.crossProduct(xVec).normalize();
+        return createAffine(from, xVec, yVec, zVec);
+    }
+
     @Override
     public void setAffineTransform(Group group, Point3D pos, RHS<Point3D> rhs) {
         Point3D xVec = rhs.getForward();
         Point3D yVec = rhs.getUp();
         Point3D zVec = rhs.getLeft();
-        Affine affine = new Affine(
-                xVec.getX(), yVec.getX(), zVec.getX(), pos.getX(),
-                xVec.getY(), yVec.getY(), zVec.getY(), pos.getY(),
-                xVec.getZ(), yVec.getZ(), zVec.getZ(), pos.getZ());
-        Transform t;
+        Affine affine = createAffine(pos, xVec, yVec, zVec);
         group.getTransforms().set(0, affine);
     }
 }

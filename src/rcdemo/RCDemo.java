@@ -15,8 +15,8 @@ public class RCDemo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //RCJava3d.run();
-        HelloJava3Dbalt.main(args);
+        RCJava3d.run();
+        //HelloJava3Dbalt.main(args);
     }
 
 
