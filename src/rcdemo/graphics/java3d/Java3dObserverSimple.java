@@ -41,7 +41,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     Canvas3D canvas;
     TransformGroup camera;
 
-    int camNum = 0;
+    int camNum = -1;
     CameraTransform<Vector3d> camTransform;
 
 
@@ -126,6 +126,8 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
                 new Point3d(camView.getEye()), 
                 new Point3d(camView.getTarget()), camView.getUp());
         transform.invert();
+        System.out.println("det3d:"+transform.determinant());
+        System.out.println(transform);
         camera.setTransform(transform);
         canvas.startRenderer();
     }

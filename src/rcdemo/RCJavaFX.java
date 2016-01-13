@@ -22,6 +22,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import rcdemo.graphics.java3d.Java3dObserverSimple;
 import rcdemo.graphics.javaFX.JavaFXObserverSimple;
 import rcdemo.simulator.ODESimulator;
 import rcdemo.simulator.SimulationState;
@@ -46,24 +47,12 @@ public class RCJavaFX extends Application {
 
         Simulator sim = new ODESimulator();
         sim.addObserver(observer3d);
+        sim.addObserver(new Java3dObserverSimple());
         //sim.addObserver( new TextBasedObserver());
         sim.setState(state);
 
         observer3d.init(sim.getState());
-        //observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
-        //sim.run();
-        //sim.
-        //primaryStage.addEventHandler(EventType., null);
-        //Timeline tl  = new Timeline(d)
         sim.init();
-//        new Timer().scheduleAtFixedRate(new TimerTask() {
-//
-//            @Override
-//            public void run() {
-//                //System.out.println("foo");
-//                //sim.update();
-//            }
-//        }, 10, 100);
 
         primaryStage.setTitle("Rollercoaster Simulator");
         primaryStage.show();

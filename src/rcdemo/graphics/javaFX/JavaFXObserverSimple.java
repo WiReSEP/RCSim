@@ -110,13 +110,14 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         setCamNum(-1);
     }
 
-    public static Affine lookAt(Point3D from, Point3D to, Point3D ydir) {
+    public static Affine lookAt(Point3D from, Point3D to, Point3D upDir) {
         Point3D zVec = to.subtract(from).normalize();
-        Point3D xVec = ydir.normalize().crossProduct(zVec).normalize();
+        Point3D xVec = upDir.normalize().crossProduct(zVec).normalize();
         Point3D yVec = zVec.crossProduct(xVec).normalize();
-        return new Affine(xVec.getX(), yVec.getX(), zVec.getX(), from.getX(),
-                xVec.getY(), yVec.getY(), zVec.getY(), from.getY(),
-                xVec.getZ(), yVec.getZ(), zVec.getZ(), from.getZ());
+        return new Affine(
+                -xVec.getX(), yVec.getX(), -zVec.getX(), from.getX(),
+                -xVec.getY(), yVec.getY(), -zVec.getY(), from.getY(),
+                -xVec.getZ(), yVec.getZ(), -zVec.getZ(), from.getZ());
     }
 
     @Override
@@ -128,6 +129,8 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         CameraView<Point3D> camView = camTransform.getTransform(s, dsdt);
 
         Transform tr = lookAt(camView.getEye(), camView.getTarget(), camView.getUp());
+        System.out.println("detFx:"+tr.determinant());
+        System.out.println(tr);       
         cameraTransform.setToTransform(tr);
     }
 
