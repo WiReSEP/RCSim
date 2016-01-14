@@ -22,6 +22,7 @@ import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.GeometryArray;
+import javax.media.j3d.Light;
 import javax.media.j3d.Material;
 import javax.media.j3d.Node;
 import javax.media.j3d.QuadArray;
@@ -104,11 +105,10 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
         Appearance appearance = new Appearance();
         Material material = new Material();
         material.setLightingEnable(true);
-        //material.setEmissiveColor(new Color3f(0.6f, 0.6f, 0));
-        material.setAmbientColor(new Color3f(1.3f, 0.0f, 1));
-        material.setDiffuseColor(new Color3f(3.0f, 0.0f, 0));
-        //material.setSpecularColor(new Color3f(10.6f, 10.6f, 10));
-        //material.setShininess(3);
+        material.setAmbientColor(new Color3f(0.8f, 0.8f, 0.98f));
+        material.setDiffuseColor(new Color3f(0.8f, 0.8f, 0.98f));
+        material.setSpecularColor(new Color3f(1.0f, 1.0f, 1.0f));
+        material.setShininess(10);
         //material.
         
         appearance.setMaterial(material);
@@ -176,13 +176,15 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
     public TransformGroup createLight(SimulationState state) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 10000.0);
         
-        Color3f light1Color = new Color3f(.9f, .9f, .9f); // white light
-        Vector3d light1Direction = new Vector3d(4.0, -7.0, -12.0);
-        DirectionalLight light = new DirectionalLight(light1Color, new Vector3f(light1Direction));
+        Color3f sunColor = new Color3f(0.9f, 0.9f, 0.6f); // white light
+        //Vector3d light1Direction = new Vector3d(4.0, -7.0, -12.0);
+        Vector3d light1Direction = new Vector3d(.0, .0, -1.0);
+        Light light = new DirectionalLight(sunColor, new Vector3f(light1Direction));
         light.setInfluencingBounds(bounds);
         
-        Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
-        AmbientLight ambLight = new AmbientLight(lightColorGreen);
+        //Color3f lightColorGreen = new Color3f(.1f, 1.4f, .1f); // green light
+        Color3f ambientColor = new Color3f(.2f, .2f, .2f);
+        Light ambLight = new AmbientLight(ambientColor);
         ambLight.setInfluencingBounds(bounds);
         
         TransformGroup group = new TransformGroup();

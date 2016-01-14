@@ -11,6 +11,14 @@ import javax.vecmath.Vector3f;
 
 /**
  * Simple color-per-vertex cube with a different color for each face
+ * 
+ * http://devmag.org.za/2009/04/25/perlin-noise/
+ * https://en.wikipedia.org/wiki/Scenery_generator
+ * https://en.wikipedia.org/wiki/Fractal_landscape
+ * https://en.wikipedia.org/wiki/Simplex_noise
+ * https://en.wikipedia.org/wiki/Perlin_noise
+ * http://codeflow.org/entries/2010/dec/09/minecraft-like-rendering-experiments-in-opengl-4/
+ * http://gamedev.stackexchange.com/questions/55895/terrain-generation-advanced
  */
 public class FractalMountains extends Shape3D {
 
@@ -20,9 +28,13 @@ public class FractalMountains extends Shape3D {
     }
 
     java.util.Random rng;
-    final double dx = 8;
-    final double dy = 8;
-    final int div = 512;
+//    final double dx = 8;
+//    final double dy = 8;
+//    final int div = 512;
+    final int nnn=2;
+    final double dx = 8*nnn;
+    final double dy = 8*nnn;
+    final int div = 512/nnn;
     int N = div + 1, M = div + 1;
     final double roughness = 0.4;
     final double maxHeight = 500;
@@ -148,8 +160,8 @@ public class FractalMountains extends Shape3D {
                 float c = (float) random();
                 c = (float) ((zpos[i][j] - min) / (max - min));
                 c = Math.max(c, 0.2f);
-                colors[i][j] = new Color3f(c * 0.6f, c, c * 0.3f);
-                colors[i][j] = new Color3f(0,0,0);
+                colors[i][j] = new Color3f(c, c, c);
+                //colors[i][j] = new Color3f(0,0,0);
             }
         }
 
@@ -198,7 +210,6 @@ public class FractalMountains extends Shape3D {
 
         Vector3f[] normalsQuad = new Vector3f[n];
         for (int i = 0; i < n; i += 4) {
-            Vector3f normal;
             normalsQuad[i + 0] = compNormal(coordsQuad[i + 3], coordsQuad[i + 0], coordsQuad[i + 1]);
             normalsQuad[i + 1] = compNormal(coordsQuad[i + 0], coordsQuad[i + 1], coordsQuad[i + 2]);
             normalsQuad[i + 2] = compNormal(coordsQuad[i + 1], coordsQuad[i + 2], coordsQuad[i + 3]);
@@ -214,10 +225,12 @@ public class FractalMountains extends Shape3D {
         Appearance appearance = new Appearance();
         Material material = new Material();
         material.setLightingEnable(true);
-        material.setEmissiveColor(new Color3f(0.0f, 0.0f, 0));
-        material.setAmbientColor(new Color3f(1.0f, 0.0f, 0f));
-        material.setDiffuseColor(new Color3f(0.0f, 1.0f, 0f));
-        material.setSpecularColor(new Color3f(0.0f, 0.0f, 0.0f));
+        material.setEmissiveColor(new Color3f(0.0f, 0.0f, 0.0f));
+        //Color3f ambColor = new Color3f(0.8f, 1.0f, 0.0f);
+        Color3f ambColor = new Color3f(0.8f, 0.8f, 0.6f);
+        material.setAmbientColor( ambColor );
+        material.setDiffuseColor( ambColor );
+        material.setSpecularColor(new Color3f(0.2f, 0.2f, 0.2f));
         material.setShininess(15.0f);
         //material.
         
