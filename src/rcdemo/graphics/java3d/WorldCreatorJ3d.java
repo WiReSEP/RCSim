@@ -17,7 +17,6 @@
 package rcdemo.graphics.java3d;
 
 import rcdemo.graphics.WorldCreator;
-import com.sun.j3d.utils.geometry.Cylinder;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.BoundingSphere;
@@ -27,10 +26,8 @@ import javax.media.j3d.Material;
 import javax.media.j3d.Node;
 import javax.media.j3d.QuadArray;
 import javax.media.j3d.Shape3D;
-import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
-import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
@@ -44,6 +41,15 @@ import rcdemo.track.Track;
  */
 public class WorldCreatorJ3d 
 extends WorldCreator<Vector3d, Node, TransformGroup> {
+
+    @Override
+    public TransformGroup createGround(SimulationState state) {
+        TransformGroup group = new TransformGroup();
+        group.addChild(super.createGround(state));
+        //group.addChild(new CheckeredPlane());
+        group.addChild(new FractalMountains());
+        return group;
+    }
 
 
     public WorldCreatorJ3d() {
@@ -149,7 +155,7 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
         double alpha = Math.acos(cosAlpha) * 180 / Math.PI;
         double middist = 0.5 * alpha / 180 * Math.PI * (s1 - s0);
         if (alpha<0.5 && middist < 0.01){
-            System.out.println("Alpha:" + alpha + "  middist: " + middist + "  ds: " + (s1-s0));
+            //System.out.println("Alpha:" + alpha + "  middist: " + middist + "  ds: " + (s1-s0));
             group.addChild(getRailCylinders(track, s0, s1));
         }
         else {
