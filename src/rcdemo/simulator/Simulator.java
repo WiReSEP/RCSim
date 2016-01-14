@@ -51,7 +51,7 @@ public abstract class Simulator {
         }
     }
 
-    static void sleep(double secs) {
+    public static void sleep(double secs) {
         try {
             double msecs = secs * 1000;
             Thread.sleep((int) msecs);

@@ -61,6 +61,10 @@ public class TrackHelper<Vector> {
         return va.normalize(toVector(track.getDxDs(s)));
     }
 
+    public Vector getSpeed(Track track, double s, double dsdt) {
+        return va.multiply(toVector(track.getDxDs(s)), dsdt);
+    }
+    
     public Vector getYaw(Track track, double s) {
         return va.normalize(toVector(track.getYaw(s)));
     }

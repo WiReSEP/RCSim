@@ -16,7 +16,6 @@
  */
 package rcdemo.graphics.java3d;
 
-import com.sun.j3d.utils.geometry.ColorCube;
 import rcdemo.graphics.ViewController;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import javax.media.j3d.BranchGroup;
@@ -38,9 +37,9 @@ import rcdemo.simulator.SimulationState;
  */
 public class Java3dObserverSimple extends Java3dObserverBase implements ViewController {
 
-    SimpleUniverse universe;
-    Canvas3D canvas;
-    TransformGroup camera;
+    protected SimpleUniverse universe;
+    protected Canvas3D canvas;
+    protected TransformGroup camera;
 
     int camNum = -1;
     CameraTransform<Vector3d> camTransform;
@@ -116,7 +115,8 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     }
 
     public void notify(double t, double[] y) {
-        canvas.stopRenderer();
+        if( !canvas.isOffScreen())
+            canvas.stopRenderer();
         super.notify(t, y);
         
         double s = y[0];
@@ -128,7 +128,9 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
                 new Point3d(camView.getTarget()), camView.getUp());
         transform.invert();
         camera.setTransform(transform);
-        canvas.startRenderer();
+        
+        if( !canvas.isOffScreen())
+            canvas.startRenderer();
     }
 
 

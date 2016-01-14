@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
-import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 import rcdemo.graphics.RHS;
 import rcdemo.graphics.camera.CameraFactory;
@@ -36,12 +34,12 @@ import rcdemo.track.Track;
  */
 public abstract class Java3dObserverBase implements Observer {
 
-    BranchGroup branchGroup;
-    TransformGroup world;
-    TransformGroup car;
-    SimulationState state;
-    Track track;
-    TrackHelperJ3d helper = new TrackHelperJ3d();
+    protected BranchGroup branchGroup;
+    protected TransformGroup world;
+    protected TransformGroup car;
+    protected SimulationState state;
+    protected Track track;
+    protected TrackHelperJ3d helper = new TrackHelperJ3d();
 
     TransformGroup createWorld(SimulationState state1) {
         // Setup the branch group
