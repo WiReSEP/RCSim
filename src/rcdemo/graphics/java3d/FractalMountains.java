@@ -19,6 +19,7 @@ public class FractalMountains extends Shape3D {
         Color3f getColor(int i, int j);
     }
 
+    java.util.Random rng;
     final double dx = 8;
     final double dy = 8;
     final int div = 512;
@@ -49,6 +50,9 @@ public class FractalMountains extends Shape3D {
         return sum / n;
     }
 
+    double random() {
+        return rng.nextDouble();
+    }
     void fractalGen(double zpos[][], int s,
             double r, double alpha,
             int M, int N) {
@@ -59,7 +63,7 @@ public class FractalMountains extends Shape3D {
 
             for (int i = 0; i + s2 < M; i += s) {
                 for (int j = 0; j + s2 < N; j += s) {
-                    double d = r * alpha * (2 * Math.random() - 1);
+                    double d = r * alpha * (2 * random() - 1);
                     int is[] = {i, i + s, i + s, i};
                     int js[] = {j, j, j + s, j + s};
                     double mean = avg(zpos, is, js, M, N);
@@ -73,7 +77,7 @@ public class FractalMountains extends Shape3D {
                     int is[] = {i, i + s2, i + s2, i + s};
                     int js[] = {j, j + s2, j - s2, j};
                     double mean = avg(zpos, is, js, M, N);
-                    double d = r * alpha * (2 * Math.random() - 1);
+                    double d = r * alpha * (2 * random() - 1);
                     zpos[i + s2][j] = mean + d;
                 }
             }
@@ -82,7 +86,7 @@ public class FractalMountains extends Shape3D {
                     int is[] = {i, i + s2, i - s2, i};
                     int js[] = {j, j + s2, j + s2, j + s};
                     double mean = avg(zpos, is, js, M, N);
-                    double d = r * alpha * (2 * Math.random() - 1);
+                    double d = r * alpha * (2 * random() - 1);
                     zpos[i][j + s2] = mean + d;
                 }
             }
@@ -93,7 +97,8 @@ public class FractalMountains extends Shape3D {
     }
 
     public FractalMountains() {
-
+        rng = new java.util.Random(1236);
+        
         N = ((N + div - 1) / div) * div + 1;
         M = ((M + div - 1) / div) * div + 1;
 
@@ -119,7 +124,7 @@ public class FractalMountains extends Shape3D {
         }
         for (int i = 0; i < M; i += div) {
             for (int j = 0; j < N; j += div) {
-                zpos[i][j] = maxHeight * Math.random() + zshift;
+                zpos[i][j] = maxHeight * random() + zshift;
                 //zpos[i][j] += (xpos[i]+ypos[j])/40;
                 zpos[i][j] += Math.sqrt(xpos[i] * xpos[i] + ypos[j] * ypos[j]) / 20;
             }
@@ -140,10 +145,11 @@ public class FractalMountains extends Shape3D {
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
                 coords[i][j] = new Point3d(xpos[i], ypos[j], zpos[i][j]);
-                float c = (float) Math.random();
+                float c = (float) random();
                 c = (float) ((zpos[i][j] - min) / (max - min));
                 c = Math.max(c, 0.2f);
                 colors[i][j] = new Color3f(c * 0.6f, c, c * 0.3f);
+                colors[i][j] = new Color3f(0,0,0);
             }
         }
 
@@ -208,11 +214,11 @@ public class FractalMountains extends Shape3D {
         Appearance appearance = new Appearance();
         Material material = new Material();
         material.setLightingEnable(true);
-        //material.setEmissiveColor(new Color3f(0.6f, 0.6f, 0));
-        material.setAmbientColor(new Color3f(1.3f, 0.0f, 1));
-        material.setDiffuseColor(new Color3f(1.0f, 0.0f, 0));
-        //material.setSpecularColor(new Color3f(10.6f, 10.6f, 10));
-        //material.setShininess(0);
+        material.setEmissiveColor(new Color3f(0.0f, 0.0f, 0));
+        material.setAmbientColor(new Color3f(1.0f, 0.0f, 0f));
+        material.setDiffuseColor(new Color3f(0.0f, 1.0f, 0f));
+        material.setSpecularColor(new Color3f(0.0f, 0.0f, 0.0f));
+        material.setShininess(15.0f);
         //material.
         
         appearance.setMaterial(material);
