@@ -108,7 +108,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         branchGroup.addChild(world);
         universe.addBranchGraph(branchGroup);
         View view = canvas.getView();
-        view.setBackClipDistance(1000);
+        view.setBackClipDistance(3000);
         view.setSceneAntialiasingEnable(true);
         
         setCamNum(camNum);
