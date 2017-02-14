@@ -1,6 +1,5 @@
-#lib/
-lib/doc/
-build/
-#nbproject/
-nbproject/private/
-dist/
+/GraphicsSupport/nbproject/private/
+/RCDemoTerminal/nbproject/private/
+/Simulator/build/
+/Simulator/dist/
+/Simulator/nbproject/private/
