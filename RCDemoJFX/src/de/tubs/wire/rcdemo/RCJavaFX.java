@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo;
+package de.tubs.wire.rcdemo;
 
 import javafx.animation.Animation;
 import javafx.animation.Transition;
@@ -23,7 +23,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import rcdemo.graphics.java3d.Java3dObserverSimple;
-import rcdemo.graphics.javaFX.JavaFXObserverSimple;
+import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.Simulator;

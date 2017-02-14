@@ -1,6 +1,13 @@
-package rcdemo;
+package de.tubs.wire.rcdemoj3d;
 
 import com.sun.j3d.utils.universe.SimpleUniverse;
+import de.tubs.wire.graphics.java3d.Java3dObserverBase;
+import de.tubs.wire.graphics.java3d.Java3dObserverMulti;
+import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
+import de.tubs.wire.simulator.Simulator;
+import de.tubs.wire.simulator.TrackSimulator;
+import de.tubs.wire.simulator.track.TrackInformation;
+import de.tubs.wire.ui.DefaultKeyListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -11,13 +18,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import rcdemo.graphics.java3d.Java3dObserverBase;
-import rcdemo.graphics.java3d.Java3dObserverMulti;
-import rcdemo.graphics.java3d.Java3dObserverSimple;
-import de.tubs.wire.simulator.TrackSimulator;
-import de.tubs.wire.simulator.track.TrackInformation;
-import de.tubs.wire.simulator.Simulator;
-import de.tubs.wire.ui.DefaultKeyListener;
 
 
 public class RCSwing extends javax.swing.JFrame {

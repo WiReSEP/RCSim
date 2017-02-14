@@ -14,32 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
+package de.tubs.wire.graphics.javaFX;
 
 import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.transform.Translate;
-import de.tubs.wire.graphics.TrackHelper;
+import de.tubs.wire.graphics.WorldCreator;
 
 /**
  *
  * @author ezander
  */
-public class TrackHelperJFX extends TrackHelper<Point3D> {
+public class WorldCreatorJFX 
+extends WorldCreator<Point3D, Node, Group> {
 
-    public TrackHelperJFX() {
-        super(new Point3DArithmetic());
+    public WorldCreatorJFX() {
+        super(new TrackHelperJFX(), new ToolkitJFX());
     }
     
-    public Node transform(Node node, Point3D p) {
-        Translate t = new Translate(p.getX(), p.getY(), p.getZ());
-        node.getTransforms().add(t);
-        return node;
-    }
-
-    public Node transform(Node node, Point3D p, boolean mod) {
-        Translate t = new Translate(p.getX(), p.getY(), p.getZ());
-        node.getTransforms().add(t);
-        return node;
-    }
 }
