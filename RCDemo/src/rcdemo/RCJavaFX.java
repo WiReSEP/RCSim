@@ -27,7 +27,7 @@ import rcdemo.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.Simulator;
-import rcdemo.ui.DefaultKeyListener;
+import de.tubs.wire.ui.DefaultKeyListener;
 
 /**
  *

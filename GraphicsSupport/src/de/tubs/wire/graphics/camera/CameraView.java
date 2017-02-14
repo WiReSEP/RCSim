@@ -14,22 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
-
-import javafx.geometry.Point3D;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import de.tubs.wire.graphics.WorldCreator;
+package de.tubs.wire.graphics.camera;
 
 /**
  *
  * @author ezander
  */
-public class WorldCreatorJFX 
-extends WorldCreator<Point3D, Node, Group> {
+public class CameraView<Vector> {
 
-    public WorldCreatorJFX() {
-        super(new TrackHelperJFX(), new ToolkitJFX());
+    private final Vector eye;
+    private final Vector target;
+    private final Vector up;
+
+    public CameraView(Vector eye, Vector target, Vector up) {
+        this.eye = eye;
+        this.target = target;
+        this.up = up;
     }
     
+    public Vector getEye() {
+        return eye;
+    }
+
+    public Vector getTarget() {
+        return target;
+    }
+
+    public Vector getUp() {
+        return up;
+    }
 }

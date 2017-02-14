@@ -14,61 +14,69 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
+package de.tubs.wire.graphics.java3d;
 
-import javafx.geometry.Point3D;
+import javax.vecmath.Vector3d;
 import de.tubs.wire.graphics.VectorArithmetic;
 
 /**
  *
  * @author ezander
  */
-public class Point3DArithmetic extends VectorArithmetic<Point3D> {
+class Vector3dArithmetic extends VectorArithmetic<Vector3d> {
 
     @Override
-    public Point3D zero() {
-        return Point3D.ZERO;
+    public Vector3d zero() {
+        return new Vector3d();
     }
 
     @Override
-    public Point3D copy(Point3D v) {
-        return new Point3D(v.getX(), v.getY(), v.getZ());
+    public Vector3d copy(Vector3d v) {
+        return new Vector3d(v.getX(), v.getY(), v.getZ());
     }
 
     @Override
-    public double[] toDouble(Point3D v) {
+    public double[] toDouble(Vector3d v) {
         return new double[]{v.getX(), v.getY(), v.getZ()};
     }
 
     @Override
-    public Point3D fromDouble(double[] d) {
+    public Vector3d fromDouble(double[] d) {
         assert d.length == 3;
-        return new Point3D(d[0], d[1], d[2]);
+        return new Vector3d(d[0], d[1], d[2]);
     }
 
     @Override
-    public Point3D add(Point3D v1, Point3D v2) {
-        return v1.add(v2);
+    public Vector3d add(Vector3d v1, Vector3d v2) {
+        Vector3d v = copy(v1);
+        v.add(v2);
+        return v;
     }
 
     @Override
-    public Point3D multiply(Point3D v1, double d) {
-        return v1.multiply(d);
+    public Vector3d multiply(Vector3d v1, double d) {
+        Vector3d v = copy(v1);
+        v.scale(d);
+        return v;
     }
 
     @Override
-    public Point3D subtract(Point3D v1, Point3D v2) {
-        return v1.subtract(v2);
+    public Vector3d subtract(Vector3d v1, Vector3d v2) {
+        Vector3d v = copy(v1);
+        v.sub(v2);
+        return v;
     }
 
     @Override
-    public Point3D crossProduct(Point3D v1, Point3D v2) {
-        return v1.crossProduct(v2);
+    public Vector3d crossProduct(Vector3d v1, Vector3d v2) {
+        Vector3d v = copy(v1);
+        v.cross(v1, v2);
+        return v;
     }
 
     @Override
-    public double dotProduct(Point3D v1, Point3D v2) {
-        return v1.dotProduct(v2);
+    public double dotProduct(Vector3d v1, Vector3d v2) {
+        return v1.dot(v2);
     }
     
 }

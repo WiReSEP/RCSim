@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo;
+package de.tubs.wire.rcdemoj3d;
 
+import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.track.TrackInformation;
-import rcdemo.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.ui.DefaultKeyListener;
@@ -27,7 +27,7 @@ import de.tubs.wire.ui.DefaultKeyListener;
  *
  * @author ezander
  */
-public class RCTeam {
+public class RCJava3d {
 
     public static void run() {
         // Load simulation stuff
@@ -36,14 +36,16 @@ public class RCTeam {
         String filename = "tracks/foo.rct";
         TrackInformation state = TrackInformation.readFromXML(filename);
         
-        TeamObserver observer = new TeamObserver();
-        observer.setCamNum(-2);
+        Java3dObserverSimple observer3d = new Java3dObserverSimple();
+        observer3d.setCamNum(-1);
         
         Simulator sim = new TrackSimulator();
-        sim.addObserver(observer);
+        sim.addObserver(observer3d);
+        //sim.addObserver( new TextBasedObserver());
         sim.setState(state);
 
-        //observer.init(sim.getState());
+        observer3d.init(sim.getState());
+        observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
         sim.run();
     }
     

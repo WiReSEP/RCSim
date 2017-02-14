@@ -5,6 +5,8 @@
  */
 package rcdemo;
 
+import de.tubs.wire.rcdemoj3d.RCJava3d;
+
 /**
  *
  * @author ezander

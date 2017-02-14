@@ -14,48 +14,51 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
+package de.tubs.wire.graphics.java3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Point3D;
-import javafx.scene.Group;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Node;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Vector3d;
 import de.tubs.wire.graphics.RHS;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.simulator.Observer;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.Track;
 
-
 /**
  *
  * @author ezander
  */
-public abstract class JavaFXObserverBase implements Observer {
+public abstract class Java3dObserverBase implements Observer {
 
-    Group world;
-    Group car;
-    TrackInformation state;
-    Track track;
-    TrackHelperJFX helper = new TrackHelperJFX();
+    protected BranchGroup branchGroup;
+    protected TransformGroup world;
+    protected TransformGroup car;
+    protected TrackInformation state;
+    protected Track track;
+    protected TrackHelperJ3d helper = new TrackHelperJ3d();
 
-    Group createWorld(TrackInformation state1) {
+    TransformGroup createWorld(TrackInformation state1) {
         // Setup the branch group
-        WorldCreatorJFX creator = new WorldCreatorJFX();
-
-        Group worldNode = new Group();
-
-        Group trackGroup = creator.createTrack(state1);
-        worldNode.getChildren().add(trackGroup);
+        WorldCreatorJ3d creator = new WorldCreatorJ3d();
+        
+        TransformGroup worldNode = new TransformGroup();
+        
+        TransformGroup trackGroup = creator.createTrack(state1);
+        worldNode.addChild(trackGroup);
         
         car = creator.createCar(state1);
-        worldNode.getChildren().add(car);
+        worldNode.addChild(car);
         
-        Group ground = creator.createGround(state1);
-        worldNode.getChildren().add(ground);
+        TransformGroup ground = creator.createGround(state1);
+        worldNode.addChild(ground);
         
-        Group light = creator.createLight(state1);
-        worldNode.getChildren().add(light);
+        Node light = creator.createLight(state1);
+        worldNode.addChild(light);
+        
         return worldNode;
     }
 
@@ -63,11 +66,12 @@ public abstract class JavaFXObserverBase implements Observer {
         assert track != null;
         double s = y[0];
         double dsdt = y[1];
-        Point3D currentPos = helper.getPosition(track, s);
-        RHS<Point3D> rhs = helper.getRHS(track, s);
+        Vector3d currentPos = helper.getPosition(track, s);
+        RHS<Vector3d> rhs = helper.getRHS(track, s);
         
-        WorldCreatorJFX creator = new WorldCreatorJFX();
+        WorldCreatorJ3d creator = new WorldCreatorJ3d();
         creator.setCarState(car, currentPos, rhs);
+        
     }
 
     static final List<CameraFactory.CameraType> camList = new ArrayList<>();

@@ -17,7 +17,7 @@
 package rcdemo.graphics.javaFX;
 
 import javafx.geometry.Point3D;
-import rcdemo.graphics.ViewController;
+import de.tubs.wire.graphics.ViewController;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -26,9 +26,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
-import rcdemo.graphics.camera.CameraTransform;
-import rcdemo.graphics.camera.CameraFactory;
-import rcdemo.graphics.camera.CameraView;
+import de.tubs.wire.graphics.camera.CameraTransform;
+import de.tubs.wire.graphics.camera.CameraFactory;
+import de.tubs.wire.graphics.camera.CameraView;
 import de.tubs.wire.simulator.track.TrackInformation;
 
 /**

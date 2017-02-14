@@ -19,7 +19,7 @@ package rcdemo.graphics.javaFX;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Translate;
-import rcdemo.graphics.TrackHelper;
+import de.tubs.wire.graphics.TrackHelper;
 
 /**
  *

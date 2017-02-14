@@ -14,22 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
+package de.tubs.wire.graphics.camera;
 
-import javafx.geometry.Point3D;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import de.tubs.wire.graphics.WorldCreator;
+import de.tubs.wire.graphics.TrackHelper;
+import de.tubs.wire.simulator.track.Track;
 
 /**
  *
  * @author ezander
  */
-public class WorldCreatorJFX 
-extends WorldCreator<Point3D, Node, Group> {
+public abstract class BaseCamera<Vector> implements CameraTransform<Vector> {
+    protected TrackHelper<Vector> helper;
+    protected Track track;
 
-    public WorldCreatorJFX() {
-        super(new TrackHelperJFX(), new ToolkitJFX());
+    public BaseCamera(TrackHelper<Vector> helper) {
+        this(helper, null);
     }
-    
+
+    public BaseCamera(TrackHelper<Vector> helper, Track track) {
+        this.helper = helper;
+        this.track = track;
+    }
+
+    @Override
+    public void init(Track track) {
+        this.track = track;
+    }
 }

@@ -14,22 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package rcdemo.graphics.javaFX;
+package de.tubs.wire.ui;
 
-import javafx.geometry.Point3D;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import de.tubs.wire.graphics.WorldCreator;
+public interface HandlerFunction {
 
-/**
- *
- * @author ezander
- */
-public class WorldCreatorJFX 
-extends WorldCreator<Point3D, Node, Group> {
-
-    public WorldCreatorJFX() {
-        super(new TrackHelperJFX(), new ToolkitJFX());
-    }
+    public void process(EventDetails e);
     
 }

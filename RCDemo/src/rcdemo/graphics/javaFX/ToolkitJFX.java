@@ -24,8 +24,8 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import rcdemo.graphics.RHS;
-import rcdemo.graphics.Toolkit;
+import de.tubs.wire.graphics.RHS;
+import de.tubs.wire.graphics.Toolkit;
 
 /**
  *
