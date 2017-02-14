@@ -17,6 +17,7 @@
 package de.tubs.wire.simulator.io;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,12 +67,19 @@ public class XMLHelper {
         return Integer.parseInt(s);
     }
 
-    public static Element loadAndGetDocRoot(String filename) {
+    public static Element loadAndGetDocRoot(String filename, boolean fromJar) {
         try {
             DocumentBuilder builder;
             builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-            Document doc = builder.parse(filename);
+            Document doc;
+            if(fromJar){
+                InputStream inputStream = XMLHelper.class.getResourceAsStream(filename); 
+                doc = builder.parse(inputStream);
+            }
+            else {
+                doc = builder.parse(filename);
+            }
             Element root = doc.getDocumentElement();
             return root;
         } catch (ParserConfigurationException | IOException | SAXException ex) {

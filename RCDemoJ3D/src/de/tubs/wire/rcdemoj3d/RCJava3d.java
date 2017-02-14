@@ -20,6 +20,7 @@ import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.Simulator;
+import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.ui.DefaultKeyListener;
 
 
@@ -31,10 +32,10 @@ public class RCJava3d {
 
     public static void run() {
         // Load simulation stuff
-        //String filename = "tracks/colossos.rct";
-        //String filename = "tracks/bigloop.rct";
-        String filename = "tracks/foo.rct";
-        TrackInformation state = TrackInformation.readFromXML(filename);
+        //String filename = "../tracks/colossos.rct";
+        //String filename = "../tracks/bigloop.rct";
+        String filename = "../Simulator/tracks/foo.rct";
+        TrackInformation state = TrackInformation.readFromXML(StockTracks.TEST);
         
         Java3dObserverSimple observer3d = new Java3dObserverSimple();
         observer3d.setCamNum(-1);

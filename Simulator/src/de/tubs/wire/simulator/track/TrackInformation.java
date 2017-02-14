@@ -99,9 +99,9 @@ public class TrackInformation {
      * @param filename Name of the XML file (e.g. colossus.rct).
      * @return A TrackInformation object.
      */
-    public static TrackInformation readFromXML(String filename) {
+    protected static TrackInformation readFromXML(String filename, boolean fromJar) {
         TrackInformation sim = new TrackInformation();
-        Element rootElement = XMLHelper.loadAndGetDocRoot(filename);
+        Element rootElement = XMLHelper.loadAndGetDocRoot(filename, fromJar);
         Element trackElement = XMLHelper.getChildByName(rootElement, "Track");
         
         Element general = XMLHelper.getChildByName(trackElement, "General");
@@ -148,5 +148,14 @@ public class TrackInformation {
                 
         return sim;
     }
+    
+    public static TrackInformation readFromXML(String filename) {
+        return readFromXML(filename, false);
+    }
+    
+    public static TrackInformation readFromXML(StockTracks st) {
+        return readFromXML(st.getResourceName(), true);
+    }
+    
 }
 
