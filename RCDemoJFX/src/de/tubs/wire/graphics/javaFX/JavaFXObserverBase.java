@@ -35,26 +35,26 @@ public abstract class JavaFXObserverBase implements Observer<TrackInformation> {
 
     Group world;
     Group car;
-    TrackInformation state;
+    TrackInformation trackInfo;
     Track track;
     TrackHelperJFX helper = new TrackHelperJFX();
 
-    Group createWorld(TrackInformation state1) {
+    Group createWorld(TrackInformation trackInfo2) {
         // Setup the branch group
         WorldCreatorJFX creator = new WorldCreatorJFX();
 
         Group worldNode = new Group();
 
-        Group trackGroup = creator.createTrack(state1);
+        Group trackGroup = creator.createTrack(trackInfo2);
         worldNode.getChildren().add(trackGroup);
         
-        car = creator.createCar(state1);
+        car = creator.createCar(trackInfo2);
         worldNode.getChildren().add(car);
         
-        Group ground = creator.createGround(state1);
+        Group ground = creator.createGround(trackInfo2);
         worldNode.getChildren().add(ground);
         
-        Group light = creator.createLight(state1);
+        Group light = creator.createLight(trackInfo2);
         worldNode.getChildren().add(light);
         return worldNode;
     }

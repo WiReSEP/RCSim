@@ -32,13 +32,13 @@ public class RCTerminal {
 
     public static void run() {
         // Load simulation stuff
-        TrackInformation state = TrackInformation.readFromXML(StockTracks.TEST);
+        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         
         TermObserver observer = new TermObserver();
         
         TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observer);
-        sim.setSimulationInfo(state);
+        sim.setSimulationInfo(trackInfo);
 
         //observer.init(sim.getState());
         sim.run();

@@ -82,9 +82,9 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     }
     
     @Override
-    public void init(TrackInformation state) {
-        this.state = state;
-        this.track = state.getTrack();
+    public void init(TrackInformation trackInfo) {
+        this.trackInfo = trackInfo;
+        this.track = trackInfo.getTrack();
         assert (track != null);
        
         // Create the universe and add the group of objects
@@ -99,7 +99,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
             SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
         }
 
-        world = createWorld(state);
+        world = createWorld(trackInfo);
         
         camera = universe.getViewingPlatform().getViewPlatformTransform();
 

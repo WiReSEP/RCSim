@@ -4,7 +4,6 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import de.tubs.wire.graphics.java3d.Java3dObserverBase;
 import de.tubs.wire.graphics.java3d.Java3dObserverMulti;
 import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
-import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.keyboard.AWTKeyProcessor;
@@ -25,7 +24,7 @@ public class RCSwing extends javax.swing.JFrame {
 
     String lastPath;
     Java3dObserverBase java3dObserver;
-    Simulator sim;
+    TrackSimulator sim;
     Timer timer;
 
     /**
@@ -224,10 +223,10 @@ public class RCSwing extends javax.swing.JFrame {
         //go.addKeyListener(this);
         // Create a simple scene and attach it to the virtual universe
         String filename = selected.getAbsolutePath();
-        TrackInformation state = TrackInformation.readFromXML(filename);
+        TrackInformation trackInfo = TrackInformation.readFromXML(filename);
         jSplitPane1.setDividerLocation(0.5);
 
-        sim.setSimulationInfo(state);
+        sim.setSimulationInfo(trackInfo);
         sim.init();
         if (timer != null) {
             timer.stop();

@@ -78,8 +78,8 @@ public class WorldCreator<Vector, Node, Group extends Node> {
         return group;
     }
     
-    public Group createTrack(TrackInformation state) {
-        Track track = state.getTrack();
+    public Group createTrack(TrackInformation trackInfo) {
+        Track track = trackInfo.getTrack();
         Group group = sc.newGroup();
         double ds = 0.01; //0.01;
         for (double s = 0; s < track.getPeriod(); s += 1) {
@@ -98,8 +98,8 @@ public class WorldCreator<Vector, Node, Group extends Node> {
 
     
     
-    public Group createCar(TrackInformation state) {
-        Track track = state.getTrack();
+    public Group createCar(TrackInformation trackInfo) {
+        Track track = trackInfo.getTrack();
         
         Node node = sc.createColorCube();
         Group group = sc.scale(node, 2, 1, 0.3);
@@ -113,11 +113,11 @@ public class WorldCreator<Vector, Node, Group extends Node> {
         sc.setAffineTransform(car, pos, rhs);
     }
     
-    public Group createGround(TrackInformation state){
-        return groundCreator.createGround(state);
+    public Group createGround(TrackInformation trackInfo){
+        return groundCreator.createGround(trackInfo);
     }
     
-    public Group createLight(TrackInformation state){
+    public Group createLight(TrackInformation trackInfo){
         // empty group currently
         return sc.newGroup();
     }

@@ -35,7 +35,7 @@ public class RCJava3d {
         //String filename = "../tracks/colossos.rct";
         //String filename = "../tracks/bigloop.rct";
         String filename = "../Simulator/tracks/foo.rct";
-        TrackInformation state = TrackInformation.readFromXML(StockTracks.TEST);
+        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         
         Java3dObserverSimple observer3d = new Java3dObserverSimple();
         observer3d.setCamNum(-1);
@@ -43,7 +43,7 @@ public class RCJava3d {
         TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observer3d);
         //sim.addObserver( new TextBasedObserver());
-        sim.setSimulationInfo(state);
+        sim.setSimulationInfo(trackInfo);
 
         observer3d.init(sim.getSimulationInfo());
         

@@ -97,12 +97,12 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
     }
 
     @Override
-    public void init(TrackInformation state) {
-        this.state = state;
-        this.track = state.getTrack();
+    public void init(TrackInformation trackInfo) {
+        this.trackInfo = trackInfo;
+        this.track = trackInfo.getTrack();
         assert (track != null);
 
-        world = createWorld(state);
+        world = createWorld(trackInfo);
         root.getChildren().clear();
         root.getChildren().add(world);
 

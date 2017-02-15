@@ -44,9 +44,9 @@ public class WorldCreatorJ3d
 extends WorldCreator<Vector3d, Node, TransformGroup> {
 
     @Override
-    public TransformGroup createGround(TrackInformation state) {
+    public TransformGroup createGround(TrackInformation trackInfo) {
         TransformGroup group = new TransformGroup();
-        //group.addChild(super.createGround(state));
+        //group.addChild(super.createGround(trackInfo));
         group.addChild(new CheckeredPlane());
         //group.addChild(new FractalMountains());
         return group;
@@ -173,7 +173,7 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
 
     
 
-    public TransformGroup createLight(TrackInformation state) {
+    public TransformGroup createLight(TrackInformation trackInfo) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 10000.0);
         
         Color3f sunColor = new Color3f(0.9f, 0.9f, 0.6f); // white light

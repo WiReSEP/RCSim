@@ -25,8 +25,6 @@ import javafx.util.Duration;
 import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
-import de.tubs.wire.simulator.Simulator;
-import de.tubs.wire.simulator.TextBasedObserver;
 import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.graphics.DefaultKeyMapping;
 

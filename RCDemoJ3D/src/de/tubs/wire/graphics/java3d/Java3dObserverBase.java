@@ -37,26 +37,26 @@ public abstract class Java3dObserverBase implements Observer<TrackInformation> {
     protected BranchGroup branchGroup;
     protected TransformGroup world;
     protected TransformGroup car;
-    protected TrackInformation state;
+    protected TrackInformation trackInfo;
     protected Track track;
     protected TrackHelperJ3d helper = new TrackHelperJ3d();
 
-    TransformGroup createWorld(TrackInformation state1) {
+    TransformGroup createWorld(TrackInformation trackInfo2) {
         // Setup the branch group
         WorldCreatorJ3d creator = new WorldCreatorJ3d();
         
         TransformGroup worldNode = new TransformGroup();
         
-        TransformGroup trackGroup = creator.createTrack(state1);
+        TransformGroup trackGroup = creator.createTrack(trackInfo2);
         worldNode.addChild(trackGroup);
         
-        car = creator.createCar(state1);
+        car = creator.createCar(trackInfo2);
         worldNode.addChild(car);
         
-        TransformGroup ground = creator.createGround(state1);
+        TransformGroup ground = creator.createGround(trackInfo2);
         worldNode.addChild(ground);
         
-        Node light = creator.createLight(state1);
+        Node light = creator.createLight(trackInfo2);
         worldNode.addChild(light);
         
         return worldNode;

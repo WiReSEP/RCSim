@@ -33,8 +33,8 @@ public class GroundCreator<Vector, Node, Group extends Node> {
         this.sc = sc;
     }
 
-    public Group createGround(TrackInformation state) {
-        Track track = state.getTrack();
+    public Group createGround(TrackInformation trackInfo) {
+        Track track = trackInfo.getTrack();
         Group t = sc.newGroup();
         TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
         double mean[] = helper.va.toDouble(stats.mean);

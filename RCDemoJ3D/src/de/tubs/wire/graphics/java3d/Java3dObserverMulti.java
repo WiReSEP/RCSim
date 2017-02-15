@@ -121,13 +121,13 @@ public class Java3dObserverMulti extends Java3dObserverBase {
     }
     
     @Override
-    public void init(TrackInformation state) {
-        this.state = state;
-        this.track = state.getTrack();
+    public void init(TrackInformation trackInfo) {
+        this.trackInfo = trackInfo;
+        this.track = trackInfo.getTrack();
         assert (track != null);
 
         //
-        world = createWorld(state);
+        world = createWorld(trackInfo);
         branchGroup = new BranchGroup();
         branchGroup.addChild(world);
 
