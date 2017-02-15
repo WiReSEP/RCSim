@@ -64,7 +64,7 @@ public class TrackingCamera<Vector> extends BaseCamera<Vector> {
     
     @Override
     public CameraView<Vector> getView(double s, double dsdt) {
-        VectorMath<Vector> vecmath = helper.TrackHelper.this.vecmath;
+        VectorMath<Vector> vecmath = helper.vecmath;
 
         Vector currentPos = helper.getPosition(track, s);
         Vector target = vecmath.copy(currentPos);

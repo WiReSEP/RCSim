@@ -28,7 +28,8 @@ import de.tubs.wire.simulator.track.TrackODE;
 import javafx.scene.input.DragEvent;
 
 /**
- * A simulator 
+ * A simulator for rollercoaster tracks.
+ * 
  * @author ezander
  */
 public class TrackSimulator extends ODESimulator<TrackInformation> {
@@ -40,12 +41,13 @@ public class TrackSimulator extends ODESimulator<TrackInformation> {
         Track track = trackInfo.getTrack();
         
         // Set the force model
+        // TODO: should be customisable
         ForceModel gravity = ConstantForceModel.createGravityForceModel(1);
         ForceModel friction = new DragForceModel(DragForceModel.getAirDensity(20), DragForceModel.CD_CUBE, 1);
         ForceModel combinedForce = new CombinedForceModel().add(gravity, 1).add(friction, 0 * 0.01);
         TrackODE ode2 = new TrackODE(track, combinedForce);
         
-        // Compute initial velocity (in terms of curve parameter s)
+        // Compute initial speed (in terms of curve parameter s)
         double v0 = trackInfo.getV0();
         double dxds = track.getDxDs(0).getNorm();
         double dsdt0 = v0 / dxds;

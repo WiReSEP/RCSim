@@ -17,7 +17,8 @@
 package de.tubs.wire.simulator;
 
 /**
- *
+ * An Observer can be registered with an Simulation and gets notifications about state changes in the Simulation.
+ * 
  * @author ezander
  */
 public interface Observer<SimulationInfo> {
@@ -29,6 +30,12 @@ public interface Observer<SimulationInfo> {
      */
     void init(SimulationInfo simulationInfo);
 
+    /**
+     * Called when the simulation has computed a new state.
+     * 
+     * @param t The new simulation time.
+     * @param y The new state of the simulation.
+     */
     void notify(double t, double[] y);
     
 }

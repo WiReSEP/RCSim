@@ -10,7 +10,8 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.ode.nonstiff.HighamHall54Integrator;
 
 /**
- *
+ * A Simulator class that works with ODEs.
+ * 
  * @author ezander
  */
 public abstract class ODESimulator<SimulationInfo> extends Simulator<SimulationInfo> {

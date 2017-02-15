@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *
+ * A class that handles key events (key pressed, release, typed).
+ * 
+ * 
  * @author ezander
  */
 public class KeyProcessor {

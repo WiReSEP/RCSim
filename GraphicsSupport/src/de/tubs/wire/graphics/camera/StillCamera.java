@@ -42,22 +42,22 @@ public class StillCamera<Vector> extends BaseCamera<Vector>{
         super.init(track);
         
         TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
-        VectorMath<Vector> vecmath = helper.TrackHelper.this.vecmath;
+        VectorMath<Vector> vecmath = helper.vecmath;
         
         switch (pos) {
             case MIN:
                 eye = vecmath.add(stats.min, vecmath.multiply(stats.dim, -0.5));
                 eye = vecmath.setEntry(eye, 2, vecmath.getEntry(stats.min, 2));
-                z = helper.TrackHelper.this.vecmath.fromDouble(new double[]{0,0,1});
+                z = helper.vecmath.fromDouble(new double[]{0,0,1});
                 break;
             case MAX:
                 eye = vecmath.add(stats.max, vecmath.multiply(stats.dim, 0.5));
-                z = helper.TrackHelper.this.vecmath.fromDouble(new double[]{0,0,1});
+                z = helper.vecmath.fromDouble(new double[]{0,0,1});
                 break;
             case MEAN:
                 eye = vecmath.add(stats.mean, vecmath.multiply(stats.dim, 0.5));
                 eye = vecmath.setEntry(eye, 2, vecmath.getEntry(eye, 2)+1000);
-                z = helper.TrackHelper.this.vecmath.fromDouble(new double[]{0,1,0});
+                z = helper.vecmath.fromDouble(new double[]{0,1,0});
                 break;
         }
         target = stats.mean;

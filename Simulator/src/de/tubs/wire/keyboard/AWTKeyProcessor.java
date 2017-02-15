@@ -21,7 +21,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- *
+ * A class to listen for AWT keyboard event and forward them to a KeyProcessor.
+ * 
  * @author ezander
  */
 public class AWTKeyProcessor extends KeyProcessor implements KeyListener //, EventHandler<javafx.scene.input.SimpleKeyEvent> {

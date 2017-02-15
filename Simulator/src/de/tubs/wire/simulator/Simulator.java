@@ -23,15 +23,15 @@ import java.util.List;
  * Base class for simulators.
  * 
  * Contains a simulationInfo, a time stepper which dictates the flow of time (i.e. 
- simulation time versus real time, and a list of observers, which get notified 
- of changes in the simulation.
- 
- Derived classes must implement the methods 'reset' and 'stepTo', which reset 
- the simulation simulationInfo or continue the simulation up to a given time (given in 
- simulation time).
- 
- Clients of this class usually call 'addObserver' in order to be notified of 
- changes in the simulation simulationInfo. 
+ * simulation time versus real time, and a list of observers, which get notified 
+ * of changes in the simulation.
+ * 
+ * Derived classes must implement the methods 'reset' and 'stepTo', which reset 
+ * the simulation state or continue the simulation up to a given time (given in 
+ * simulation time).
+ * 
+ * Clients of this class usually call 'addObserver' in order to be notified of 
+ * changes in the simulation state. 
  * 
  * @author ezander
  * @param <SimulationInfo> Class containing information essential to the specific simulation.
@@ -78,10 +78,12 @@ public abstract class Simulator<SimulationInfo> {
     }
 
     /** 
-     * Notifies the observers if the simulationInfo has changed. 
+     * Notifies the observers if the simulation state has changed. 
+     * 
      * Usually called by update, no need to call it yourself.
+     * 
      * @param t The current time (simulation time).
-     * @param y The current position.
+     * @param y The current state.
      */
     protected void notifyObservers(double t, double[] y) {
         for (Observer<SimulationInfo> observer : observers) {
@@ -104,7 +106,7 @@ public abstract class Simulator<SimulationInfo> {
     }
 
     /**
-     * Reset the simulation to the initial simulationInfo.
+     * Reset the simulation to the initial state.
      * 
      * Needs to be implemented in derived classes.
      */
@@ -117,7 +119,7 @@ public abstract class Simulator<SimulationInfo> {
      * integration scheme).
      * 
      * @param simTime The new simulation time up to which needs to be simulated.
-     * @return The current simulationInfo of the simulation.
+     * @return The current state of the simulation.
      */
     protected abstract double[] stepTo(double simTime);
 
@@ -125,7 +127,7 @@ public abstract class Simulator<SimulationInfo> {
      * Update the simulation.
      * 
      * Gets the current time from the time stepper, lets the derived simulation 
- class compute the new simulationInfo and inform all observers about the new simulationInfo.
+     * class compute the new state and inform all observers about the new state.
      */
     public final void update() {
         double t = stepper.getSimTime();
