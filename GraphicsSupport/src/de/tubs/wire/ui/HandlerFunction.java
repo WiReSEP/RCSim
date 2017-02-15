@@ -16,6 +16,15 @@
  */
 package de.tubs.wire.ui;
 
+/**
+ * Interface for functions that can handle events.
+ * 
+ * An instance of HandlerFunction can be registered with a KeyProcessor to 
+ * handle a key event (pressed, released, typed,...). If the key event happened 
+ * the HandlerFunction's process method is called.
+ * 
+ * @author ezander
+ */
 public interface HandlerFunction {
 
     public void process(EventDetails e);

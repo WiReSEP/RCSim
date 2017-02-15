@@ -22,11 +22,11 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import rcdemo.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.Simulator;
+import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.ui.DefaultKeyListener;
 
 /**
@@ -38,20 +38,18 @@ public class RCJavaFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //String filename = "tracks/colossos.rct";
-        String filename = "tracks/foo.rct";
-        TrackInformation state = TrackInformation.readFromXML(filename);
+        TrackInformation state = TrackInformation.readFromXML(StockTracks.TEST);
 
-        JavaFXObserverSimple observer3d = new JavaFXObserverSimple(primaryStage);
+        JavaFXObserverSimple observerFX = new JavaFXObserverSimple(primaryStage);
         //observer3d.setCamNum(-1);
 
         Simulator sim = new TrackSimulator();
-        sim.addObserver(observer3d);
-        sim.addObserver(new Java3dObserverSimple());
+        sim.addObserver(observerFX);
+        //sim.addObserver(new Java3dObserverSimple());
         //sim.addObserver( new TextBasedObserver());
         sim.setState(state);
 
-        observer3d.init(sim.getState());
+        observerFX.init(sim.getState());
         sim.init();
 
         primaryStage.setTitle("Rollercoaster Simulator");
@@ -59,14 +57,10 @@ public class RCJavaFX extends Application {
 
         Scene scene = primaryStage.getScene();
         //scene.setOnKeyPressed(
-        scene.setOnKeyTyped(
-                DefaultKeyListener.getDefaultKeyListener(sim, observer3d));
-//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                System.out.println(event);
-//            }
-//        });
+        
+        KeyProcessorFX keyprocessor = new KeyProcessorFX();
+        DefaultKeyListener.setDefaultKeys(keyprocessor, sim, observerFX, false);
+        scene.setOnKeyTyped(keyprocessor);
 
         Animation animation = new Transition() {
             {

@@ -16,26 +16,38 @@
  */
 package de.tubs.wire.ui;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 /**
- * This class is supposed to contain information about the event that occurred.
- *
- * Currently, contains nothing but could contain stuff like event time, input
- * device, originating window, etc in the future.
  *
  * @author ezander
  */
-public class EventDetails {
-    
-    public final KeyProcessor.SimpleKeyEvent evt;
+public class AWTKeyProcessor extends KeyProcessor implements KeyListener //, EventHandler<javafx.scene.input.SimpleKeyEvent> {
+{
 
-    // currently nothing, but maybe in the future
-    public EventDetails(KeyProcessor.SimpleKeyEvent evt) {
-        this.evt = evt;
+    void processAWTEvent(KeyEvent e) {
+        final char keyChar = e.getKeyChar();
+        final int keyCode = e.getKeyCode();
+        final int eventType = e.getID(); // 
+        
+        SimpleKeyEvent evt = new SimpleKeyEvent(keyChar, keyCode, eventType);
+        super.processKeyEvent(evt);
     }
-
+    
     @Override
-    public String toString() {
-        return getClass().getName() + "(" + evt.toString() + ")";
+    public void keyTyped(KeyEvent e) {
+        processAWTEvent(e);
     }
     
+    @Override
+    public void keyPressed(KeyEvent e) {
+        processAWTEvent(e);
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        processAWTEvent(e);
+    }
+
 }

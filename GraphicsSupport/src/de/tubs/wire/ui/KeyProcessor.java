@@ -1,140 +1,135 @@
 /*
- * Copyright (C) 2016 ezander
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package de.tubs.wire.ui;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.event.EventHandler;
 
 /**
  *
  * @author ezander
  */
-public class KeyProcessor implements KeyListener, EventHandler<javafx.scene.input.KeyEvent> {
+public class KeyProcessor {
 
+    public static class SimpleKeyEvent {
 
-    static class KeyEventMap {
+        private final char keyChar;
+        private final int keyCode;
+        private final int eventType;
 
-        Map<Character, HandlerFunction> charToFunction = new HashMap<>();
-        Map<Integer, HandlerFunction> keycodeToFunction = new HashMap<>();
+        public SimpleKeyEvent(char keyChar, int keyCode, int eventType) {
+            this.keyChar = keyChar;
+            this.keyCode = keyCode;
+            this.eventType = eventType;
+        }
+
+        /**
+         * @return the keyChar
+         */
+        public char getKeyChar() {
+            return keyChar;
+        }
+
+        /**
+         * @return the keyCode
+         */
+        public int getKeyCode() {
+            return keyCode;
+        }
+
+        /**
+         * @return the eventType
+         */
+        public int getEventType() {
+            return eventType;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s(char=%c,code=%d,type=%d)",
+                    getClass().getSimpleName(), keyChar, keyCode, eventType);
+        }
+
+    }
+
+    protected class AWTKeyEvent extends java.awt.event.KeyEvent {
+
+        public AWTKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
+            super(null, id, when, modifiers, keyCode, keyChar, keyLocation);
+        }
+    }
+    
+    public static class KeyEventMap {
+
+        Map<Character, HandlerFunction> charToFunctionMap = new HashMap<>();
+        Map<Integer, HandlerFunction> keycodeToFunctionMap = new HashMap<>();
 
         void add(char c, HandlerFunction func) {
             if (func != null) {
-                charToFunction.put(c, func);
+                charToFunctionMap.put(c, func);
             }
         }
 
         void add(int i, HandlerFunction func) {
             if (func != null) {
-                keycodeToFunction.put(i, func);
+                keycodeToFunctionMap.put(i, func);
             }
         }
 
-        void processEvent(KeyEvent e) {
+        void processEvent(SimpleKeyEvent e) {
             HandlerFunction function = null;
-            if (keycodeToFunction.containsKey(e.getKeyCode())) {
-                function = keycodeToFunction.get(e.getKeyCode());
-            } else if (charToFunction.containsKey(e.getKeyChar())) {
-                function = charToFunction.get(e.getKeyChar());
+            if (keycodeToFunctionMap.containsKey(e.getKeyCode())) {
+                function = keycodeToFunctionMap.get(e.getKeyCode());
+            } else if (charToFunctionMap.containsKey(e.getKeyChar())) {
+                function = charToFunctionMap.get(e.getKeyChar());
             }
             if (function != null) {
-                EventDetails details = new EventDetails();
+                EventDetails details = new EventDetails(e);
                 // maybe fill with details from e
                 function.process(details);
             }
         }
 
-        void processEvent(javafx.scene.input.KeyEvent t) {
-            int code = t.getCode().ordinal();
-            char ch = t.getCharacter().charAt(0);
-            System.out.println(t.getCharacter());
-            System.out.println(t.getCode());
-            System.out.println(code);
-            
-            HandlerFunction function = null;
-            if (keycodeToFunction.containsKey(code)) {
-                function = keycodeToFunction.get(code);
-            } else if (charToFunction.containsKey(ch)) {
-                function = charToFunction.get(ch);
-            }
-            if (function != null) {
-                EventDetails details = new EventDetails();
-                // maybe fill with details from t
-                function.process(details);
-            }
-        }
     }
-    KeyProcessor.KeyEventMap typedKeyFunctions = new KeyProcessor.KeyEventMap();
-    KeyProcessor.KeyEventMap pressedKeyFunctions = new KeyProcessor.KeyEventMap();
-    KeyProcessor.KeyEventMap releasedKeyFunctions = new KeyProcessor.KeyEventMap();
 
-    public KeyProcessor add(char c, HandlerFunction typedFunc) {
+    private KeyEventMap typedKeyFunctions = new KeyProcessor.KeyEventMap();
+    private KeyEventMap pressedKeyFunctions = new KeyProcessor.KeyEventMap();
+    private KeyEventMap releasedKeyFunctions = new KeyProcessor.KeyEventMap();
+
+    public void add(char c, HandlerFunction typedFunc) {
         typedKeyFunctions.add(c, typedFunc);
-        return this;
     }
 
-//    public KeyProcessor add(char c, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
-//        return add(c, null, pressedFunc, releasedFunc);
-//    }
-//
-//    public KeyProcessor add(char c, HandlerFunction typedFunc, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
-//        typedKeyFunctions.add(c, typedFunc);
-//        pressedKeyFunctions.add(c, pressedFunc);
-//        releasedKeyFunctions.add(c, releasedFunc);
-//        return this;
-//    }
-
-//    public KeyProcessor add(int i, HandlerFunction typedFunc) {
-//        return add(i, typedFunc, null, null);
-//    }
-
-    public KeyProcessor add(int i, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
+    public void add(int i, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
         pressedKeyFunctions.add(i, pressedFunc);
         releasedKeyFunctions.add(i, releasedFunc);
-        return this;
-    }
-
-//    public KeyProcessor add(int i, HandlerFunction typedFunc, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
-//        typedKeyFunctions.add(i, typedFunc);
-//        pressedKeyFunctions.add(i, pressedFunc);
-//        releasedKeyFunctions.add(i, releasedFunc);
-//        return this;
-//    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        typedKeyFunctions.processEvent(e);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        pressedKeyFunctions.processEvent(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        releasedKeyFunctions.processEvent(e);
-    }
-
-    @Override
-    public void handle(javafx.scene.input.KeyEvent t) {
-        typedKeyFunctions.processEvent(t);
     }
     
+    public void processKeyEvent(SimpleKeyEvent evt) {
+        System.err.println("de.tubs.wire.ui.KeyProcessor.processKeyEvent(evt)\n  evt=" + evt);
+        
+        switch(evt.getEventType()) {
+            case AWTKeyEvent.KEY_PRESSED:
+                typedKeyFunctions.processEvent(evt);
+                break;
+            case AWTKeyEvent.KEY_RELEASED:
+                releasedKeyFunctions.processEvent(evt);
+                break;
+            case AWTKeyEvent.KEY_TYPED:
+                typedKeyFunctions.processEvent(evt);
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal event type constant in SimpleKeyEvent: " + evt);
+        }
+    }
+    
+    public void showHelp() {
+        System.err.println("Dies ist die Hilfe!!");
+    }
+
+
 }

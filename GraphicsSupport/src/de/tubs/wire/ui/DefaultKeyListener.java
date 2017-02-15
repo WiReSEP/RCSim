@@ -27,12 +27,16 @@ import de.tubs.wire.simulator.Simulator;
  */
 public class DefaultKeyListener {
 
-    public static KeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc) {
+    public static AWTKeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc) {
         return getDefaultKeyListener(sim, vc, false);
     }
     
-    public static KeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc, boolean withQuit) {
-        KeyProcessor kp = new KeyProcessor();
+    public static AWTKeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc, boolean withQuit) {
+        AWTKeyProcessor kp = new AWTKeyProcessor();
+        return setDefaultKeys(kp, sim, vc, withQuit);
+    }
+    
+    public static AWTKeyProcessor setDefaultKeys(AWTKeyProcessor kp, Simulator sim, ViewController vc, boolean withQuit) {
         kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
         kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
         kp.add('+', d -> sim.getStepper().accelerate(1.4142));
@@ -44,6 +48,7 @@ public class DefaultKeyListener {
         kp.add('w', d -> vc.prevCam());
         kp.add('e', d -> vc.nextCam());
         kp.add('r', d -> ((TrackSimulator)sim).reverse());
+        kp.add('h', d -> kp.showHelp());
         if (withQuit)
             kp.add('q', d -> System.exit(0));
         return kp;

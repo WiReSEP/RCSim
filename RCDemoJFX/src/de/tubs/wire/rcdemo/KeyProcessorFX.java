@@ -1,0 +1,86 @@
+/*
+ * Copyright (C) 2016 ezander
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package de.tubs.wire.rcdemo;
+
+import de.tubs.wire.ui.KeyProcessor;
+import java.awt.Component;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
+/**
+ *
+ * @author ezander
+ */
+public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEvent> {
+
+
+    public static int keycodeToInt(KeyCode code) {
+        switch( code ){
+            case LEFT: return AWTKeyEvent.VK_LEFT;
+            case RIGHT: return AWTKeyEvent.VK_RIGHT;
+            default:
+                System.err.println("Unknown key code: " + code);
+                return AWTKeyEvent.VK_UNDEFINED;
+        }
+        
+    }
+    @Override
+    public void handle(javafx.scene.input.KeyEvent fxevt) {
+        Component source = null;
+        int eventType = 0;
+        long when = 0;
+        int modifiers = 0;
+        int keyCode = keycodeToInt(fxevt.getCode());
+        char keyChar = fxevt.getCharacter().charAt(0); 
+        int keyLocation = AWTKeyEvent.KEY_LOCATION_STANDARD; //?? cant distiguish lctrl and rctrl
+        
+        if(fxevt.getEventType().equals(KeyEvent.KEY_PRESSED)) eventType = AWTKeyEvent.KEY_PRESSED;
+        if(fxevt.getEventType().equals(KeyEvent.KEY_RELEASED)) eventType = AWTKeyEvent.KEY_RELEASED;
+        if(fxevt.getEventType().equals(KeyEvent.KEY_TYPED)) eventType = AWTKeyEvent.KEY_TYPED;
+                
+        if( fxevt.isAltDown() ) modifiers |= AWTKeyEvent.ALT_DOWN_MASK | AWTKeyEvent.ALT_MASK;
+        if( fxevt.isControlDown() ) modifiers |= AWTKeyEvent.CTRL_DOWN_MASK | AWTKeyEvent.CTRL_MASK;
+        // Shift, Meta, Shortcut?
+        
+        source = (Component)fxevt.getSource();
+        SimpleKeyEvent evt = new SimpleKeyEvent(keyChar, keyCode, eventType);
+        super.processKeyEvent(evt);
+    }
+    
+    
+        /*void processEvent(javafx.scene.input.SimpleKeyEvent t) {
+            int code = t.getCode().ordinal();
+            char ch = t.getCharacter().charAt(0);
+            System.out.println(t.getCharacter());
+            System.out.println(t.getCode());
+            System.out.println(code);
+            
+            HandlerFunction function = null;
+            if (keycodeToFunction.containsKey(code)) {
+                function = keycodeToFunction.get(code);
+            } else if (charToFunction.containsKey(ch)) {
+                function = charToFunction.get(ch);
+            }
+            if (function != null) {
+                EventDetails details = new EventDetails();
+                // maybe fill with details from t
+                function.process(details);
+            }
+        }*/
+    
+}
