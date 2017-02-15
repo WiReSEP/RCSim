@@ -28,9 +28,9 @@ import javax.media.j3d.TransformGroup;
 import javax.media.j3d.View;
 import javax.media.j3d.ViewPlatform;
 import javax.media.j3d.VirtualUniverse;
-import de.tubs.wire.graphics.camera.CameraTransform;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.simulator.track.TrackInformation;
+import de.tubs.wire.graphics.camera.Camera;
 
 
 /**
@@ -47,14 +47,14 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         Canvas3D canvas;
         TransformGroup camera;
         int camNum = 0;
-        CameraTransform camTransform;
+        Camera camTransform;
         BranchGroup viewBranch;
         
         public MyView(Canvas3D canvas) {
             this.canvas = canvas;
         }
         
-        public CameraTransform getCamTransform() {
+        public Camera getCamTransform() {
             return camTransform;
         }
         
@@ -155,7 +155,7 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         
         for (MyView view : views) {
             assert false;
-            //Transform3D transform = view.camTransform.getTransform(track, s, dsdt);
+            //Transform3D transform = view.camTransform.getView(track, s, dsdt);
             //transform.invert();
             //view.camera.setTransform(transform);
             //view.canvas.startRenderer();

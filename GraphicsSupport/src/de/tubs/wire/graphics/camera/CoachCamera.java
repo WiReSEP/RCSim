@@ -35,7 +35,7 @@ public class CoachCamera<Vector> extends BaseCamera<Vector> {
     }
 
     @Override
-    public CameraView<Vector> getTransform(double s, double dsdt) {
+    public CameraView<Vector> getView(double s, double dsdt) {
         Vector currentPos = helper.getPosition(track, s);
         RHS<Vector> rhs = helper.getRHS(track, s);
         Vector up = rhs.getUp();
@@ -48,22 +48,22 @@ public class CoachCamera<Vector> extends BaseCamera<Vector> {
             case BEHIND:
                 fe=-5.0; re=0.0; ue=2.0;
                 ft= 5.0; rt=0.0; ut=0.0;
-                z = helper.va.copy(up);
+                z = helper.vecmath.copy(up);
                 break;
             case INSIDE:
                 fe= 0.0; re=0.0; ue=1.0;
                 ft= 5.0; rt=0.0; ut=0.0;
-                z = helper.va.copy(up);
+                z = helper.vecmath.copy(up);
                 break;
             case LEFT:
                 fe= 0.0; re=-10.0; ue=0.0;
                 ft= 0.0; rt= 10.0; ut=0.0;
-                z = helper.va.fromDouble(new double[]{0,0,1});
+                z = helper.vecmath.fromDouble(new double[]{0,0,1});
                 break;
             case RIGHT:
                 fe= 0.0; re= 10.0; ue=0.0;
                 ft= 0.0; rt=-10.0; ut=0.0;
-                z = helper.va.fromDouble(new double[]{0,0,1});
+                z = helper.vecmath.fromDouble(new double[]{0,0,1});
                 break;
             default:
                 throw new RuntimeException("this cannot happen");

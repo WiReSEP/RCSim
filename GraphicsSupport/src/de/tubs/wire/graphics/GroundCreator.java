@@ -37,14 +37,14 @@ public class GroundCreator<Vector, Node, Group extends Node> {
         Track track = trackInfo.getTrack();
         Group t = sc.newGroup();
         TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
-        double mean[] = helper.va.toDouble(stats.mean);
-        double dim[] = helper.va.toDouble(stats.dim);
+        double mean[] = helper.vecmath.toDouble(stats.mean);
+        double dim[] = helper.vecmath.toDouble(stats.dim);
         for (int i = 0; i < 300; i++) {
             double[] x = new double[3];
             x[0] = mean[0] + 3 * dim[0] * (Math.random()-0.5);
             x[1] = mean[1] + 3 * dim[1] * (Math.random()-0.5);
             x[2] = mean[2] + 3 * dim[2] * (Math.random()-0.5);
-            Vector p = helper.va.fromDouble(x);
+            Vector p = helper.vecmath.fromDouble(x);
             Node s = sc.createSphere(3);
             sc.add(t, sc.translate(s, p));
         }

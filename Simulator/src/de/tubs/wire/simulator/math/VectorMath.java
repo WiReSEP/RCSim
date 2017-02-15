@@ -20,7 +20,7 @@ package de.tubs.wire.simulator.math;
  *
  * @author ezander
  */
-public abstract class VectorArithmetic<Vector> {
+public abstract class VectorMath<Vector> {
     public abstract Vector zero();
     public abstract Vector copy(Vector v);
     public abstract double[] toDouble(Vector v);

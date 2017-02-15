@@ -18,9 +18,27 @@ package de.tubs.wire.graphics.camera;
 
 import de.tubs.wire.simulator.track.Track;
 
-
-public interface CameraTransform<Vector> {
+/**
+ * A Camera defines for each position on the track the camera view (consisting 
+ * of the position of the camera, the target position and the yaw (up) vector).
+ * 
+ * @author ezander
+ * @param <Vector> The vector type used.
+ */
+public interface Camera<Vector> {
+    /**
+     * Initialise the camera for a new track (if necessary).
+     * 
+     * @param track The track.
+     */
     void init(Track track);
     
-    CameraView<Vector> getTransform(double s, double dsdt);
+    /**
+     * Get the camera view for the current position and velocity of the coach.
+     * 
+     * @param s Position on the track.
+     * @param dsdt Velocity on the track.
+     * @return The camera view.
+     */
+    CameraView<Vector> getView(double s, double dsdt);
 }

@@ -26,10 +26,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
-import de.tubs.wire.graphics.camera.CameraTransform;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.graphics.camera.CameraView;
 import de.tubs.wire.simulator.track.TrackInformation;
+import de.tubs.wire.graphics.camera.Camera;
 
 /**
  *
@@ -40,7 +40,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
     Stage stage;
     Group root;
     int camNum = 0;
-    CameraTransform<Point3D> camTransform;
+    Camera<Point3D> camTransform;
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     Affine cameraTransform = new Affine();
     TrackHelperJFX helper = new TrackHelperJFX();
@@ -68,7 +68,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         primaryStage.setScene(scene);
     }
 
-    public CameraTransform getCamTransform() {
+    public Camera getCamTransform() {
         return camTransform;
     }
 
@@ -82,7 +82,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         if (track != null) {
             // Note: this MUST be done in two steps, otherwise a screen update 
             // could occur in between before the camera is initialised
-            CameraTransform<Point3D> camTransformNew = CameraFactory.buildCamera(camList.get(camNum), helper);
+            Camera<Point3D> camTransformNew = CameraFactory.buildCamera(camList.get(camNum), helper);
             camTransformNew.init(track);
             camTransform = camTransformNew;
         }
@@ -116,7 +116,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 
         double s = y[0];
         double dsdt = y[1];
-        CameraView<Point3D> camView = camTransform.getTransform(s, dsdt);
+        CameraView<Point3D> camView = camTransform.getView(s, dsdt);
 
         Transform tr = ToolkitJFX.lookAt(camView.getEye(), camView.getTarget(), camView.getUp());
         cameraTransform.setToTransform(tr);

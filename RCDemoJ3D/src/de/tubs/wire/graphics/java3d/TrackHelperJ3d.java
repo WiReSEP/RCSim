@@ -29,7 +29,7 @@ import de.tubs.wire.simulator.track.TrackHelper;
 public class TrackHelperJ3d extends TrackHelper<Vector3d> {
 
     public TrackHelperJ3d() {
-        super(new Vector3dArithmetic());
+        super(new Vector3dMath());
     }
 
     public static TransformGroup transform(Node node, Vector3d vector) {

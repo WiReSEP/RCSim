@@ -26,10 +26,10 @@ import javax.media.j3d.View;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-import de.tubs.wire.graphics.camera.CameraTransform;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.graphics.camera.CameraView;
 import de.tubs.wire.simulator.track.TrackInformation;
+import de.tubs.wire.graphics.camera.Camera;
 
 /**
  *
@@ -42,10 +42,10 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
     protected TransformGroup camera;
 
     int camNum = -1;
-    CameraTransform<Vector3d> camTransform;
+    Camera<Vector3d> camTransform;
 
 
-    public CameraTransform<Vector3d> getCamTransform() {
+    public Camera<Vector3d> getCamTransform() {
         return camTransform;
     }
 
@@ -68,7 +68,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         if( track!= null ){
             // Note: this MUST be done in two steps, otherwise a screen update 
             // could occur in between before the camera is initialised
-            CameraTransform<Vector3d> camTransformNew = CameraFactory.buildCamera( camList.get(camNum), helper );
+            Camera<Vector3d> camTransformNew = CameraFactory.buildCamera( camList.get(camNum), helper );
             camTransformNew.init(track);
             camTransform = camTransformNew;
         }
@@ -121,7 +121,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         
         double s = y[0];
         double dsdt = y[1];
-        CameraView<Vector3d> camView = camTransform.getTransform(s, dsdt);
+        CameraView<Vector3d> camView = camTransform.getView(s, dsdt);
         Transform3D transform = new Transform3D();
         transform.lookAt(
                 new Point3d(camView.getEye()), 

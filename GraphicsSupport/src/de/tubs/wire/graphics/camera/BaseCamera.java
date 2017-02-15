@@ -23,7 +23,7 @@ import de.tubs.wire.simulator.track.Track;
  *
  * @author ezander
  */
-public abstract class BaseCamera<Vector> implements CameraTransform<Vector> {
+public abstract class BaseCamera<Vector> implements Camera<Vector> {
     protected TrackHelper<Vector> helper;
     protected Track track;
 

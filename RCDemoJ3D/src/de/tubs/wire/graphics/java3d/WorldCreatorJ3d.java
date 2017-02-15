@@ -151,7 +151,7 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
     public void makeRailPiece(Track track, double s0, double s1, TransformGroup group) {
         Vector3d f0 = helper.getForward(track, s0);
         Vector3d f1 = helper.getForward(track, s1);
-        double cosAlpha = helper.va.dotProduct(f0, f1);
+        double cosAlpha = helper.vecmath.dotProduct(f0, f1);
         double alpha = Math.acos(cosAlpha) * 180 / Math.PI;
         double middist = 0.5 * alpha / 180 * Math.PI * (s1 - s0);
         if (alpha<0.5 && middist < 0.01){

@@ -30,7 +30,7 @@ import de.tubs.wire.simulator.track.TrackHelper;
         MOVING1
     }
 
-    public static <Vector> CameraTransform<Vector> buildCamera(CameraFactory.CameraType type,
+    public static <Vector> Camera<Vector> buildCamera(CameraFactory.CameraType type,
             TrackHelper<Vector> helper) {
         System.out.println(type);
         switch (type) {

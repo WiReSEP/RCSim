@@ -17,13 +17,13 @@
 package de.tubs.wire.graphics.javaFX;
 
 import javafx.geometry.Point3D;
-import de.tubs.wire.simulator.math.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorMath;
 
 /**
  *
  * @author ezander
  */
-public class Point3DArithmetic extends VectorArithmetic<Point3D> {
+public class Point3DMath extends VectorMath<Point3D> {
 
     @Override
     public Point3D zero() {

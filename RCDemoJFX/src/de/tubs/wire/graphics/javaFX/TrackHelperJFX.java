@@ -28,7 +28,7 @@ import de.tubs.wire.simulator.track.TrackHelper;
 public class TrackHelperJFX extends TrackHelper<Point3D> {
 
     public TrackHelperJFX() {
-        super(new Point3DArithmetic());
+        super(new Point3DMath());
     }
     
     public Node transform(Node node, Point3D p) {

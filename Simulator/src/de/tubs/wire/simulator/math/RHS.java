@@ -32,7 +32,7 @@ public class RHS<Vector> {
         this.up = up;
     }
 
-    public static <Vector> RHS<Vector> createRHS(Vector forward, Vector up, VectorArithmetic<Vector> va) {
+    public static <Vector> RHS<Vector> createRHS(Vector forward, Vector up, VectorMath<Vector> va) {
         Vector left = va.normalize(va.crossProduct(up, forward));
         up = va.normalize(va.crossProduct(forward, left));
         forward = va.normalize(forward);

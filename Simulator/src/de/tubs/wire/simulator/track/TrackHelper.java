@@ -17,7 +17,7 @@
 package de.tubs.wire.simulator.track;
 
 import de.tubs.wire.simulator.math.RHS;
-import de.tubs.wire.simulator.math.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorMath;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
@@ -26,23 +26,23 @@ import org.apache.commons.math3.linear.RealVector;
  */
 public class TrackHelper<Vector> {
     
-    public VectorArithmetic<Vector> va;
+    public VectorMath<Vector> vecmath;
 
-    public TrackHelper(VectorArithmetic<Vector> va) {
-        this.va = va;
+    public TrackHelper(VectorMath<Vector> va) {
+        this.vecmath = va;
     }
 
     public Vector toVector(RealVector v) {
         double[] x = v.toArray();
-        return va.fromDouble(x);
+        return vecmath.fromDouble(x);
     }
     
     public Vector addScaled(Vector v1, Vector v2, double alpha2) {
-        return va.add(v1, va.multiply(v2, alpha2));
+        return vecmath.add(v1, vecmath.multiply(v2, alpha2));
     }
 
     public Vector addScaled(Vector v1, double alpha1, Vector v2, double alpha2) {
-        return va.add(va.multiply(v1, alpha1), va.multiply(v2, alpha2));
+        return vecmath.add(vecmath.multiply(v1, alpha1), vecmath.multiply(v2, alpha2));
     }
     
     public Vector getShiftedPos(Vector pos, RHS<Vector> rhs, double f, double r, double z) {
@@ -59,21 +59,21 @@ public class TrackHelper<Vector> {
     }
 
     public Vector getForward(Track track, double s) {
-        return va.normalize(toVector(track.getDxDs(s)));
+        return vecmath.normalize(toVector(track.getDxDs(s)));
     }
 
     public Vector getSpeed(Track track, double s, double dsdt) {
-        return va.multiply(toVector(track.getDxDs(s)), dsdt);
+        return vecmath.multiply(toVector(track.getDxDs(s)), dsdt);
     }
     
     public Vector getYaw(Track track, double s) {
-        return va.normalize(toVector(track.getYaw(s)));
+        return vecmath.normalize(toVector(track.getYaw(s)));
     }
     
     public RHS<Vector> getRHS(Track track, double s) {
         Vector forward = getForward(track, s);
         Vector up = getYaw(track, s);
-        return RHS.createRHS(forward, up, va);
+        return RHS.createRHS(forward, up, vecmath);
     }
 
 
@@ -84,7 +84,7 @@ public class TrackHelper<Vector> {
     }
 
     public double[] getDoubles(Vector v) {
-        return va.toDouble(v);
+        return vecmath.toDouble(v);
     }
 
     public static class TrackStats<Vector> {
@@ -93,7 +93,7 @@ public class TrackHelper<Vector> {
         public Vector mean;
         public Vector dim;
 
-        public TrackStats(double[] min, double[] max, double[] mean, double[] dim, VectorArithmetic<Vector> va) {
+        public TrackStats(double[] min, double[] max, double[] mean, double[] dim, VectorMath<Vector> va) {
             this.min = va.fromDouble(min);
             this.max = va.fromDouble(max);
             this.mean = va.fromDouble(mean);
@@ -120,7 +120,7 @@ public class TrackHelper<Vector> {
                 dim[i] = max[i] - min[i];
             }
         }
-        return new TrackStats<>(min, max, mean, dim, va);
+        return new TrackStats<>(min, max, mean, dim, vecmath);
     }
 
 }

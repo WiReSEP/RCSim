@@ -17,13 +17,13 @@
 package de.tubs.wire.graphics.java3d;
 
 import javax.vecmath.Vector3d;
-import de.tubs.wire.simulator.math.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorMath;
 
 /**
  *
  * @author ezander
  */
-class Vector3dArithmetic extends VectorArithmetic<Vector3d> {
+class Vector3dMath extends VectorMath<Vector3d> {
 
     @Override
     public Vector3d zero() {

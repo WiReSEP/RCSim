@@ -18,11 +18,11 @@ package de.tubs.wire.graphics.camera;
 
 import de.tubs.wire.simulator.math.RHS;
 import de.tubs.wire.simulator.track.TrackHelper;
-import de.tubs.wire.simulator.math.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorMath;
 import de.tubs.wire.simulator.track.Track;
 
 /**
- *
+ * A camera that 
  * @author ezander
  */
 public class TrackingCamera<Vector> extends BaseCamera<Vector> {
@@ -42,7 +42,7 @@ public class TrackingCamera<Vector> extends BaseCamera<Vector> {
         super.init(track);
         
         TrackHelper.TrackStats<Vector> stats = helper.getStatistics(track);
-        VectorArithmetic<Vector> va = helper.va;
+        VectorMath<Vector> va = helper.vecmath;
 
         switch (pos) {
             case MIN:
@@ -63,13 +63,13 @@ public class TrackingCamera<Vector> extends BaseCamera<Vector> {
     }
     
     @Override
-    public CameraView<Vector> getTransform(double s, double dsdt) {
-        VectorArithmetic<Vector> va = helper.va;
+    public CameraView<Vector> getView(double s, double dsdt) {
+        VectorMath<Vector> vecmath = helper.TrackHelper.this.vecmath;
 
         Vector currentPos = helper.getPosition(track, s);
-        Vector target = va.copy(currentPos);
+        Vector target = vecmath.copy(currentPos);
         if (pos == Position.MOVING){
-            double l = va.distance(eye, currentPos);
+            double l = vecmath.distance(eye, currentPos);
             double mdist = 100.0d;
             if (l>mdist) {
                 eye = currentPos;
@@ -78,7 +78,7 @@ public class TrackingCamera<Vector> extends BaseCamera<Vector> {
                 eye = helper.addScaled(eye, rhs.getUp(), 10);
             }
         }
-        Vector z = va.unit(2);
+        Vector z = vecmath.unit(2);
         return new CameraView<>(eye, target, z);
     }
 
