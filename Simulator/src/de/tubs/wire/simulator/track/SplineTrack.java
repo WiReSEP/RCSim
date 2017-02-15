@@ -36,6 +36,17 @@ public class SplineTrack implements Track {
     
     Spline yawAngle;
 
+    /**
+     * Create a spline track.
+     * 
+     * @param posX Spline for x coords.
+     * @param posY Spline for y coords.
+     * @param posZ Spline for z coords.
+     * @param yawX Spline for yaw x coords.
+     * @param yawY Spline for yaw y coords.
+     * @param yawZ Spline for yaw z coords.
+     * @param yawAngle  Spline for yaw angles.
+     */
     public SplineTrack(Spline posX, Spline posY, Spline posZ, Spline yawX, Spline yawY, Spline yawZ, Spline yawAngle) {
         this.posX = posX;
         this.posY = posY;
@@ -46,11 +57,25 @@ public class SplineTrack implements Track {
         this.yawAngle = yawAngle;
     }
         
+    /**
+     * Get period of spline track.
+     * 
+     * The period of a closed spline track is just its number of nodes.
+     * 
+     * @return The period.
+     */
     @Override
     public double getPeriod() {
         return posX.length();
     }
     
+    /**
+     * Compute position or derivative.
+     * 
+     * @param s The curve parameter.
+     * @param deriv The derivative order.
+     * @return The value of the position or the derivative.
+     */
     protected RealVector getPosAt(double s, int deriv) {
         double pos[] = {posX.compute(s, deriv), posY.compute(s, deriv), posZ.compute(s, deriv)};
         return new ArrayRealVector(pos);

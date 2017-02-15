@@ -6,7 +6,9 @@
 package de.tubs.wire.simulator.track;
 
 /**
- *
+ * Enum that helps in loading tracks from the internal resources (JAR).
+ * 
+ * @see TrackInformation
  * @author ezander
  */
 public enum StockTracks {
@@ -21,6 +23,11 @@ public enum StockTracks {
         this.resourceName = resourceName;
     }   
     
+    /**
+     * Get the name of the internal resource.
+     * 
+     * @return The name of the internal resource.
+     */
     public String getResourceName() {
         return resourceName;
     }

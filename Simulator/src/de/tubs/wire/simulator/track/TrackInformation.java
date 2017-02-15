@@ -149,10 +149,22 @@ public class TrackInformation {
         return sim;
     }
     
+    /**
+     * Load track from an XML file.
+     * 
+     * @param filename The filename.
+     * @return The TrackInformation object.
+     */
     public static TrackInformation readFromXML(String filename) {
         return readFromXML(filename, false);
     }
     
+    /**
+     * Load track from JAR file (internal resource in Simulator.jar).
+     * 
+     * @param st StockTrack
+     * @return The TrackInformation object.
+     */
     public static TrackInformation readFromXML(StockTracks st) {
         return readFromXML(st.getResourceName(), true);
     }

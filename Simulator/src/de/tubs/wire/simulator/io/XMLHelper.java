@@ -28,21 +28,30 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Helper class for easier reading of XML files.
+ * 
  * @author ezander
  */
 public class XMLHelper {
 
     /**
-     *
-     * @param parent
-     * @param name
-     * @return
+     * Returns a child of some parent by name.
+     * 
+     * @param parent The parent element.
+     * @param name Name of the child.
+     * @return The child element.
      */
     public static Element getChildByName(Element parent, String name) {
         return (Element) parent.getElementsByTagName(name).item(0);
     }
 
+    /**
+     * Get all children by name.
+     * 
+     * @param parent The parent element.
+     * @param name The name of the children.
+     * @return An ArrayList of Elements containing the children.
+     */
     public static ArrayList<Element> getChildrenByName(Element parent, String name) {
         ArrayList<Element> nodes = new ArrayList<>();
         NodeList list = parent.getElementsByTagName(name);
@@ -52,21 +61,49 @@ public class XMLHelper {
         return nodes;
     }
 
+    /**
+     * Get string of direct child element.
+     * 
+     * @param parent The parent element.
+     * @param name The child element containing the string content.
+     * @return The string content.
+     */
     public static String getString(Element parent, String name) {
         Element node = getChildByName(parent, name);
         return node.getTextContent();
     }
 
+    /**
+     * Get string value of direct child element and parse as double.
+     * 
+     * @param parent The parent element.
+     * @param name The child element containing the double value as string.
+     * @return The string content.
+     */
     public static double getDouble(Element parent, String name) {
         String s = getString(parent, name);
         return Double.parseDouble(s);
     }
 
+    /**
+     * Get string value of direct child element and parse as int.
+     * 
+     * @param parent The parent element.
+     * @param name The child element containing the int value as string.
+     * @return The string content.
+     */
     public static int getInt(Element parent, String name) {
         String s = getString(parent, name);
         return Integer.parseInt(s);
     }
 
+    /**
+     * Load XML and return root element.
+     * 
+     * @param filename A filename or resource inside a JAR file.
+     * @param fromJar Determines whether filename is external or an internal resource.
+     * @return The root Element.
+     */
     public static Element loadAndGetDocRoot(String filename, boolean fromJar) {
         try {
             DocumentBuilder builder;
