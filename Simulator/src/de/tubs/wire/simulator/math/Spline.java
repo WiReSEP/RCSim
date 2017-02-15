@@ -17,12 +17,32 @@
 package de.tubs.wire.simulator.math;
 
 /**
- *
+ * Abstract interface for spline curves.
+ * 
  * @author ezander
  */
 public interface Spline {
+    /**
+     * Return the (parametric) length of the curve.
+     * 
+     * That means if length() returns L, then compute can be called with values 
+     * of s from 0 to L.
+     * 
+     * @return Length of spline.
+     */
     double length();
 
-    double compute(double t, int deriv);
+    /**
+     * Compute value or derivative of spline.
+     * 
+     * Compute value spline or derivatives up to second order. deriv=0 means 
+     * just compute the value, deriv=1 means compute first derivative, 
+     * deriv=2 mean compute second derivative.
+     * 
+     * @param s The curve parameter.
+     * @param deriv Order of derivative.
+     * @return The value.
+     */
+    double compute(double s, int deriv);
     
 }

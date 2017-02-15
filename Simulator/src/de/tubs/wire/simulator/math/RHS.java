@@ -17,7 +17,11 @@
 package de.tubs.wire.simulator.math;
 
 /**
- *
+ * Creates and represents a right handed coordinate system (RHS). 
+ * 
+ * An RHS is defined by three vectors, which determine the (local) up, left and 
+ * forward direction. 
+ * 
  * @author ezander
  */
 public class RHS<Vector> {
@@ -26,27 +30,61 @@ public class RHS<Vector> {
     private final Vector left;
     private final Vector up;
 
+    /**
+     * Generates a RHS from three vectors.
+     * 
+     * Note, that no checking is done on the vectors.
+     * @param forward The forward pointing vector.
+     * @param left The left pointing vector.
+     * @param up The upward pointing vector.
+     */
     protected RHS(Vector forward, Vector left, Vector up) {
         this.forward = forward;
         this.left = left;
         this.up = up;
     }
 
-    public static <Vector> RHS<Vector> createRHS(Vector forward, Vector up, VectorMath<Vector> va) {
-        Vector left = va.normalize(va.crossProduct(up, forward));
-        up = va.normalize(va.crossProduct(forward, left));
-        forward = va.normalize(forward);
+    /**
+     * Generates a RHS from the forward and up vector.
+     * 
+     * The result left vector is orthogonal to forward and up and all three 
+     * vectors are normalised. For a moving observer, the forward vector is 
+     * given by the current velocity and the up vector by the yaw vector.
+     * 
+     * @param forward The forward pointing vector.
+     * @param up The upward pointing vector.
+     * @return An RHS.
+     */
+    public static <Vector> RHS<Vector> createRHS(Vector forward, Vector up, VectorMath<Vector> vecmath) {
+        Vector left = vecmath.normalize(vecmath.crossProduct(up, forward));
+        up = vecmath.normalize(vecmath.crossProduct(forward, left));
+        forward = vecmath.normalize(forward);
         return new RHS<>(forward, left, up);
     }
 
+    /**
+     * Get the forward pointing vector.
+     * 
+     * @return The forward pointing vector.
+     */
     public Vector getForward() {
         return forward;
     }
 
+    /**
+     * Get the left pointing vector.
+     * 
+     * @return The left pointing vector.
+     */
     public Vector getLeft() {
         return left;
     }
 
+    /**
+     * Get the upward pointing vector.
+     * 
+     * @return The upward pointing vector.
+     */
     public Vector getUp() {
         return up;
     }

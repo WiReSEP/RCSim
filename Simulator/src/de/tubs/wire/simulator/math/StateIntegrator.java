@@ -25,7 +25,13 @@ import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 import org.apache.commons.math3.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 
 /**
- *
+ * Integrate first or second order ODEs keeping the current state.
+ * 
+ * A StateIntegrator object can be used to integrate 1st or 2nd order ODEs and 
+ * keep track of the current state. The most important methods being integrateTo 
+ * which integrates from the current time to the specified time, and getY which 
+ * gets the state at the current time.
+ * 
  * @author ezander
  */
 public class StateIntegrator {
@@ -37,6 +43,14 @@ public class StateIntegrator {
     private ArrayRealVector y;
     public int evals = 0;
 
+    /**
+     * Create a StateIntegrator.
+     * 
+     * @param ode The first order ODEs.
+     * @param y The current state.
+     * @param t The current time.
+     * @param integrator An integrator (can use defaultIntegrator).
+     */
     public StateIntegrator(FirstOrderDifferentialEquations ode, RealVector y, double t, FirstOrderIntegrator integrator) {
         this.ode = ode;
         this.integrator = integrator;
@@ -44,10 +58,25 @@ public class StateIntegrator {
         this.t = t;
     }
 
+    /**
+     * Create a StateIntegrator.
+     * 
+     * @param ode2 The second order ODEs (defining yDDot).
+     * @param y The state (containing "position" and "velocities")
+     */
     public StateIntegrator(SecondOrderDifferentialEquations ode2, RealVector y) {
         this(new FirstOrderConverter(ode2), y, 0, StateIntegrator.defaultIntegrator);
     }
 
+    /**
+     * Integrate up to new time.
+     * 
+     * Integrate up to time tNew, stores the state and sets the current time to 
+     * tNew.
+     * 
+     * @param tNew The new time.
+     * @return The StateIntegrator itself.
+     */
     public StateIntegrator integrateTo(double tNew) {
         if (Math.abs(t - tNew) == 0) {
             return this;
@@ -64,6 +93,18 @@ public class StateIntegrator {
         return this;
     }
 
+    /**
+     * Integrate a second order ode and store all intermediate results in an 
+     * array.
+     * 
+     * @param ode2
+     * @param t0
+     * @param t1
+     * @param dt
+     * @param y0
+     * @return 
+     */
+    @Deprecated
     public static ArrayRealVector doIntegrate2ndOrder(SecondOrderDifferentialEquations ode2, double t0, double t1, double dt, RealVector y0) {
         StateIntegrator stateInt = new StateIntegrator(ode2, y0);
         stateInt.setT(t0);
@@ -78,26 +119,56 @@ public class StateIntegrator {
         return stateInt.getY();
     }
 
+    /**
+     * Get the default ODE integrator.
+     * 
+     * @return The default ODE integrator.
+     */
     public static FirstOrderIntegrator getDefaultIntegrator() {
         return StateIntegrator.defaultIntegrator;
     }
 
+    /**
+     * Set the default ODE integrator.
+     * 
+     * @param defaultIntegrator The new default ODE integrator.
+     */
     public static void setDefaultIntegrator(FirstOrderIntegrator defaultIntegrator) {
         StateIntegrator.defaultIntegrator = defaultIntegrator;
     }
 
+    /**
+     * Get current time.
+     * 
+     * @return The current time.
+     */
     public double getT() {
         return t;
     }
 
+    /**
+     * Set current time.
+     * 
+     * @param t The new current time.
+     */
     public void setT(double t) {
         this.t = t;
     }
 
+    /**
+     * Get current state.
+     * 
+     * @return The current state.
+     */
     public ArrayRealVector getY() {
         return y;
     }
 
+    /**
+     * Set current state.
+     * 
+     * @param y The new current state.
+     */
     public void setY(ArrayRealVector y) {
         this.y = y.copy();
     }

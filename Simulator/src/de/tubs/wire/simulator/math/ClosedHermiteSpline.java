@@ -24,57 +24,97 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
+ * Implementation of closed cubic Hermite splines.
+ * 
  * https://en.wikipedia.org/wiki/Cubic_Hermite_spline
  * @author ezander
  */
 public class ClosedHermiteSpline implements Spline {
-    private final RealMatrix a;
+    private final RealMatrix A;
 
+    /**
+     * Generate Hermite Spline from coefficient matrix.
+     * 
+     * @param coeffs A 4xn matrix of coefficients.
+     */
     public ClosedHermiteSpline(RealMatrix coeffs) {
-        this.a = coeffs;
+        this.A = coeffs;
     }
 
+    /**
+     * Generate closed Hermite spline from path.
+     * 
+     * @param p Vector containing the points to be interpolated.
+     */
     public ClosedHermiteSpline(RealVector p) {
         this(ClosedHermiteSpline.generate(p));
     }
     
+    /**
+     * Get length of spline.
+     * @return The length.
+     */
     @Override
     public double length() {
-        return a.getColumnDimension();
+        return A.getColumnDimension();
     }
     
     @Override
-    public double compute(double t, int deriv) {
+    public double compute(double s, int deriv) {
+        // Compute the section of the spline curve we're in (k) and the 
+        // fractional remaining there (s).
         int n = (int)length();
-        int k = (int)Math.floor(t);
-        t = t - k;
+        int k = (int)Math.floor(s);
+        s = s - k;
         k = k % n; 
         if (k<0) {k+=n;}
+
+        // Compute Hermite basis functions
+        RealVector h = getHermiteBasis(s, deriv);
         
-        double t2 = t * t;
-        double t3 = t2 * t;
+        // The final value is the inner product between the column k of the 
+        // coefficent matrix and the values of the Hermite basis functions.
+        RealVector ak = A.getColumnVector(k);
+        return h.dotProduct(ak);
+    }
+
+    /**
+     * Compute the Hermite basis functions or their derivatives.
+     * 
+     * @param s The parameter in [0,1].
+     * @param deriv The derivative order.
+     * @return The values of the basis functions as a RealVector.
+     */
+    RealVector getHermiteBasis(double s, int deriv) throws RuntimeException {
+        double s2 = s * s;
+        double s3 = s2 * s;
         double d[];
         switch (deriv) {
             case 0:
                 d = new double[]{
-                    2 * t3 - 3 * t2 + 1, t3 - 2 * t2 + t, -2 * t3 + 3 * t2, t3 - t2};
+                    2 * s3 - 3 * s2 + 1, s3 - 2 * s2 + s, -2 * s3 + 3 * s2, s3 - s2};
                 break;
             case 1:
                 d = new double[]{
-                    6 * t2 - 6 * t, 3 * t2 - 4 * t + 1, -6 * t2 + 6 * t, 3 * t2 - 2 * t};
+                    6 * s2 - 6 * s, 3 * s2 - 4 * s + 1, -6 * s2 + 6 * s, 3 * s2 - 2 * s};
                 break;
             case 2:
                 d = new double[]{
-                    12 * t - 6, 6 * t - 4, -12 * t + 6, 6 * t - 2};
+                    12 * s - 6, 6 * s - 4, -12 * s + 6, 6 * s - 2};
                 break;
             default:
                 throw new RuntimeException("Derivative requested to high");
         }
-        RealVector h = new ArrayRealVector(d);
-        RealVector c = a.getColumnVector(k);
-        return h.dotProduct(c);
+        return new ArrayRealVector(d);
     }
     
+    /**
+     * Compute the coefficient matrix with respect to the Hermite basis 
+     * functions the node values in p.
+     * 
+     * @param p The values that shall be interpolated by the Hermite splines.
+     * @return The coefficient matrix.
+     */
     public static RealMatrix generate(RealVector p) {
         int n = p.getDimension();
         RealMatrix A = MatrixUtils.createRealMatrix(n, n);
