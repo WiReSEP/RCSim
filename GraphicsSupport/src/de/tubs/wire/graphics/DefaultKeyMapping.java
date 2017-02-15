@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.tubs.wire.ui;
+package de.tubs.wire.graphics;
 
 import java.awt.event.KeyEvent;
 import de.tubs.wire.graphics.ViewController;
+import de.tubs.wire.keyboard.KeyProcessor;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.Simulator;
 
@@ -25,7 +26,7 @@ import de.tubs.wire.simulator.Simulator;
  *
  * @author ezander
  */
-public class DefaultKeyListener {
+public class DefaultKeyMapping {
 
     
     

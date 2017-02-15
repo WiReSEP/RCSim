@@ -28,7 +28,7 @@ import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.simulator.TextBasedObserver;
 import de.tubs.wire.simulator.track.StockTracks;
-import de.tubs.wire.ui.DefaultKeyListener;
+import de.tubs.wire.graphics.DefaultKeyMapping;
 
 /**
  *
@@ -58,7 +58,7 @@ public class RCJavaFX extends Application {
         Scene scene = primaryStage.getScene();
         
         KeyProcessorFX keyprocessor = new KeyProcessorFX();
-        DefaultKeyListener.setDefaultKeys(keyprocessor, sim, observerFX, false);
+        DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observerFX, false);
         keyprocessor.add('q', d->primaryStage.close(), "Quit the application.");
         keyprocessor.handleSceneEvents(scene);
         

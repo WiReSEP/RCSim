@@ -7,8 +7,8 @@ import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
-import de.tubs.wire.ui.AWTKeyProcessor;
-import de.tubs.wire.ui.DefaultKeyListener;
+import de.tubs.wire.keyboard.AWTKeyProcessor;
+import de.tubs.wire.graphics.DefaultKeyMapping;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -84,8 +84,8 @@ public class RCSwing extends javax.swing.JFrame {
         sim = new TrackSimulator();
         sim.addObserver(observer);
         //sim.addObserver(new TextBasedObserver());
-        canvas1.addKeyListener( DefaultKeyListener.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
-        canvas2.addKeyListener( DefaultKeyListener.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
+        canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
+        canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
     }
     
     void initSimple() {

@@ -20,8 +20,8 @@ import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.StockTracks;
-import de.tubs.wire.ui.AWTKeyProcessor;
-import de.tubs.wire.ui.DefaultKeyListener;
+import de.tubs.wire.keyboard.AWTKeyProcessor;
+import de.tubs.wire.graphics.DefaultKeyMapping;
 
 
 /**
@@ -48,7 +48,7 @@ public class RCJava3d {
         observer3d.init(sim.getSimulationInfo());
         
         AWTKeyProcessor keyprocessor = new AWTKeyProcessor();
-        DefaultKeyListener.setDefaultKeys(keyprocessor, sim, observer3d, true);
+        DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observer3d, true);
         keyprocessor.handleEvents(observer3d.getCanvas());
         
         sim.run();

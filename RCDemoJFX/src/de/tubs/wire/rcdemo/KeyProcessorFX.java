@@ -16,7 +16,7 @@
  */
 package de.tubs.wire.rcdemo;
 
-import de.tubs.wire.ui.KeyProcessor;
+import de.tubs.wire.keyboard.KeyProcessor;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
