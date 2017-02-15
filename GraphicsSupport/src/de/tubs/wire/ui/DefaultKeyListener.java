@@ -37,20 +37,23 @@ public class DefaultKeyListener {
     }
     
     public static AWTKeyProcessor setDefaultKeys(AWTKeyProcessor kp, Simulator sim, ViewController vc, boolean withQuit) {
-        kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
-        kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume());
-        kp.add('+', d -> sim.getStepper().accelerate(1.4142));
-        kp.add('-', d -> sim.getStepper().decelerate(1.4142));
-        kp.add('p', d -> sim.getStepper().pause());
-        kp.add('c', d -> sim.getStepper().resume());
-        kp.add(KeyEvent.VK_LEFT, null, d -> vc.prevCam());
-        kp.add(KeyEvent.VK_RIGHT, null, d -> vc.nextCam());
-        kp.add('w', d -> vc.prevCam());
-        kp.add('e', d -> vc.nextCam());
-        kp.add('r', d -> ((TrackSimulator)sim).reverse());
-        kp.add('h', d -> kp.showHelp());
+        //kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation.");
+        kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation (while pressed).");
+        kp.add('+', d -> sim.getStepper().accelerate(1.4142), "Makes the simulation run faster.");
+        kp.add('-', d -> sim.getStepper().decelerate(1.4142), "Makes the simulation run slower.");
+        kp.add('p', d -> sim.getStepper().pause(), "Pauses the simulation.");
+        kp.add('c', d -> sim.getStepper().resume(), "Resumes the simulation (after pausing).");
+        
+        kp.add(KeyEvent.VK_LEFT, null, d -> vc.prevCam(), "Selects the previous camera.");
+        kp.add(KeyEvent.VK_RIGHT, null, d -> vc.nextCam(), "Selects the next camera.");
+        kp.add('w', d -> vc.prevCam(), "Selects the next camera.");
+        kp.add('e', d -> vc.nextCam(), "Selects the previous camera.");
+        
+        kp.add('r', d -> ((TrackSimulator)sim).reverse(), "Reverses the direction of the coach.");
+        
+        kp.add('h', d -> kp.showHelp(), "Shows the help.");
         if (withQuit)
-            kp.add('q', d -> System.exit(0));
+            kp.add('q', d -> System.exit(0), "Quits the simulation.");
         return kp;
     }
 }

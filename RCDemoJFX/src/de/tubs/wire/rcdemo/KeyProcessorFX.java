@@ -49,9 +49,9 @@ public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEven
         char keyChar = fxevt.getCharacter().charAt(0); 
         int keyLocation = AWTKeyEvent.KEY_LOCATION_STANDARD; //?? cant distiguish lctrl and rctrl
         
+        if(fxevt.getEventType().equals(KeyEvent.KEY_TYPED)) eventType = AWTKeyEvent.KEY_TYPED;
         if(fxevt.getEventType().equals(KeyEvent.KEY_PRESSED)) eventType = AWTKeyEvent.KEY_PRESSED;
         if(fxevt.getEventType().equals(KeyEvent.KEY_RELEASED)) eventType = AWTKeyEvent.KEY_RELEASED;
-        if(fxevt.getEventType().equals(KeyEvent.KEY_TYPED)) eventType = AWTKeyEvent.KEY_TYPED;
                 
         if( fxevt.isAltDown() ) modifiers |= AWTKeyEvent.ALT_DOWN_MASK | AWTKeyEvent.ALT_MASK;
         if( fxevt.isControlDown() ) modifiers |= AWTKeyEvent.CTRL_DOWN_MASK | AWTKeyEvent.CTRL_MASK;
@@ -61,26 +61,5 @@ public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEven
         SimpleKeyEvent evt = new SimpleKeyEvent(keyChar, keyCode, eventType);
         super.processKeyEvent(evt);
     }
-    
-    
-        /*void processEvent(javafx.scene.input.SimpleKeyEvent t) {
-            int code = t.getCode().ordinal();
-            char ch = t.getCharacter().charAt(0);
-            System.out.println(t.getCharacter());
-            System.out.println(t.getCode());
-            System.out.println(code);
-            
-            HandlerFunction function = null;
-            if (keycodeToFunction.containsKey(code)) {
-                function = keycodeToFunction.get(code);
-            } else if (charToFunction.containsKey(ch)) {
-                function = charToFunction.get(ch);
-            }
-            if (function != null) {
-                EventDetails details = new EventDetails();
-                // maybe fill with details from t
-                function.process(details);
-            }
-        }*/
     
 }

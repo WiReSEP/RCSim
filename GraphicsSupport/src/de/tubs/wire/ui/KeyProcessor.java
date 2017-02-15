@@ -6,8 +6,11 @@
 package de.tubs.wire.ui;
 
 import java.awt.Component;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -63,64 +66,68 @@ public class KeyProcessor {
         }
     }
     
-    public static class KeyEventMap {
+    public static class KeyEventMap<T> {
 
-        Map<Character, HandlerFunction> charToFunctionMap = new HashMap<>();
-        Map<Integer, HandlerFunction> keycodeToFunctionMap = new HashMap<>();
+        Map<T, HandlerFunction> keyToFunctionMap = new HashMap<>();
 
-        void add(char c, HandlerFunction func) {
+        void add(T key, HandlerFunction func) {
             if (func != null) {
-                charToFunctionMap.put(c, func);
+                keyToFunctionMap.put(key, func);
             }
         }
 
-        void add(int i, HandlerFunction func) {
-            if (func != null) {
-                keycodeToFunctionMap.put(i, func);
-            }
-        }
-
-        void processEvent(SimpleKeyEvent e) {
-            HandlerFunction function = null;
-            if (keycodeToFunctionMap.containsKey(e.getKeyCode())) {
-                function = keycodeToFunctionMap.get(e.getKeyCode());
-            } else if (charToFunctionMap.containsKey(e.getKeyChar())) {
-                function = charToFunctionMap.get(e.getKeyChar());
-            }
-            if (function != null) {
+        void processEvent(SimpleKeyEvent e, T key) {
+            HandlerFunction function = keyToFunctionMap.get(key);
+            if( function!=null ) {
                 EventDetails details = new EventDetails(e);
-                // maybe fill with details from e
                 function.process(details);
             }
         }
 
     }
 
-    private KeyEventMap typedKeyFunctions = new KeyProcessor.KeyEventMap();
-    private KeyEventMap pressedKeyFunctions = new KeyProcessor.KeyEventMap();
-    private KeyEventMap releasedKeyFunctions = new KeyProcessor.KeyEventMap();
+    private KeyEventMap<Character> typedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    private KeyEventMap<Integer> pressedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    private KeyEventMap<Integer> releasedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    
+    private Map<Character, String> typedKeyDescriptions = new TreeMap<>();
+    private Map<Integer, String> pressedKeyDescriptions = new TreeMap<>();
 
     public void add(char c, HandlerFunction typedFunc) {
-        typedKeyFunctions.add(c, typedFunc);
+        add(c, typedFunc, (String)null);
     }
 
-    public void add(int i, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
-        pressedKeyFunctions.add(i, pressedFunc);
-        releasedKeyFunctions.add(i, releasedFunc);
+    public void add(char keyChar, HandlerFunction typedFunc, String description) {
+        typedKeyFunctions.add(keyChar, typedFunc);
+        if( description!=null ) {
+            typedKeyDescriptions.put(keyChar, description);
+        }   
+    }
+
+    public void add(int keyCode, HandlerFunction pressedFunc, HandlerFunction releasedFunc) {
+        add(keyCode, pressedFunc, releasedFunc, (String)null);
+    }
+    
+    public void add(int keyCode, HandlerFunction pressedFunc, HandlerFunction releasedFunc, String description) {
+        pressedKeyFunctions.add(keyCode, pressedFunc);
+        releasedKeyFunctions.add(keyCode, releasedFunc);
+        if( description!=null ) {
+            pressedKeyDescriptions.put(keyCode, description);
+        }   
     }
     
     public void processKeyEvent(SimpleKeyEvent evt) {
-        System.err.println("de.tubs.wire.ui.KeyProcessor.processKeyEvent(evt)\n  evt=" + evt);
+        //System.err.println("de.tubs.wire.ui.KeyProcessor.processKeyEvent(evt)\n  evt=" + evt);
         
         switch(evt.getEventType()) {
+            case AWTKeyEvent.KEY_TYPED:
+                typedKeyFunctions.processEvent(evt, evt.getKeyChar());
+                break;
             case AWTKeyEvent.KEY_PRESSED:
-                typedKeyFunctions.processEvent(evt);
+                pressedKeyFunctions.processEvent(evt, evt.getKeyCode());
                 break;
             case AWTKeyEvent.KEY_RELEASED:
-                releasedKeyFunctions.processEvent(evt);
-                break;
-            case AWTKeyEvent.KEY_TYPED:
-                typedKeyFunctions.processEvent(evt);
+                releasedKeyFunctions.processEvent(evt, evt.getKeyCode());
                 break;
             default:
                 throw new IllegalArgumentException("Illegal event type constant in SimpleKeyEvent: " + evt);
@@ -128,7 +135,12 @@ public class KeyProcessor {
     }
     
     public void showHelp() {
-        System.err.println("Dies ist die Hilfe!!");
+
+        PrintStream out = System.err;
+        out.println("Keyboard help");
+        out.println("=============");
+        typedKeyDescriptions.forEach((k,v)->out.println(k + " -> " + v));
+        pressedKeyDescriptions.forEach((k,v)->out.println(AWTKeyEvent.getKeyText(k) + " -> " + v));
     }
 
 
