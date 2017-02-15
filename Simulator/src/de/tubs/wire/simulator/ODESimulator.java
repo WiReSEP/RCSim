@@ -13,7 +13,7 @@ import org.apache.commons.math3.ode.nonstiff.HighamHall54Integrator;
  *
  * @author ezander
  */
-public abstract class ODESimulator extends Simulator {
+public abstract class ODESimulator<SimulationInfo> extends Simulator<SimulationInfo> {
     
     StateIntegrator stateInt;
 

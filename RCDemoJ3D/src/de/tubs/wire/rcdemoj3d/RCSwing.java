@@ -7,6 +7,7 @@ import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
+import de.tubs.wire.ui.AWTKeyProcessor;
 import de.tubs.wire.ui.DefaultKeyListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -40,7 +41,7 @@ public class RCSwing extends javax.swing.JFrame {
 
     
     
-    void initMulti() {
+    final void initMulti() {
         //setLayout(new BorderLayout());
         Dimension minimumSize = new Dimension(10, 10);
         
@@ -83,8 +84,8 @@ public class RCSwing extends javax.swing.JFrame {
         sim = new TrackSimulator();
         sim.addObserver(observer);
         //sim.addObserver(new TextBasedObserver());
-        canvas1.addKeyListener( DefaultKeyListener.getDefaultKeyListener(sim, view1) );
-        canvas2.addKeyListener( DefaultKeyListener.getDefaultKeyListener(sim, view2) );
+        canvas1.addKeyListener( DefaultKeyListener.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
+        canvas2.addKeyListener( DefaultKeyListener.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
     }
     
     void initSimple() {
@@ -226,7 +227,7 @@ public class RCSwing extends javax.swing.JFrame {
         TrackInformation state = TrackInformation.readFromXML(filename);
         jSplitPane1.setDividerLocation(0.5);
 
-        sim.setState(state);
+        sim.setSimulationInfo(state);
         sim.init();
         if (timer != null) {
             timer.stop();
@@ -278,6 +279,7 @@ public class RCSwing extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new RCSwing().setVisible(true);
             }

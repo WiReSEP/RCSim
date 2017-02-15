@@ -23,18 +23,20 @@ import de.tubs.wire.simulator.physics.ConstantForceModel;
 import de.tubs.wire.simulator.physics.ForceModel;
 import de.tubs.wire.simulator.physics.FrictionForceModel;
 import de.tubs.wire.simulator.track.Track;
+import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.TrackODE;
 
 /**
  * A simulator 
  * @author ezander
  */
-public class TrackSimulator extends ODESimulator {
+public class TrackSimulator extends ODESimulator<TrackInformation> {
 
     @Override
     protected void reset() {
         // Get the track
-        Track track = state.getTrack();
+        TrackInformation trackInfo = getSimulationInfo();
+        Track track = trackInfo.getTrack();
         
         // Set the force model
         ForceModel gravity = ConstantForceModel.createGravityForceModel(1, 9.81);
@@ -43,11 +45,11 @@ public class TrackSimulator extends ODESimulator {
         TrackODE ode2 = new TrackODE(track, combinedForce);
         
         // Compute initial velocity (in terms of curve parameter s)
-        double v0 = state.getV0();
+        double v0 = trackInfo.getV0();
         double dxds = track.getDxDs(0).getNorm();
         double dsdt0 = v0 / dxds;
         
-        // Set initial values for the ODE state (s0, dots0)
+        // Set initial values for the ODE simulationInfo (s0, dots0)
         ArrayRealVector y = new ArrayRealVector(new double[]{0, dsdt0});
         stateInt = new StateIntegrator(ode2, y);
     }

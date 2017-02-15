@@ -17,8 +17,8 @@
 package de.tubs.wire.rcdemo;
 
 import de.tubs.wire.ui.KeyProcessor;
-import java.awt.Component;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -33,21 +33,22 @@ public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEven
         switch( code ){
             case LEFT: return AWTKeyEvent.VK_LEFT;
             case RIGHT: return AWTKeyEvent.VK_RIGHT;
+            case SPACE: return AWTKeyEvent.VK_SPACE;
+            case UNDEFINED: return AWTKeyEvent.VK_UNDEFINED;
             default:
                 System.err.println("Unknown key code: " + code);
                 return AWTKeyEvent.VK_UNDEFINED;
         }
-        
     }
+    
     @Override
     public void handle(javafx.scene.input.KeyEvent fxevt) {
-        Component source = null;
         int eventType = 0;
         long when = 0;
         int modifiers = 0;
         int keyCode = keycodeToInt(fxevt.getCode());
         char keyChar = fxevt.getCharacter().charAt(0); 
-        int keyLocation = AWTKeyEvent.KEY_LOCATION_STANDARD; //?? cant distiguish lctrl and rctrl
+        //int keyLocation = AWTKeyEvent.KEY_LOCATION_STANDARD; //?? cant distiguish lctrl and rctrl
         
         if(fxevt.getEventType().equals(KeyEvent.KEY_TYPED)) eventType = AWTKeyEvent.KEY_TYPED;
         if(fxevt.getEventType().equals(KeyEvent.KEY_PRESSED)) eventType = AWTKeyEvent.KEY_PRESSED;
@@ -57,9 +58,15 @@ public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEven
         if( fxevt.isControlDown() ) modifiers |= AWTKeyEvent.CTRL_DOWN_MASK | AWTKeyEvent.CTRL_MASK;
         // Shift, Meta, Shortcut?
         
-        source = (Component)fxevt.getSource();
         SimpleKeyEvent evt = new SimpleKeyEvent(keyChar, keyCode, eventType);
         super.processKeyEvent(evt);
+    }
+    
+
+    public void handleSceneEvents(Scene scene){
+        scene.setOnKeyTyped(this);
+        scene.setOnKeyPressed(this);
+        scene.setOnKeyReleased(this);
     }
     
 }

@@ -31,7 +31,7 @@ import de.tubs.wire.simulator.track.Track;
  *
  * @author ezander
  */
-public abstract class JavaFXObserverBase implements Observer {
+public abstract class JavaFXObserverBase implements Observer<TrackInformation> {
 
     Group world;
     Group car;

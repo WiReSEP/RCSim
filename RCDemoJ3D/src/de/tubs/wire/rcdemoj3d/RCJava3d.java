@@ -19,8 +19,8 @@ package de.tubs.wire.rcdemoj3d;
 import de.tubs.wire.graphics.java3d.Java3dObserverSimple;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.TrackSimulator;
-import de.tubs.wire.simulator.Simulator;
 import de.tubs.wire.simulator.track.StockTracks;
+import de.tubs.wire.ui.AWTKeyProcessor;
 import de.tubs.wire.ui.DefaultKeyListener;
 
 
@@ -40,13 +40,17 @@ public class RCJava3d {
         Java3dObserverSimple observer3d = new Java3dObserverSimple();
         observer3d.setCamNum(-1);
         
-        Simulator sim = new TrackSimulator();
+        TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observer3d);
         //sim.addObserver( new TextBasedObserver());
-        sim.setState(state);
+        sim.setSimulationInfo(state);
 
-        observer3d.init(sim.getState());
-        observer3d.getCanvas().addKeyListener(DefaultKeyListener.getDefaultKeyListener(sim, observer3d, true));
+        observer3d.init(sim.getSimulationInfo());
+        
+        AWTKeyProcessor keyprocessor = new AWTKeyProcessor();
+        DefaultKeyListener.setDefaultKeys(keyprocessor, sim, observer3d, true);
+        keyprocessor.handleEvents(observer3d.getCanvas());
+        
         sim.run();
     }
     

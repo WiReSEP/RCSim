@@ -16,26 +16,19 @@
  */
 package de.tubs.wire.simulator;
 
-import de.tubs.wire.simulator.track.TrackInformation;
-import de.tubs.wire.simulator.track.Track;
-
 /**
  *
  * @author ezander
  */
-public class TextBasedObserver implements Observer {
-    TrackInformation state;
-    Track track;
+public class TextBasedObserver<SimulationInfo> implements Observer<SimulationInfo> {
 
     @Override
-    public void init(TrackInformation state) {
-        this.state = state;
-        this.track = state.getTrack();
+    public void init(SimulationInfo info) {
     }
 
     @Override
     public void notify(double t, double[] y) {
-        System.out.format("%4.2f %4.2f \n", t, y[0]);
+        System.out.format("t=%4.2f  s=%4.2f  s'=%4.2f\n", t, y[0], y[1]);
     }
-    
+
 }

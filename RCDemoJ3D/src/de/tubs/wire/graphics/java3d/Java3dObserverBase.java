@@ -32,7 +32,7 @@ import de.tubs.wire.simulator.track.Track;
  *
  * @author ezander
  */
-public abstract class Java3dObserverBase implements Observer {
+public abstract class Java3dObserverBase implements Observer<TrackInformation> {
 
     protected BranchGroup branchGroup;
     protected TransformGroup world;

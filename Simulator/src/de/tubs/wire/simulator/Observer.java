@@ -16,22 +16,18 @@
  */
 package de.tubs.wire.simulator;
 
-import de.tubs.wire.simulator.track.TrackInformation;
-
 /**
  *
  * @author ezander
  */
-public interface Observer {
+public interface Observer<SimulationInfo> {
 
-    //void setTrack();
-    //void setParameters();
-    
     /**
      * Called when the simulator is first run or reset.
-     * @param state The simulation state object.
+     * 
+     * @param simulationInfo The simulation info object.
      */
-    void init(TrackInformation state);
+    void init(SimulationInfo simulationInfo);
 
     void notify(double t, double[] y);
     

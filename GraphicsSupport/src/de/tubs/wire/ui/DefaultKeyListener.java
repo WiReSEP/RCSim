@@ -27,16 +27,9 @@ import de.tubs.wire.simulator.Simulator;
  */
 public class DefaultKeyListener {
 
-    public static AWTKeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc) {
-        return getDefaultKeyListener(sim, vc, false);
-    }
     
-    public static AWTKeyProcessor getDefaultKeyListener(Simulator sim, ViewController vc, boolean withQuit) {
-        AWTKeyProcessor kp = new AWTKeyProcessor();
-        return setDefaultKeys(kp, sim, vc, withQuit);
-    }
     
-    public static AWTKeyProcessor setDefaultKeys(AWTKeyProcessor kp, Simulator sim, ViewController vc, boolean withQuit) {
+    public static <T extends KeyProcessor> T setDefaultKeys(T kp, Simulator sim, ViewController vc, boolean withQuit) {
         //kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation.");
         kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation (while pressed).");
         kp.add('+', d -> sim.getStepper().accelerate(1.4142), "Makes the simulation run faster.");

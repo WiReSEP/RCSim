@@ -38,7 +38,7 @@ public class RCTerminal {
         
         Simulator sim = new TrackSimulator();
         sim.addObserver(observer);
-        sim.setState(state);
+        sim.setSimulationInfo(state);
 
         //observer.init(sim.getState());
         sim.run();

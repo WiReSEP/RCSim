@@ -16,47 +16,47 @@
  */
 package de.tubs.wire.simulator;
 
-import de.tubs.wire.simulator.track.TrackInformation;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Base class for simulators.
  * 
- * Contains a state, a time stepper which dictates the flow of time (i.e. 
- * simulation time versus real time, and a list of observers, which get notified 
- * of changes in the simulation.
- * 
- * Derived classes must implement the methods 'reset' and 'stepTo', which reset 
- * the simulation state or continue the simulation up to a given time (given in 
- * simulation time).
- * 
- * Clients of this class usually call 'addObserver' in order to be notified of 
- * changes in the simulation state. 
+ * Contains a simulationInfo, a time stepper which dictates the flow of time (i.e. 
+ simulation time versus real time, and a list of observers, which get notified 
+ of changes in the simulation.
+ 
+ Derived classes must implement the methods 'reset' and 'stepTo', which reset 
+ the simulation simulationInfo or continue the simulation up to a given time (given in 
+ simulation time).
+ 
+ Clients of this class usually call 'addObserver' in order to be notified of 
+ changes in the simulation simulationInfo. 
  * 
  * @author ezander
+ * @param <SimulationInfo> Class containing information essential to the specific simulation.
  */
-public abstract class Simulator {
+public abstract class Simulator<SimulationInfo> {
 
-    List<Observer> observers = new LinkedList<>();
+    List<Observer<SimulationInfo>> observers = new LinkedList<>();
     TimeStepper stepper = new TimeStepper();
-    TrackInformation state;
+    SimulationInfo simulationInfo;
 
     /**
-     * Get current simulation state.
-     * @return The current state.
+     * Get current simulation info.
+     * @return The current simulation info.
      */
-    public TrackInformation getState() {
-        return state;
+    public SimulationInfo getSimulationInfo() {
+        return simulationInfo;
     }
 
     /**
-     * Set a new simulation state.
+     * Set a new simulation simulationInfo.
      * 
-     * @param state The state to be set as new state.
+     * @param simulationInfo The info struct to be set as new simulation info.
      */
-    public void setState(TrackInformation state) {
-        this.state = state;
+    public void setSimulationInfo(SimulationInfo simulationInfo) {
+        this.simulationInfo = simulationInfo;
     }
 
     /**
@@ -73,18 +73,18 @@ public abstract class Simulator {
      * 
      * @param observer A new observer.
      */
-    public void addObserver(Observer observer) {
+    public void addObserver(Observer<SimulationInfo> observer) {
         observers.add(observer);
     }
 
     /** 
-     * Notifies the observers if the state has changed. 
+     * Notifies the observers if the simulationInfo has changed. 
      * Usually called by update, no need to call it yourself.
      * @param t The current time (simulation time).
      * @param y The current position.
      */
     protected void notifyObservers(double t, double[] y) {
-        for (Observer observer : observers) {
+        for (Observer<SimulationInfo> observer : observers) {
             observer.notify(t, y);
         }
     }
@@ -104,7 +104,7 @@ public abstract class Simulator {
     }
 
     /**
-     * Reset the simulation to the initial state.
+     * Reset the simulation to the initial simulationInfo.
      * 
      * Needs to be implemented in derived classes.
      */
@@ -117,7 +117,7 @@ public abstract class Simulator {
      * integration scheme).
      * 
      * @param simTime The new simulation time up to which needs to be simulated.
-     * @return The current state of the simulation.
+     * @return The current simulationInfo of the simulation.
      */
     protected abstract double[] stepTo(double simTime);
 
@@ -125,7 +125,7 @@ public abstract class Simulator {
      * Update the simulation.
      * 
      * Gets the current time from the time stepper, lets the derived simulation 
-     * class compute the new state and inform all observers about the new state.
+ class compute the new simulationInfo and inform all observers about the new simulationInfo.
      */
     public final void update() {
         double t = stepper.getSimTime();
@@ -142,8 +142,8 @@ public abstract class Simulator {
     public final void init() {
         stepper = new TimeStepper();
         reset();
-        for (Observer observer : observers) {
-            observer.init(state);
+        for (Observer<SimulationInfo> observer : observers) {
+            observer.init(simulationInfo);
         }
     }
     

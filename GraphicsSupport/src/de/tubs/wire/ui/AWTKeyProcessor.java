@@ -16,6 +16,7 @@
  */
 package de.tubs.wire.ui;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -50,4 +51,8 @@ public class AWTKeyProcessor extends KeyProcessor implements KeyListener //, Eve
         processAWTEvent(e);
     }
 
+    public void handleEvents(Component component) {
+        component.addKeyListener(this);
+    }
+    
 }

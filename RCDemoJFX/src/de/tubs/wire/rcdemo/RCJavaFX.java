@@ -26,6 +26,7 @@ import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.Simulator;
+import de.tubs.wire.simulator.TextBasedObserver;
 import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.ui.DefaultKeyListener;
 
@@ -38,35 +39,36 @@ public class RCJavaFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        TrackInformation state = TrackInformation.readFromXML(StockTracks.TEST);
+        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
 
         JavaFXObserverSimple observerFX = new JavaFXObserverSimple(primaryStage);
         //observer3d.setCamNum(-1);
 
-        Simulator sim = new TrackSimulator();
+        TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observerFX);
-        //sim.addObserver(new Java3dObserverSimple());
-        //sim.addObserver( new TextBasedObserver());
-        sim.setState(state);
+        //sim.addObserver( new TextBasedObserver<TrackInformation>());
+        sim.setSimulationInfo(trackInfo);
 
-        observerFX.init(sim.getState());
+        observerFX.init(sim.getSimulationInfo());
         sim.init();
 
         primaryStage.setTitle("Rollercoaster Simulator");
         primaryStage.show();
 
         Scene scene = primaryStage.getScene();
-        //scene.setOnKeyPressed(
         
         KeyProcessorFX keyprocessor = new KeyProcessorFX();
         DefaultKeyListener.setDefaultKeys(keyprocessor, sim, observerFX, false);
-        scene.setOnKeyTyped(keyprocessor);
+        keyprocessor.add('q', d->primaryStage.close(), "Quit the application.");
+        keyprocessor.handleSceneEvents(scene);
+        
 
         Animation animation = new Transition() {
             {
                 setCycleDuration(Duration.millis(200000));
             }
 
+            @Override
             protected void interpolate(double frac) {
                 sim.update();
             }
