@@ -16,34 +16,17 @@
  */
 package de.tubs.wire.simulator.physics;
 
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- * (class should be named AirDragForceModel)
+ * A ForceModel implementing drag by fluids (like air).
+ * 
  * https://en.wikipedia.org/wiki/Drag_equation
  * https://en.wikipedia.org/wiki/Drag_coefficient
  * @author ezander
  */
-public class FrictionForceModel implements ForceModel {
-    public double rho = 1;
-    public double Cd = 1;
-    public double A = 1;
-
-//https://en.wikipedia.org/wiki/Density#Air
-//−25 	1.423 (in kg/m^3)
-//−20 	1.395
-//−15 	1.368
-//−10 	1.342
-//−5 	1.316
-//0 	1.293
-//5 	1.269
-//10 	1.247
-//15 	1.225
-//20 	1.204
-//25 	1.184
-//30 	1.164
-//35 	1.146
-
+public class DragForceModel implements ForceModel {
     
     public static double CD_SPHERE = 0.47;
     public static double CD_HALFSPHERE = 0.42;
@@ -54,7 +37,38 @@ public class FrictionForceModel implements ForceModel {
     public static double CD_CYLINDER_SHORT = 1.15;
     public static double CD_STREAMLINED = 0.04;
 
-    public FrictionForceModel() {
+    
+    public final double rho;
+    public final double Cd;
+    public final double A;
+
+    /**
+     * Compute air density from temperature.
+     * 
+     * //https://en.wikipedia.org/wiki/Density#Air
+     * 
+     * @param temp Temperature in degree Celsius.
+     * @return Density in kg/m^3
+     */
+    public static double getAirDensity(double temp) {
+        double[] airTemps = {-25, -20, -15, -10, -5, 0 , 5, 10, 15, 20, 25, 30, 35};
+        double[] airDensity = {1.423, 1.395, 1.368, 1.342, 1.316, 1.293, 1.269, 1.247, 1.225, 1.204, 1.184, 1.164, 1.146};
+        
+        return new LinearInterpolator().interpolate(airTemps, airDensity).value(temp);
+    }
+
+
+    /**
+     * Generate a DragForce model.
+     * 
+     * @param rho The mass density of the fluid.
+     * @param Cd The drag coefficient.
+     * @param A The reference area of body moving in the fluid.
+     */
+    public DragForceModel(double rho, double Cd, double A) {
+        this.rho = rho;
+        this.Cd = Cd;
+        this.A = A;
     }
     
     /**

@@ -20,7 +20,10 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- *
+ * A ForceModel modelling no force at all.
+ * 
+ * Use where a ForceModel is needed, but you don't want any forces.
+ * 
  * @author ezander
  */
 public class ZeroForceModel implements ForceModel {

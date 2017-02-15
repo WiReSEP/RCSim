@@ -20,22 +20,67 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- *
+ * A ForceModel modelling constant forces like gravity.
+ * 
  * @author ezander
  */
 public class ConstantForceModel implements ForceModel {
+    
+    public static final double MASS_ACCEL_EARTH = 9.80665;
+    public static final double MASS_ACCEL_EARTH_POLE = 9.832;
+    public static final double MASS_ACCEL_EARTH_EQUATOR = 9.780;
+    
+    public static final double MASS_ACCEL_MOON = 1.622;
+    
+    
+    public static final double MASS_ACCEL_MERCURY = 3.7;
+    public static final double MASS_ACCEL_VENUS = 8.87;
+    public static final double MASS_ACCEL_MARS = 3.711;
+    public static final double MASS_ACCEL_JUPITER = 24.79;
+    public static final double MASS_ACCEL_SATURN = 10.44;
+    public static final double MASS_ACCEL_URANUS = 8.69;
+    public static final double MASS_ACCEL_NEPTUN = 11.15;
+    
+    
+            
 
     private final double[] F;
 
+    /**
+     * Create a constant force model.
+     * 
+     * @param F The constant force.
+     */
     public ConstantForceModel(double[] F) {
         this.F = F;
     }
 
+    /**
+     * Create a gravity force model.
+     * 
+     * The force here is [0, 0, -m*g], i.e. m*g in negative z direction.
+     * 
+     * @param m The mass.
+     * @param g Gravitational acceleration.
+     * @return The gravity force model.
+     */
     public static ConstantForceModel createGravityForceModel(double m, double g) {
         double F[] = {0, 0, -m*g};
         return new ConstantForceModel(F);
     }
-        
+
+    /**
+     * Create a gravity force model with standard earth gravity.
+     * 
+     * The force here is [0, 0, -m*g], i.e. m*g in negative z direction.
+     * 
+     * @param m The mass.
+     * @return The gravity force model.
+     */
+    public static ConstantForceModel createGravityForceModel(double m) {
+        return createGravityForceModel(m, MASS_ACCEL_EARTH);
+    }
+    
     @Override
     public RealVector getForce(RealVector x, RealVector v) {
         return new ArrayRealVector(F);

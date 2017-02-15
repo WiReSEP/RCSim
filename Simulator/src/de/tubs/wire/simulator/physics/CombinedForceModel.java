@@ -22,22 +22,40 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- *
+ * Combines two force models into one (summing up forces and energies).
+ * 
  * @author ezander
  */
 public class CombinedForceModel implements ForceModel {
     private final List<ForceModel> models;
     private final List<Double> factors;
 
+    /**
+     * Create a new combined force model.
+     */
     public CombinedForceModel() {
         factors = new ArrayList<>();
         models = new ArrayList<>();
     }
 
+    /**
+     * Add a force to the model.
+     * 
+     * @param model The force model to add.
+     * 
+     * @return The combined model itself.
+     */
     public CombinedForceModel add(ForceModel model) {
         return add(model, 1.0);
     }
 
+    /**
+     * Add a scaled force to the model.
+     * 
+     * @param model The force model to add.
+     * @param factor The factor.
+     * @return The combined model itself.
+     */
     public CombinedForceModel add(ForceModel model, double factor) {
         models.add(model);
         factors.add(factor);
@@ -57,8 +75,9 @@ public class CombinedForceModel implements ForceModel {
     @Override
     public double getPotentialEnergy(RealVector x, RealVector v) {
         double E = 0;
-        for (ForceModel model : models) {
-            E += model.getPotentialEnergy(x, v);
+        for (int i = 0; i < models.size(); i++) {
+            ForceModel model = models.get(i);
+            E += factors.get(i) * model.getPotentialEnergy(x, v);
         }
         return E;
     }

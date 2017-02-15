@@ -21,10 +21,11 @@ import de.tubs.wire.simulator.math.StateIntegrator;
 import de.tubs.wire.simulator.physics.CombinedForceModel;
 import de.tubs.wire.simulator.physics.ConstantForceModel;
 import de.tubs.wire.simulator.physics.ForceModel;
-import de.tubs.wire.simulator.physics.FrictionForceModel;
+import de.tubs.wire.simulator.physics.DragForceModel;
 import de.tubs.wire.simulator.track.Track;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.TrackODE;
+import javafx.scene.input.DragEvent;
 
 /**
  * A simulator 
@@ -39,8 +40,8 @@ public class TrackSimulator extends ODESimulator<TrackInformation> {
         Track track = trackInfo.getTrack();
         
         // Set the force model
-        ForceModel gravity = ConstantForceModel.createGravityForceModel(1, 9.81);
-        ForceModel friction = new FrictionForceModel();
+        ForceModel gravity = ConstantForceModel.createGravityForceModel(1);
+        ForceModel friction = new DragForceModel(DragForceModel.getAirDensity(20), DragForceModel.CD_CUBE, 1);
         ForceModel combinedForce = new CombinedForceModel().add(gravity, 1).add(friction, 0 * 0.01);
         TrackODE ode2 = new TrackODE(track, combinedForce);
         
