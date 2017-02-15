@@ -36,7 +36,7 @@ public class RCTerminal {
         
         TermObserver observer = new TermObserver();
         
-        Simulator sim = new TrackSimulator();
+        TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observer);
         sim.setSimulationInfo(state);
 

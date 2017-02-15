@@ -32,7 +32,7 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-import de.tubs.wire.graphics.RHS;
+import de.tubs.wire.simulator.math.RHS;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.Track;
 

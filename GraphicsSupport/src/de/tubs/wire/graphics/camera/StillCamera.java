@@ -16,8 +16,8 @@
  */
 package de.tubs.wire.graphics.camera;
 
-import de.tubs.wire.graphics.TrackHelper;
-import de.tubs.wire.graphics.VectorArithmetic;
+import de.tubs.wire.simulator.track.TrackHelper;
+import de.tubs.wire.simulator.math.VectorArithmetic;
 import de.tubs.wire.simulator.track.Track;
 
 /**

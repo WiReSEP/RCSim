@@ -17,7 +17,7 @@
 package de.tubs.wire.graphics.java3d;
 
 import javax.vecmath.Vector3d;
-import de.tubs.wire.graphics.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorArithmetic;
 
 /**
  *

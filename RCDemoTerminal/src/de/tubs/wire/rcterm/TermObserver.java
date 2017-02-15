@@ -26,7 +26,7 @@ import de.tubs.wire.simulator.Simulator;
  *
  * @author ezander
  */
-public class TermObserver implements Observer {
+public class TermObserver implements Observer<TrackInformation> {
 
     @Override
     public void init(TrackInformation trackInfo) {

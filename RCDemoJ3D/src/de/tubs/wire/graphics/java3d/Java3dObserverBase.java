@@ -22,7 +22,7 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
-import de.tubs.wire.graphics.RHS;
+import de.tubs.wire.simulator.math.RHS;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.simulator.Observer;
 import de.tubs.wire.simulator.track.TrackInformation;

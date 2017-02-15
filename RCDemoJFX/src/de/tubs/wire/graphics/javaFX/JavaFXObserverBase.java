@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
-import de.tubs.wire.graphics.RHS;
+import de.tubs.wire.simulator.math.RHS;
 import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.simulator.Observer;
 import de.tubs.wire.simulator.track.TrackInformation;

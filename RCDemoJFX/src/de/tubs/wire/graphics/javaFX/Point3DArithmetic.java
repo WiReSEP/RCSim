@@ -17,7 +17,7 @@
 package de.tubs.wire.graphics.javaFX;
 
 import javafx.geometry.Point3D;
-import de.tubs.wire.graphics.VectorArithmetic;
+import de.tubs.wire.simulator.math.VectorArithmetic;
 
 /**
  *

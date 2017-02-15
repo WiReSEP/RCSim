@@ -19,7 +19,7 @@ package de.tubs.wire.graphics.javaFX;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Translate;
-import de.tubs.wire.graphics.TrackHelper;
+import de.tubs.wire.simulator.track.TrackHelper;
 
 /**
  *

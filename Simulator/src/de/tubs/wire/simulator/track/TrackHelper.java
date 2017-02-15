@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.tubs.wire.graphics;
+package de.tubs.wire.simulator.track;
 
+import de.tubs.wire.simulator.math.RHS;
+import de.tubs.wire.simulator.math.VectorArithmetic;
 import org.apache.commons.math3.linear.RealVector;
-import de.tubs.wire.simulator.track.Track;
 
 /**
  *

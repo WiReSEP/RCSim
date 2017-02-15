@@ -16,6 +16,8 @@
  */
 package de.tubs.wire.graphics;
 
+import de.tubs.wire.simulator.math.RHS;
+
 /**
  *
  * @author ezander

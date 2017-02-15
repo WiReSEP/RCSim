@@ -16,6 +16,8 @@
  */
 package de.tubs.wire.graphics;
 
+import de.tubs.wire.simulator.math.RHS;
+import de.tubs.wire.simulator.track.TrackHelper;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.Track;
 
