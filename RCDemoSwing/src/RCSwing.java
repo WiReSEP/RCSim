@@ -1,4 +1,4 @@
-package de.tubs.wire.rcdemoj3d;
+
 
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import de.tubs.wire.graphics.java3d.Java3dObserverBase;
@@ -34,8 +34,8 @@ public class RCSwing extends javax.swing.JFrame {
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         initComponents();
         lastPath = System.getProperty("user.dir");
-        //initSimple();
-        initMulti();
+        initSimple();
+        //initMulti();
     }
 
     
@@ -49,7 +49,7 @@ public class RCSwing extends javax.swing.JFrame {
         
         
         GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
-        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
         GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
@@ -83,8 +83,8 @@ public class RCSwing extends javax.swing.JFrame {
         sim = new TrackSimulator();
         sim.addObserver(observer);
         //sim.addObserver(new TextBasedObserver());
-        canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
-        canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
+        //canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
+        //canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
     }
     
     void initSimple() {

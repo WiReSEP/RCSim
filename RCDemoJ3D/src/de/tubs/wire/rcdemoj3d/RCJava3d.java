@@ -22,6 +22,7 @@ import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.graphics.DefaultKeyMapping;
+import de.tubs.wire.simulator.TextBasedObserver;
 
 
 /**
@@ -37,20 +38,18 @@ public class RCJava3d {
         String filename = "../Simulator/tracks/foo.rct";
         TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         
+        TrackSimulator sim = new TrackSimulator();
+        sim.setSimulationInfo(trackInfo);
+        
         Java3dObserverSimple observer3d = new Java3dObserverSimple();
         observer3d.setCamNum(-1);
-        
-        TrackSimulator sim = new TrackSimulator();
-        sim.addObserver(observer3d);
-        //sim.addObserver( new TextBasedObserver());
-        sim.setSimulationInfo(trackInfo);
 
-        observer3d.init(sim.getSimulationInfo());
-        
         AWTKeyProcessor keyprocessor = new AWTKeyProcessor();
         DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observer3d, true);
-        keyprocessor.handleEvents(observer3d.getCanvas());
+        observer3d.setKeyProcessor(keyprocessor);
         
+        sim.addObserver(observer3d);
+        sim.addObserver( new TextBasedObserver());
         sim.run();
     }
     

@@ -30,6 +30,7 @@ import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.graphics.camera.CameraView;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.graphics.camera.Camera;
+import de.tubs.wire.keyboard.AWTKeyProcessor;
 
 /**
  *
@@ -43,6 +44,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
 
     int camNum = -1;
     Camera<Vector3d> camTransform;
+    protected AWTKeyProcessor keyprocessor;
 
 
     public Camera<Vector3d> getCamTransform() {
@@ -100,10 +102,14 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
             canvas.setDoubleBufferEnable(true);
             SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
         }
+        keyprocessor.handleEvents(canvas);
 
+
+        System.out.println("de.tubs.wire.graphics.java3d.Java3dObserverSimple.init() w1");
         world = createWorld(trackInfo);
-        
+        System.out.println("de.tubs.wire.graphics.java3d.Java3dObserverSimple.init() w2");
         camera = universe.getViewingPlatform().getViewPlatformTransform();
+        new Exception().printStackTrace();
 
         //
         branchGroup = new BranchGroup();
@@ -134,6 +140,10 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         
         if( !canvas.isOffScreen())
             canvas.startRenderer();
+    }
+
+    public void setKeyProcessor(AWTKeyProcessor keyprocessor) {
+        this.keyprocessor = keyprocessor;
     }
 
 

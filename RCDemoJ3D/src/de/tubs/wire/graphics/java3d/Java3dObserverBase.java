@@ -24,6 +24,7 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
 import de.tubs.wire.simulator.math.RHS;
 import de.tubs.wire.graphics.camera.CameraFactory;
+import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.simulator.Observer;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.Track;
@@ -61,6 +62,8 @@ public abstract class Java3dObserverBase implements Observer<TrackInformation> {
         
         return worldNode;
     }
+
+
 
     @Override
     public void notify(double t, double[] y) {
