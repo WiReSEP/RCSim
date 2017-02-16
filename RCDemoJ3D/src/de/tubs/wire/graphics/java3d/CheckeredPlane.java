@@ -49,11 +49,11 @@ public class CheckeredPlane extends Shape3D {
      * Constructs a checkered plane.
      */
     public CheckeredPlane() {
-        //createPlane(COLORING_BLACK_WHITE);
-        //createPlane(COLORING_RED_WHITE);
-        //createPlane(COLORING_RGBY);
-        //createPlane(COLORING_STRIPED);
-        createPlane(COLORING_RANDOM);
+        this(COLORING_RED_WHITE);
+    }
+    
+    public CheckeredPlane(ColoringFunction coloring) {
+        createPlane(coloring);
     }
 
     protected final void createPlane(ColoringFunction func) {

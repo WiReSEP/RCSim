@@ -47,7 +47,7 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
     public TransformGroup createGround(TrackInformation trackInfo) {
         TransformGroup group = new TransformGroup();
         //group.addChild(super.createGround(trackInfo));
-        group.addChild(new CheckeredPlane());
+        group.addChild(new CheckeredPlane(CheckeredPlane.COLORING_RANDOM));
         //group.addChild(new FractalMountains());
         return group;
     }

@@ -102,7 +102,8 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
             canvas.setDoubleBufferEnable(true);
             SwingUtilities.windowForComponent(canvas).setSize(160 * 6, 90 * 6);
         }
-        keyprocessor.handleEvents(canvas);
+        if( keyprocessor!=null )
+            keyprocessor.handleEvents(canvas);
 
 
         System.out.println("de.tubs.wire.graphics.java3d.Java3dObserverSimple.init() w1");

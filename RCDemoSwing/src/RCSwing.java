@@ -8,12 +8,14 @@ import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.graphics.DefaultKeyMapping;
+import de.tubs.wire.simulator.TextBasedObserver;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.io.File;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.GraphicsConfigTemplate3D;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -34,8 +36,8 @@ public class RCSwing extends javax.swing.JFrame {
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
         initComponents();
         lastPath = System.getProperty("user.dir");
-        initSimple();
-        //initMulti();
+        //initSimple();
+        initMulti();
     }
 
     
@@ -44,16 +46,16 @@ public class RCSwing extends javax.swing.JFrame {
         //setLayout(new BorderLayout());
         Dimension minimumSize = new Dimension(10, 10);
         
-        //GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         //config.set
         
         
-        GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
+        /*GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
         gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
         GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
-                getBestConfiguration(gct3D);
+                getBestConfiguration(gct3D);*/
         
         Canvas3D canvas1 = new Canvas3D(config);
         canvas1.setDoubleBufferEnable(true);
@@ -66,6 +68,9 @@ public class RCSwing extends javax.swing.JFrame {
         jSplitPane1.setLeftComponent(canvas2);
         jSplitPane1.setRightComponent(canvas1);
         canvas2.requestFocus();
+        
+        //JButton but = new JButton("foo");
+        //jSplitPane1.setRightComponent(but);
 
         
         setSize(160 * 6, 90 * 6);
@@ -79,16 +84,17 @@ public class RCSwing extends javax.swing.JFrame {
         Java3dObserverMulti.MyView view1 = observer.addView(canvas1);
         Java3dObserverMulti.MyView view2 = observer.addView(canvas2);
         view1.setCamNum(-1);
+        view2.setCamNum(2);
 
         sim = new TrackSimulator();
         sim.addObserver(observer);
-        //sim.addObserver(new TextBasedObserver());
+        sim.addObserver(new TextBasedObserver());
         //canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
         //canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
     }
     
-    void initSimple() {
-        //setLayout(new BorderLayout());
+    final void initSimple() {
+        setLayout(new BorderLayout());
         GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         Canvas3D canvas = new Canvas3D(config);
         canvas.setDoubleBufferEnable(true);
@@ -102,6 +108,7 @@ public class RCSwing extends javax.swing.JFrame {
 
         sim = new TrackSimulator();
         sim.addObserver(observer);
+        sim.addObserver(new TextBasedObserver());
     }
 
     /**
