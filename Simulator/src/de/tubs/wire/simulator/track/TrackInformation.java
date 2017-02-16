@@ -111,7 +111,7 @@ public class TrackInformation {
         
         Element parameterElement = XMLHelper.getChildByName(trackElement, "SimulationParameters");
         sim.v0 = XMLHelper.getDouble(parameterElement, "Speed");
-        double scale = XMLHelper.getDouble(parameterElement, "Scale");
+        // double scale = XMLHelper.getDouble(parameterElement, "Scale");
         
         Element pillarListElement = XMLHelper.getChildByName(trackElement, "PillarList");
         ArrayList<Element> pillars = XMLHelper.getChildrenByName(pillarListElement, "Pillar");

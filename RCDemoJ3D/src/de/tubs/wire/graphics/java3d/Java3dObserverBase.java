@@ -62,6 +62,7 @@ public abstract class Java3dObserverBase implements Observer<TrackInformation> {
         return worldNode;
     }
 
+    @Override
     public void notify(double t, double[] y) {
         assert track != null;
         double s = y[0];

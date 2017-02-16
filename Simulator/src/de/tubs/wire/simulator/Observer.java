@@ -20,6 +20,7 @@ package de.tubs.wire.simulator;
  * An Observer can be registered with an Simulation and gets notifications about state changes in the Simulation.
  * 
  * @author ezander
+ * @param <SimulationInfo> The simulation info class.
  */
 public interface Observer<SimulationInfo> {
 

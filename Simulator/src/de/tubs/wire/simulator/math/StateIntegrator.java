@@ -110,7 +110,7 @@ public class StateIntegrator {
         stateInt.setT(t0);
         while (true) {
             double t = stateInt.getT();
-            System.out.format("%4.1f: %s\n", t, stateInt.getY());
+            System.out.format("%4.1f: %s%n", t, stateInt.getY());
             if (t >= t1 - 1e-7) {
                 break;
             }

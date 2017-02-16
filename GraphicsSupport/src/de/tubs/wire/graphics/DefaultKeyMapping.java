@@ -16,8 +16,7 @@
  */
 package de.tubs.wire.graphics;
 
-import java.awt.event.KeyEvent;
-import de.tubs.wire.graphics.ViewController;
+import static java.awt.event.KeyEvent.*;
 import de.tubs.wire.keyboard.KeyProcessor;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.Simulator;
@@ -31,15 +30,15 @@ public class DefaultKeyMapping {
     
     
     public static <T extends KeyProcessor> T setDefaultKeys(T kp, Simulator sim, ViewController vc, boolean withQuit) {
-        //kp.add(KeyEvent.VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation.");
-        kp.add(KeyEvent.VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation (while pressed).");
+        //kp.add(VK_SHIFT, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation.");
+        kp.add(VK_SPACE, d -> sim.getStepper().pause(), d -> sim.getStepper().resume(), "Pauses the simulation (while pressed).");
         kp.add('+', d -> sim.getStepper().accelerate(1.4142), "Makes the simulation run faster.");
         kp.add('-', d -> sim.getStepper().decelerate(1.4142), "Makes the simulation run slower.");
         kp.add('p', d -> sim.getStepper().pause(), "Pauses the simulation.");
         kp.add('c', d -> sim.getStepper().resume(), "Resumes the simulation (after pausing).");
         
-        kp.add(KeyEvent.VK_LEFT, null, d -> vc.prevCam(), "Selects the previous camera.");
-        kp.add(KeyEvent.VK_RIGHT, null, d -> vc.nextCam(), "Selects the next camera.");
+        kp.add(VK_LEFT, null, d -> vc.prevCam(), "Selects the previous camera.");
+        kp.add(VK_RIGHT, null, d -> vc.nextCam(), "Selects the next camera.");
         kp.add('w', d -> vc.prevCam(), "Selects the next camera.");
         kp.add('e', d -> vc.nextCam(), "Selects the previous camera.");
         

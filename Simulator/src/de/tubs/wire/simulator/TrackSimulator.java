@@ -16,16 +16,15 @@
  */
 package de.tubs.wire.simulator;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
 import de.tubs.wire.simulator.math.StateIntegrator;
 import de.tubs.wire.simulator.physics.CombinedForceModel;
 import de.tubs.wire.simulator.physics.ConstantForceModel;
-import de.tubs.wire.simulator.physics.ForceModel;
 import de.tubs.wire.simulator.physics.DragForceModel;
+import de.tubs.wire.simulator.physics.ForceModel;
 import de.tubs.wire.simulator.track.Track;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.TrackODE;
-import javafx.scene.input.DragEvent;
+import org.apache.commons.math3.linear.ArrayRealVector;
 
 /**
  * A simulator for rollercoaster tracks.

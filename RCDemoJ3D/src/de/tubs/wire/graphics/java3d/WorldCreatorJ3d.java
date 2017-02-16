@@ -173,6 +173,7 @@ extends WorldCreator<Vector3d, Node, TransformGroup> {
 
     
 
+    @Override
     public TransformGroup createLight(TrackInformation trackInfo) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 10000.0);
         

@@ -74,9 +74,11 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         }
     }
     
+    @Override
     public void nextCam() {
         setCamNum(getCamNum()+1);
     }
+    @Override
     public void prevCam() {
         setCamNum(getCamNum()-1);
     }
@@ -114,6 +116,7 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         setCamNum(camNum);
     }
 
+    @Override
     public void notify(double t, double[] y) {
         if( !canvas.isOffScreen())
             canvas.stopRenderer();

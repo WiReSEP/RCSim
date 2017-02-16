@@ -28,14 +28,14 @@ import org.apache.commons.math3.linear.RealVector;
  */
 public class DragForceModel implements ForceModel {
     
-    public static double CD_SPHERE = 0.47;
-    public static double CD_HALFSPHERE = 0.42;
-    public static double CD_CONE = 0.50;
-    public static double CD_CUBE = 1.05;
-    public static double CD_CUBE_ANGLED = 0.80;
-    public static double CD_CYLINDER_LONG = 0.82;
-    public static double CD_CYLINDER_SHORT = 1.15;
-    public static double CD_STREAMLINED = 0.04;
+    public static final double CD_SPHERE = 0.47;
+    public static final double CD_HALFSPHERE = 0.42;
+    public static final double CD_CONE = 0.50;
+    public static final double CD_CUBE = 1.05;
+    public static final double CD_CUBE_ANGLED = 0.80;
+    public static final double CD_CYLINDER_LONG = 0.82;
+    public static final double CD_CYLINDER_SHORT = 1.15;
+    public static final double CD_STREAMLINED = 0.04;
 
     
     public final double rho;

@@ -16,6 +16,7 @@
  */
 package de.tubs.wire.rcdemo;
 
+import de.tubs.wire.graphics.DefaultKeyMapping;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.application.Application;
@@ -26,7 +27,6 @@ import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.StockTracks;
-import de.tubs.wire.graphics.DefaultKeyMapping;
 
 /**
  *

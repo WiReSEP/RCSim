@@ -28,6 +28,7 @@ package de.tubs.wire.simulator.math;
  * 
  * 
  * @author ezander
+ * @param <Vector> The vector class.
  */
 public abstract class VectorMath<Vector> {
     /**

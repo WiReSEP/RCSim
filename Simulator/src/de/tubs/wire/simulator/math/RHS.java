@@ -23,6 +23,7 @@ package de.tubs.wire.simulator.math;
  * forward direction. 
  * 
  * @author ezander
+ * @param <Vector> The vector class.
  */
 public class RHS<Vector> {
 
@@ -51,8 +52,10 @@ public class RHS<Vector> {
      * vectors are normalised. For a moving observer, the forward vector is 
      * given by the current velocity and the up vector by the yaw vector.
      * 
+     * @param <Vector> The vector class.
      * @param forward The forward pointing vector.
      * @param up The upward pointing vector.
+     * @param vecmath The VectorMath object.
      * @return An RHS.
      */
     public static <Vector> RHS<Vector> createRHS(Vector forward, Vector up, VectorMath<Vector> vecmath) {

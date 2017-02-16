@@ -28,7 +28,7 @@ public interface Track {
      * 
      * Meaningful for closed curved. Open curves should return a value of 0.
      * E.g. if <code>double p = track.getPeriod()</code>; then 
-     * <code>assert getx(s)==getx(s+p)<code> should be true (at least up to some 
+     * <code>assert getx(s)==getx(s+p)</code> should be true (at least up to some 
      * epsilon.
      * 
      * @return Periodicity of the curve.

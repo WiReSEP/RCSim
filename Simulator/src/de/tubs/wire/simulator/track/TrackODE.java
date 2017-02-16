@@ -16,10 +16,10 @@
  */
 package de.tubs.wire.simulator.track;
 
-import org.apache.commons.math3.linear.RealVector;
-import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 import de.tubs.wire.simulator.physics.ForceModel;
 import de.tubs.wire.simulator.physics.ZeroForceModel;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.ode.SecondOrderDifferentialEquations;
 
 /**
  * Implements an ODE model on a track.

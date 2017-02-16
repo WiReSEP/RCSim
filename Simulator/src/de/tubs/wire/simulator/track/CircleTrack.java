@@ -25,8 +25,8 @@ import org.apache.commons.math3.linear.RealVector;
  * @author ezander
  */
 public class CircleTrack implements Track {
-    private final double omega = Math.PI * 2;
-    private final double alpha = 0.1;
+    private static final double omega = Math.PI * 2;
+    private static final double alpha = 0.1;
 
     /**
      * The perios of a circle is 1 (at least in this implementation, could also 

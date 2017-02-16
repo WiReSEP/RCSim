@@ -13,13 +13,15 @@ import org.apache.commons.math3.ode.nonstiff.HighamHall54Integrator;
  * A Simulator class that works with ODEs.
  * 
  * @author ezander
+ * @param <SimulationInfo> The simulation info class.
  */
 public abstract class ODESimulator<SimulationInfo> extends Simulator<SimulationInfo> {
     
-    StateIntegrator stateInt;
+    protected StateIntegrator stateInt;
 
     @Override
     protected double[] stepTo(double simTime) {
+        assert stateInt != null : "Need to set stateIntegrator before calling stepTo()";
         stateInt.integrateTo(simTime);
         return stateInt.getY().toArray();
     }
@@ -30,6 +32,7 @@ public abstract class ODESimulator<SimulationInfo> extends Simulator<SimulationI
     }
     
     public void reverse() {
+        assert stateInt != null : "Need to set stateIntegrator before calling reverse()";
         ArrayRealVector y = stateInt.getY();
         y.setEntry(1, -y.getEntry(1));
         stateInt.setY(y);

@@ -111,8 +111,9 @@ public class XMLHelper {
 
             Document doc;
             if(fromJar){
-                InputStream inputStream = XMLHelper.class.getResourceAsStream(filename); 
-                doc = builder.parse(inputStream);
+                try (InputStream inputStream = XMLHelper.class.getResourceAsStream(filename)) {
+                    doc = builder.parse(inputStream);
+                }
             }
             else {
                 doc = builder.parse(filename);

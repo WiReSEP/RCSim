@@ -6,7 +6,6 @@
 package de.tubs.wire.keyboard;
 
 import java.awt.Component;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,9 +60,8 @@ public class KeyProcessor {
 
     }
 
-    protected class AWTKeyEvent extends java.awt.event.KeyEvent {
-
-        public AWTKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
+    protected static class AWTKeyEvent extends java.awt.event.KeyEvent {
+        private AWTKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
             super(null, id, when, modifiers, keyCode, keyChar, keyLocation);
         }
     }
@@ -88,12 +86,12 @@ public class KeyProcessor {
 
     }
 
-    private KeyEventMap<Character> typedKeyFunctions = new KeyProcessor.KeyEventMap<>();
-    private KeyEventMap<Integer> pressedKeyFunctions = new KeyProcessor.KeyEventMap<>();
-    private KeyEventMap<Integer> releasedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    private final KeyEventMap<Character> typedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    private final KeyEventMap<Integer> pressedKeyFunctions = new KeyProcessor.KeyEventMap<>();
+    private final KeyEventMap<Integer> releasedKeyFunctions = new KeyProcessor.KeyEventMap<>();
     
-    private Map<Character, String> typedKeyDescriptions = new TreeMap<>();
-    private Map<Integer, String> pressedKeyDescriptions = new TreeMap<>();
+    private final Map<Character, String> typedKeyDescriptions = new TreeMap<>();
+    private final Map<Integer, String> pressedKeyDescriptions = new TreeMap<>();
 
     public void add(char c, HandlerFunction typedFunc) {
         add(c, typedFunc, (String)null);

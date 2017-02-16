@@ -24,6 +24,7 @@ import de.tubs.wire.simulator.track.Track;
 /**
  * A camera that 
  * @author ezander
+ * @param <Vector> The vector class.
  */
 public class TrackingCamera<Vector> extends BaseCamera<Vector> {
     public enum Position {

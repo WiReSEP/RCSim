@@ -16,9 +16,9 @@
  */
 package de.tubs.wire.simulator.track;
 
+import de.tubs.wire.simulator.math.Spline;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import de.tubs.wire.simulator.math.Spline;
 
 /**
  * Implements a track build from splines.

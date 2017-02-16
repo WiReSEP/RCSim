@@ -17,8 +17,10 @@
 package de.tubs.wire.simulator;
 
 /**
- *
+ * An observer that just outputs the simulation state to the terminal.
+ * 
  * @author ezander
+ * @param <SimulationInfo> The simulation info class.
  */
 public class TextBasedObserver<SimulationInfo> implements Observer<SimulationInfo> {
 
@@ -28,7 +30,7 @@ public class TextBasedObserver<SimulationInfo> implements Observer<SimulationInf
 
     @Override
     public void notify(double t, double[] y) {
-        System.out.format("t=%4.2f  s=%4.2f  s'=%4.2f\n", t, y[0], y[1]);
+        System.out.format("t=%4.2f  s=%4.2f  s'=%4.2f%n", t, y[0], y[1]);
     }
 
 }

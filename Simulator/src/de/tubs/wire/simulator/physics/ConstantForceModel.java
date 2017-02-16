@@ -52,7 +52,7 @@ public class ConstantForceModel implements ForceModel {
      * @param F The constant force.
      */
     public ConstantForceModel(double[] F) {
-        this.F = F;
+        this.F = F.clone();
     }
 
     /**
