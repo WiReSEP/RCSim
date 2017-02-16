@@ -46,16 +46,16 @@ public class RCSwing extends javax.swing.JFrame {
         //setLayout(new BorderLayout());
         Dimension minimumSize = new Dimension(10, 10);
         
-        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        //GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         //config.set
         
         
-        /*GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
-        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
+        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
         GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
-                getBestConfiguration(gct3D);*/
+                getBestConfiguration(gct3D);
         
         Canvas3D canvas1 = new Canvas3D(config);
         canvas1.setDoubleBufferEnable(true);
@@ -84,13 +84,13 @@ public class RCSwing extends javax.swing.JFrame {
         Java3dObserverMulti.MyView view1 = observer.addView(canvas1);
         Java3dObserverMulti.MyView view2 = observer.addView(canvas2);
         view1.setCamNum(-1);
-        view2.setCamNum(2);
+        view2.setCamNum(-1);
 
         sim = new TrackSimulator();
         sim.addObserver(observer);
         sim.addObserver(new TextBasedObserver());
-        //canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
-        //canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
+        canvas1.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view1, false) );
+        canvas2.addKeyListener(DefaultKeyMapping.setDefaultKeys(new AWTKeyProcessor(), sim, view2, false) );
     }
     
     final void initSimple() {
