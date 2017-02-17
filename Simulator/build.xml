@@ -70,4 +70,51 @@
     nbproject/build-impl.xml file. 
 
     -->
+    
+    <target depends="init,-javadoc-build,-javadoc-post-build,-javadoc-browse" description="Build Javadoc." name="javadoc"/>    
+    <target name="-javadoc-post-build" description="Generates UML-Javadoc">
+        <mkdir dir="${dist.javadoc.dir}"/>
+        <javadoc source="${javac.source}" packagenames="de.wire.*" 
+                 destdir="${dist.javadoc.dir}"  
+                 private="true">  
+            <classpath>
+                <path path="${javac.classpath}"/>
+            </classpath>
+            <fileset dir="${src.dir}" excludes="${excludes}" 
+                     includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <doclet name="org.umlgraph.doclet.UmlGraphDoc" 
+                    path="${file.reference.UmlGraph.jar}">
+                <param name="-attributes" />
+                <param name="-operations" />
+                <param name="-types" />
+                <param name="-visibility" />
+
+
+                <param name="-inferrel"/>
+                <param name="-inferdep"/>
+                <param name="-hide" value="java.*"/>
+                <param name="-hide" value="org.apache.*"/>
+                <param name="-collpackages" value="java.util.*"/>
+                <!--
+                <param name="-collapsible" />
+                <param name="-qualify" />
+
+                <param name="-inferrel"/>
+                <param name="-inferdep"/>
+                <param name="-hide" value="java.*"/>
+                <param name="-collpackages" value="java.util.*"/>
+                <param name="-qualify"/>
+                <param name="-postfixpackage"/>
+                <param name="-nodefontsize" value="9"/>
+                <param name="-nodefontpackagesize" value="7"/>
+                <param name="-link" value="http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec"/>
+                <param name="-link"
+                value="http://java.sun.com/j2se/1.5/docs/api"/>
+                -->
+            </doclet>
+        </javadoc>
+    </target>
+    
 </project>
