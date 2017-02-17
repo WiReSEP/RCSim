@@ -17,13 +17,16 @@
 package de.tubs.wire.simulator;
 
 /**
- * An Observer can be registered with an Simulation and gets notifications about state changes in the Simulation.
+ * An observer interface for receiving notifications from simulations.
+ * 
+ * An Observer can be registered with a {@link Simulator} and gets 
+ * {@link #notify notifications} about state changes in the simulation.
  * 
  * @author ezander
  * @param <SimulationInfo> The simulation info class.
+ * @see Simulator
  */
 public interface Observer<SimulationInfo> {
-
     /**
      * Called when the simulator is first run or reset.
      * 

@@ -22,7 +22,7 @@ import org.apache.commons.math3.linear.RealVector;
 /**
  * A ForceModel modelling no force at all.
  * 
- * Use where a ForceModel is needed, but you don't want any forces.
+ * Use where a {@link ForceModel} is needed, but you don't want any forces.
  * 
  * @author ezander
  */

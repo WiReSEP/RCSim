@@ -22,7 +22,8 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- * Combines two force models into one (summing up forces and energies).
+ * Combines two {@link ForceModel}s into one, summing up all forces and 
+ * (potential) energies.
  * 
  * @author ezander
  */
@@ -34,14 +35,14 @@ public class CombinedForceModel implements ForceModel {
      * Create a new combined force model.
      */
     public CombinedForceModel() {
-        factors = new ArrayList<>();
-        models = new ArrayList<>();
+        factors = new ArrayList<>(2);
+        models = new ArrayList<>(2);
     }
 
     /**
      * Add a force to the model.
      * 
-     * @param model The force model to add.
+     * @param model The force to add.
      * 
      * @return The combined model itself.
      */
@@ -52,7 +53,7 @@ public class CombinedForceModel implements ForceModel {
     /**
      * Add a scaled force to the model.
      * 
-     * @param model The force model to add.
+     * @param model The force to add.
      * @param factor The factor.
      * @return The combined model itself.
      */

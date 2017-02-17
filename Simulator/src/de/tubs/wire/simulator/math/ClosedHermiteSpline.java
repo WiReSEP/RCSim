@@ -26,10 +26,12 @@ import org.apache.commons.math3.linear.RealVector;
 /**
  * Implementation of closed cubic Hermite splines.
  * 
- * https://en.wikipedia.org/wiki/Cubic_Hermite_spline
  * @author ezander
+ * @see <a href="https://en.wikipedia.org/wiki/Cubic_Hermite_spline">Wikipedia: Cubic Hermite spline</a>
  */
 public class ClosedHermiteSpline implements Spline {
+    
+    /** Matrix of coefficient for the Hermite basis function, array of size 4xN */
     private final RealMatrix A;
 
     /**

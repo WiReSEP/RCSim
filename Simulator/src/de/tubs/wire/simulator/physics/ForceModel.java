@@ -8,11 +8,11 @@ package de.tubs.wire.simulator.physics;
 import org.apache.commons.math3.linear.RealVector;
 
 /**
- * A ForceModel is a general model for a physical force like gravity, friction 
- * or electormagnectic forces. The force may depend on the position in space and 
- * on velocity. Forces that aris from a potential may return the potential 
- * energy at the given position, non-conservative forces may just return zero 
- * here.
+ * General model for physical forces like gravity or friction.
+ * 
+ * The force may depend on the position in space and on velocity. Forces that 
+ * arising from a potential may return the potential energy at the given 
+ * position, non-conservative forces may just return zero here.
  * 
  * @author ezander
  */

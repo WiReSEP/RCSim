@@ -102,7 +102,7 @@ public class StateIntegrator {
      * @param t1
      * @param dt
      * @param y0
-     * @return 
+     * @return Intermediate results.
      */
     @Deprecated
     public static ArrayRealVector doIntegrate2ndOrder(SecondOrderDifferentialEquations ode2, double t0, double t1, double dt, RealVector y0) {
