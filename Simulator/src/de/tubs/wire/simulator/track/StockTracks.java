@@ -8,7 +8,7 @@ package de.tubs.wire.simulator.track;
 /**
  * Enum that helps in loading tracks from the internal resources (JAR).
  * 
- * @see TrackInformation
+ * @see TrackInformation#readFromXML(StockTracks) 
  * @author ezander
  */
 public enum StockTracks {

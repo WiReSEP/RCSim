@@ -72,12 +72,14 @@ public class TrackODE implements SecondOrderDifferentialEquations {
     /**
      * Compute the second derivative.
      * 
-     * Compute yDDot given t, y, and yDot.
+     * Compute yDDot given t, y, and yDot, which is given by the force acting 
+     * on the coach divided by it mass (because of F=ma) and then projected onto
+     * the track, since the coach is constraint to follow the track.
      * 
-     * @param t The time paramter.
-     * @param y
-     * @param yDot
-     * @param yDDot 
+     * @param t The time paramter (not used).
+     * @param y The current state (in).
+     * @param yDot The time deriviative of the current state (in).
+     * @param yDDot The second derivative (out).
      */
     @Override
     public void computeSecondDerivatives(double t, double[] y, double[] yDot, double[] yDDot) {
@@ -99,13 +101,14 @@ public class TrackODE implements SecondOrderDifferentialEquations {
     }
     
     /**
-     * Compute the energy of the current state.
+     * Compute the (potential) energy of the current state.
      * 
-     * Used for reference and checking.
+     * Used for reference and checking. Returns the sum of all potential 
+     * energies w.r.t. all conservative forces acting on the body.
      * 
-     * @param s
-     * @param dsdt
-     * @return 
+     * @param s The curve parameter.
+     * @param dsdt The derivative of the curve parameter.
+     * @return The total potential energy of the state.
      */
     public double getEnergy(double s, double dsdt) {
         RealVector x = track.getx(s);
