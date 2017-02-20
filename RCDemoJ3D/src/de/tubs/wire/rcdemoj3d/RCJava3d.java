@@ -22,7 +22,9 @@ import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.StockTracks;
 import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.graphics.DefaultKeyMapping;
+import de.tubs.wire.graphics.java3d.Screen;
 import de.tubs.wire.simulator.TextBasedObserver;
+import javax.swing.SwingUtilities;
 
 
 /**
@@ -32,24 +34,27 @@ import de.tubs.wire.simulator.TextBasedObserver;
 public class RCJava3d {
 
     public static void run() {
-        // Load simulation stuff
-        //String filename = "../tracks/colossos.rct";
-        //String filename = "../tracks/bigloop.rct";
-        String filename = "../Simulator/tracks/foo.rct";
-        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
-        
+        // Instantiate new simulator
         TrackSimulator sim = new TrackSimulator();
+
+        // Load a track
+        //String filename = "../tracks/colossos.rct";
+        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         sim.setSimulationInfo(trackInfo);
         
+        // Create a Java3d observer
         Java3dObserverSimple observer3d = new Java3dObserverSimple();
         observer3d.setCamNum(-1);
 
+        // Add keyprocessor to observer
         AWTKeyProcessor keyprocessor = new AWTKeyProcessor();
         DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observer3d, true);
+        keyprocessor.add('f', d -> Screen.toggleParentFullScreen(observer3d.getCanvas()));
         observer3d.setKeyProcessor(keyprocessor);
         
+        // Tell the simulator about the observer and start it...
         sim.addObserver(observer3d);
-        sim.addObserver( new TextBasedObserver());
+        //fsim.addObserver( new TextBasedObserver());
         sim.run();
     }
     

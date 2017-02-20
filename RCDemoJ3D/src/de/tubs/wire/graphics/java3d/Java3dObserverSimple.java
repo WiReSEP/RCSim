@@ -106,11 +106,8 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
             keyprocessor.handleEvents(canvas);
 
 
-        System.out.println("de.tubs.wire.graphics.java3d.Java3dObserverSimple.init() w1");
         world = createWorld(trackInfo);
-        System.out.println("de.tubs.wire.graphics.java3d.Java3dObserverSimple.init() w2");
         camera = universe.getViewingPlatform().getViewPlatformTransform();
-        new Exception().printStackTrace();
 
         //
         branchGroup = new BranchGroup();
