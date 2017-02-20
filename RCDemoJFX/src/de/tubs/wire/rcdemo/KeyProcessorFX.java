@@ -34,6 +34,7 @@ public class KeyProcessorFX extends KeyProcessor implements EventHandler<KeyEven
             case LEFT: return AWTKeyEvent.VK_LEFT;
             case RIGHT: return AWTKeyEvent.VK_RIGHT;
             case SPACE: return AWTKeyEvent.VK_SPACE;
+            case ESCAPE: return AWTKeyEvent.VK_ESCAPE;
             case UNDEFINED: return AWTKeyEvent.VK_UNDEFINED;
             default:
                 System.err.println("Unknown key code: " + code);

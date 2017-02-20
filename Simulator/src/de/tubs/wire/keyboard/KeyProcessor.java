@@ -60,7 +60,7 @@ public class KeyProcessor {
 
     }
 
-    protected static class AWTKeyEvent extends java.awt.event.KeyEvent {
+    public static class AWTKeyEvent extends java.awt.event.KeyEvent {
         private AWTKeyEvent(Component source, int id, long when, int modifiers, int keyCode, char keyChar, int keyLocation) {
             super(null, id, when, modifiers, keyCode, keyChar, keyLocation);
         }

@@ -32,7 +32,6 @@ import de.tubs.wire.graphics.camera.CameraFactory;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.graphics.camera.Camera;
 import de.tubs.wire.graphics.camera.CameraView;
-import de.tubs.wire.keyboard.AWTKeyProcessor;
 import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -45,9 +44,9 @@ import javax.vecmath.Vector3d;
 public class Java3dObserverMulti extends Java3dObserverBase {
     
     VirtualUniverse universe;
-    List<MyView> views = new ArrayList<>();
+    List<ViewInfo> views = new ArrayList<>();
 
-    public class MyView implements ViewController {
+    public class ViewInfo implements ViewController {
 
         Canvas3D canvas;
         TransformGroup camera;
@@ -55,7 +54,7 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         Camera camTransform;
         BranchGroup viewBranch;
         
-        public MyView(Canvas3D canvas) {
+        public ViewInfo(Canvas3D canvas) {
             this.canvas = canvas;
         }
         
@@ -85,47 +84,42 @@ public class Java3dObserverMulti extends Java3dObserverBase {
             }
         }
         
+        @Override
         public void nextCam() {
             setCamNum(getCamNum() + 1);
         }
         
+        @Override
         public void prevCam() {
             setCamNum(getCamNum() - 1);
         }
     }
     
-    public MyView addView(Canvas3D canvas) {
+    public ViewInfo addView(Canvas3D canvas) {
         assert universe == null;
         
-        MyView view = new MyView(canvas);
-        views.add(view);
+        ViewInfo viewinfo = new ViewInfo(canvas);
+        views.add(viewinfo);
 
-        view.viewBranch = new BranchGroup();
-        view.camera = new TransformGroup();
-        view.camera.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        view.viewBranch.addChild(view.camera);
+        viewinfo.viewBranch = new BranchGroup();
+        viewinfo.camera = new TransformGroup();
+        viewinfo.camera.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+        viewinfo.viewBranch.addChild(viewinfo.camera);
         ViewPlatform viewPlatform = new ViewPlatform();
-        view.camera.addChild(viewPlatform);
+        viewinfo.camera.addChild(viewPlatform);
         
         
-        View xview = new View();
-        xview.addCanvas3D(canvas);
+        View view = new View();
+        view.addCanvas3D(canvas);
         //View xview = canvas.getView();
-        xview.setPhysicalBody(new PhysicalBody());
-        xview.setPhysicalEnvironment(new PhysicalEnvironment());
-        xview.attachViewPlatform(viewPlatform);
-        xview.setBackClipDistance(1000);
-        xview.setSceneAntialiasingEnable(true);
+        view.setPhysicalBody(new PhysicalBody());
+        view.setPhysicalEnvironment(new PhysicalEnvironment());
+        view.attachViewPlatform(viewPlatform);
+        view.setBackClipDistance(1000);
+        view.setSceneAntialiasingEnable(true);
         //assert canvas.getSceneAntialiasingAvailable();
-        
-        
-//        camera = universe.getViewingPlatform().getViewPlatformTransform();
-//
-//        View view = canvas.getView();
-//        view.setBackClipDistance(1000);
-//        
         // setCamNum(camNum);
-        return view;
+        return viewinfo;
     }
     
     @Override
@@ -135,48 +129,41 @@ public class Java3dObserverMulti extends Java3dObserverBase {
         assert (track != null);
 
         //
-        world = createWorld(trackInfo);
+        world = createWorld();
         branchGroup = new BranchGroup();
         branchGroup.addChild(world);
 
-        //if (1+1==2)            return; 
         // Create the universe and add the group of objects
         if (universe == null) {
             universe = new VirtualUniverse();
             Locale locale = new Locale(universe);
             locale.addBranchGraph(branchGroup);
-            for (MyView view : views) {
+            for (ViewInfo view : views) {
                 locale.addBranchGraph(view.viewBranch);
                 view.setCamNum(view.getCamNum());
             }
         }
     }
     
+    @Override
     public void notify(double t, double[] y) {
-        for (MyView view : views) {
+        for (ViewInfo view : views) {
             view.canvas.stopRenderer();
         }
         super.notify(t, y);
         double s = y[0];
         double dsdt = y[1];
-        
-        for (MyView view : views) {
-            //assert false;
-            //Transform3D transform = view.getCamTransform().getView(s, dsdt);
-            
-            //transform.invert();
-            //view.camera.setTransform(transform);
-            
-            
-        CameraView<Vector3d> camView = view.camTransform.getView(s, dsdt);
-        Transform3D transform = new Transform3D();
-        transform.lookAt(
-                new Point3d(camView.getEye()), 
-                new Point3d(camView.getTarget()), camView.getUp());
-        transform.invert();
-        view.camera.setTransform(transform);
+
+        for (ViewInfo view : views) {
+            CameraView<Vector3d> camView = view.camTransform.getView(s, dsdt);
+            Transform3D transform = new Transform3D();
+            transform.lookAt(
+                    new Point3d(camView.getEye()),
+                    new Point3d(camView.getTarget()), camView.getUp());
+            transform.invert();
+            view.camera.setTransform(transform);
             view.canvas.startRenderer();
-            
+
         }
     }
     

@@ -39,37 +39,42 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 
     Stage stage;
     Group root;
+    final PerspectiveCamera fxCamera = new PerspectiveCamera(true);
+    final Affine cameraTransform = new Affine();
+
     int camNum = 0;
-    Camera<Point3D> camTransform;
-    final PerspectiveCamera camera = new PerspectiveCamera(true);
-    Affine cameraTransform = new Affine();
+    Camera<Point3D> camera;
     TrackHelperJFX helper = new TrackHelperJFX();
 
     public JavaFXObserverSimple(Stage primaryStage) {
+        // Save the state and creat a new root group (for the scene graph)
         stage = primaryStage;
         root = new Group();
 
+        // Create a new scene for the scene graph (root)
         Scene scene = new Scene(root, 1024, 768, true, SceneAntialiasing.BALANCED);
         scene.setFill(Color.BLACK);
         scene.setFill(Color.AQUAMARINE);
-        //handleKeyboard(scene, world);
-        //handleMouse(scene, world);
-        
-        
 
-        Group camGroup = new Group();
-        camGroup.getChildren().add(camera);
-        camGroup.getTransforms().add(cameraTransform);
-
-        root.getChildren().add(camGroup);
-        camera.setNearClip(0.1);
-        camera.setFarClip(10000);
-        scene.setCamera(camera);
+        // For the FX Camera stuff we need to setup a group with a camera and 
+        // put an affine transform into it (which will be later used for the 
+        // updating the camera view).
+        Group cameraGroup = new Group();
+        cameraGroup.getChildren().add(fxCamera);
+        cameraGroup.getTransforms().add(cameraTransform);
+        root.getChildren().add(cameraGroup);
+        
+        // Set near and far clip and put camera into scene
+        fxCamera.setNearClip(0.1);
+        fxCamera.setFarClip(10000);
+        scene.setCamera(fxCamera);
+        
+        // Set the scene into the primary stage
         primaryStage.setScene(scene);
     }
 
-    public Camera getCamTransform() {
-        return camTransform;
+    public Camera getCamera() {
+        return camera;
     }
 
     public int getCamNum() {
@@ -81,17 +86,19 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         camNum = ((camNumNew % n) + n) % n;
         if (track != null) {
             // Note: this MUST be done in two steps, otherwise a screen update 
-            // could occur in between before the camera is initialised
-            Camera<Point3D> camTransformNew = CameraFactory.buildCamera(camList.get(camNum), helper);
-            camTransformNew.init(track);
-            camTransform = camTransformNew;
+            // could occur in between before the fxCamera is initialised
+            Camera<Point3D> newCamera = CameraFactory.buildCamera(camList.get(camNum), helper);
+            newCamera.init(track);
+            camera = newCamera;
         }
     }
 
+    @Override
     public void nextCam() {
         setCamNum(getCamNum() + 1);
     }
 
+    @Override
     public void prevCam() {
         setCamNum(getCamNum() - 1);
     }
@@ -102,7 +109,7 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         this.track = trackInfo.getTrack();
         assert (track != null);
 
-        world = createWorld(trackInfo);
+        world = createWorld();
         root.getChildren().clear();
         root.getChildren().add(world);
 
@@ -116,10 +123,10 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 
         double s = y[0];
         double dsdt = y[1];
-        CameraView<Point3D> camView = camTransform.getView(s, dsdt);
+        CameraView<Point3D> camView = camera.getView(s, dsdt);
 
-        Transform tr = ToolkitJFX.lookAt(camView.getEye(), camView.getTarget(), camView.getUp());
-        cameraTransform.setToTransform(tr);
+        Transform newCameraTransform = ToolkitJFX.lookAt(camView.getEye(), camView.getTarget(), camView.getUp());
+        cameraTransform.setToTransform(newCameraTransform);
     }
 
 }

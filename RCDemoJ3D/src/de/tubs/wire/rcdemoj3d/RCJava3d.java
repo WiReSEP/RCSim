@@ -24,7 +24,7 @@ import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.graphics.DefaultKeyMapping;
 import de.tubs.wire.graphics.java3d.Screen;
 import de.tubs.wire.simulator.TextBasedObserver;
-import javax.swing.SwingUtilities;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -49,7 +49,8 @@ public class RCJava3d {
         // Add keyprocessor to observer
         AWTKeyProcessor keyprocessor = new AWTKeyProcessor();
         DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observer3d, true);
-        keyprocessor.add('f', d -> Screen.toggleParentFullScreen(observer3d.getCanvas()));
+        keyprocessor.add('f', d -> Screen.toggleParentFullScreen(observer3d.getCanvas()), "Toggle fullscreen.");
+        keyprocessor.add(KeyEvent.VK_ESCAPE, null, d -> Screen.restoreScreen(), "Exit fullscreen.");
         observer3d.setKeyProcessor(keyprocessor);
         
         // Tell the simulator about the observer and start it...

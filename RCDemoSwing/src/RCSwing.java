@@ -46,18 +46,20 @@ public class RCSwing extends javax.swing.JFrame {
         //setLayout(new BorderLayout());
         Dimension minimumSize = new Dimension(10, 10);
         
-        //GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
         //config.set
         
         
         GraphicsConfigTemplate3D gct3D= new GraphicsConfigTemplate3D();
-        //gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
-        GraphicsConfiguration config= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
+        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.PREFERRED);
+        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.REQUIRED);
+        gct3D.setSceneAntialiasing(GraphicsConfigTemplate3D.UNNECESSARY);
+        GraphicsConfiguration config2= java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getDefaultScreenDevice().
                 //getDefaultConfiguration();
                 getBestConfiguration(gct3D);
         
-        Canvas3D canvas1 = new Canvas3D(config);
+        Canvas3D canvas1 = new Canvas3D(config2);
         canvas1.setDoubleBufferEnable(true);
         canvas1.setMinimumSize(minimumSize);
 
@@ -81,8 +83,8 @@ public class RCSwing extends javax.swing.JFrame {
         
         Java3dObserverMulti observer = new Java3dObserverMulti();
         java3dObserver = observer;
-        Java3dObserverMulti.MyView view1 = observer.addView(canvas1);
-        Java3dObserverMulti.MyView view2 = observer.addView(canvas2);
+        Java3dObserverMulti.ViewInfo view1 = observer.addView(canvas1);
+        Java3dObserverMulti.ViewInfo view2 = observer.addView(canvas2);
         view1.setCamNum(-1);
         view2.setCamNum(-1);
 
@@ -220,14 +222,6 @@ public class RCSwing extends javax.swing.JFrame {
 
     private void loadFile(File selected) {
 
-        //c.addKeyListener(this);
-        //timer = new Timer(100, this);
-        //timer.start();
-        //Panel p = new Panel();
-        //p.add(go);
-        //add("North", p);
-        //go.addActionListener(this);
-        //go.addKeyListener(this);
         // Create a simple scene and attach it to the virtual universe
         String filename = selected.getAbsolutePath();
         TrackInformation trackInfo = TrackInformation.readFromXML(filename);
@@ -235,6 +229,10 @@ public class RCSwing extends javax.swing.JFrame {
 
         sim.setSimulationInfo(trackInfo);
         sim.init();
+        restartTimer();
+    }
+
+    protected void restartTimer() {
         if (timer != null) {
             timer.stop();
         }

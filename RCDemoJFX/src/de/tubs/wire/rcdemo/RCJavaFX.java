@@ -24,9 +24,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import de.tubs.wire.graphics.javaFX.JavaFXObserverSimple;
+import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.StockTracks;
+import java.time.Clock;
+import javafx.scene.input.KeyCombination;
 
 /**
  *
@@ -37,34 +40,40 @@ public class RCJavaFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
-
-        JavaFXObserverSimple observerFX = new JavaFXObserverSimple(primaryStage);
-        //observer3d.setCamNum(-1);
-
+        // Create new simulator
         TrackSimulator sim = new TrackSimulator();
-        sim.addObserver(observerFX);
-        //sim.addObserver( new TextBasedObserver<TrackInformation>());
+
+        // Load a track into simulator
+        TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         sim.setSimulationInfo(trackInfo);
 
-        observerFX.init(sim.getSimulationInfo());
-        sim.init();
+        // Create a JavaFX observer
+        JavaFXObserverSimple observerFX = new JavaFXObserverSimple(primaryStage);
+        observerFX.setCamNum(-1);
 
-        primaryStage.setTitle("Rollercoaster Simulator");
-        primaryStage.show();
-
-        Scene scene = primaryStage.getScene();
-        
+        // Create keyprocessor and add to observer
         KeyProcessorFX keyprocessor = new KeyProcessorFX();
         DefaultKeyMapping.setDefaultKeys(keyprocessor, sim, observerFX, false);
         keyprocessor.add('q', d->primaryStage.close(), "Quit the application.");
-        keyprocessor.handleSceneEvents(scene);
+        keyprocessor.add('f', d->primaryStage.setFullScreen(!primaryStage.isFullScreen()), "Toggle fullscreen.");
+        keyprocessor.add(KeyProcessorFX.AWTKeyEvent.VK_ESCAPE, d->primaryStage.setFullScreen(false), null, "Exit fullscreen.");
+        keyprocessor.handleSceneEvents(primaryStage.getScene());
         
+        
+        // Add the observer to the simulator so it gets notified of updates
+        sim.addObserver(observerFX);
+        //sim.addObserver( new TextBasedObserver<TrackInformation>());
+        sim.init();
 
+        
+        // Set title of the primary stage and show it
+        primaryStage.setTitle("Rollercoaster Simulator");
+        primaryStage.show();
+        
+        // Create an infinite animation in which the simulator is continually 
+        // updated
         Animation animation = new Transition() {
-            {
-                setCycleDuration(Duration.millis(200000));
-            }
+            { setCycleDuration(Duration.INDEFINITE); }
 
             @Override
             protected void interpolate(double frac) {

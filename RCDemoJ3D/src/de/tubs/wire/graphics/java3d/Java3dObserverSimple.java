@@ -40,15 +40,15 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
 
     protected SimpleUniverse universe;
     protected Canvas3D canvas;
-    protected TransformGroup camera;
+    protected TransformGroup glCamera;
 
     int camNum = -1;
-    Camera<Vector3d> camTransform;
+    Camera<Vector3d> camera;
     protected AWTKeyProcessor keyprocessor;
 
 
-    public Camera<Vector3d> getCamTransform() {
-        return camTransform;
+    public Camera<Vector3d> getCamera() {
+        return camera;
     }
 
     public void setCanvas(Canvas3D canvas) {
@@ -69,10 +69,10 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         camNum = ((camNumNew % n) + n) % n;
         if( track!= null ){
             // Note: this MUST be done in two steps, otherwise a screen update 
-            // could occur in between before the camera is initialised
-            Camera<Vector3d> camTransformNew = CameraFactory.buildCamera( camList.get(camNum), helper );
-            camTransformNew.init(track);
-            camTransform = camTransformNew;
+            // could occur in between before the glCamera is initialised
+            Camera<Vector3d> newCamera = CameraFactory.buildCamera( camList.get(camNum), helper );
+            newCamera.init(track);
+            camera = newCamera;
         }
     }
     
@@ -106,8 +106,8 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
             keyprocessor.handleEvents(canvas);
 
 
-        world = createWorld(trackInfo);
-        camera = universe.getViewingPlatform().getViewPlatformTransform();
+        world = createWorld();
+        glCamera = universe.getViewingPlatform().getViewPlatformTransform();
 
         //
         branchGroup = new BranchGroup();
@@ -128,13 +128,13 @@ public class Java3dObserverSimple extends Java3dObserverBase implements ViewCont
         
         double s = y[0];
         double dsdt = y[1];
-        CameraView<Vector3d> camView = camTransform.getView(s, dsdt);
+        CameraView<Vector3d> camView = camera.getView(s, dsdt);
         Transform3D transform = new Transform3D();
         transform.lookAt(
                 new Point3d(camView.getEye()), 
                 new Point3d(camView.getTarget()), camView.getUp());
         transform.invert();
-        camera.setTransform(transform);
+        glCamera.setTransform(transform);
         
         if( !canvas.isOffScreen())
             canvas.startRenderer();
