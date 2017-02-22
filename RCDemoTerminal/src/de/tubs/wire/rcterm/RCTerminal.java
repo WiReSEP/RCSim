@@ -18,6 +18,7 @@ package de.tubs.wire.rcterm;
  */
 
 
+import de.tubs.wire.simulator.track.TerminalTrackObserver;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.Simulator;
@@ -34,7 +35,7 @@ public class RCTerminal {
         // Load simulation stuff
         TrackInformation trackInfo = TrackInformation.readFromXML(StockTracks.TEST);
         
-        TermObserver observer = new TermObserver();
+        TerminalTrackObserver observer = new TerminalTrackObserver(0.5);
         
         TrackSimulator sim = new TrackSimulator();
         sim.addObserver(observer);

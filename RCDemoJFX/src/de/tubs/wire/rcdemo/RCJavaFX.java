@@ -28,6 +28,7 @@ import de.tubs.wire.keyboard.AWTKeyProcessor;
 import de.tubs.wire.simulator.TrackSimulator;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.StockTracks;
+import de.tubs.wire.simulator.track.TerminalTrackObserver;
 import java.time.Clock;
 import javafx.scene.input.KeyCombination;
 
@@ -62,7 +63,7 @@ public class RCJavaFX extends Application {
         
         // Add the observer to the simulator so it gets notified of updates
         sim.addObserver(observerFX);
-        //sim.addObserver( new TextBasedObserver<TrackInformation>());
+        sim.addObserver(new TerminalTrackObserver());
         sim.init();
 
         

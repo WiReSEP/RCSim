@@ -16,6 +16,9 @@
  */
 package de.tubs.wire.simulator;
 
+import java.io.PrintStream;
+import org.apache.commons.math3.linear.ArrayRealVector;
+
 /**
  * An observer that just outputs the simulation state to the terminal.
  * 
@@ -24,13 +27,16 @@ package de.tubs.wire.simulator;
  */
 public class TextBasedObserver<SimulationInfo> implements Observer<SimulationInfo> {
 
+    PrintStream out = System.out;
+    
     @Override
     public void init(SimulationInfo info) {
     }
 
     @Override
     public void notify(double t, double[] y) {
-        System.out.format("t=%4.2f  s=%4.2f  s'=%4.2f%n", t, y[0], y[1]);
+        out.format("Simumlatorstate: t=%4.2f y=%s\n", t, new ArrayRealVector(y));
+        
     }
 
 }

@@ -24,7 +24,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
  *
  * @author ezander
  */
-class VectorACMath extends VectorMath<ArrayRealVector> {
+public class VectorACMath extends VectorMath<ArrayRealVector> {
 
     @Override
     public ArrayRealVector zero() {
