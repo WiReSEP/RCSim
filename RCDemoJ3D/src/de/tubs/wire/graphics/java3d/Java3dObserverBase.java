@@ -34,7 +34,9 @@ import de.tubs.wire.simulator.track.Track;
  * @author ezander
  */
 public abstract class Java3dObserverBase implements Observer<TrackInformation> {
+    //TODO: derive from TrackObserver (store track and helper in TrackObserver)
 
+    
     protected BranchGroup branchGroup;
     protected TransformGroup world;
     protected TransformGroup car;
