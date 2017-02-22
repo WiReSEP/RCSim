@@ -44,7 +44,6 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
 
     int camNum = 0;
     Camera<Point3D> camera;
-    TrackHelperJFX helper = new TrackHelperJFX();
 
     public JavaFXObserverSimple(Stage primaryStage) {
         // Save the state and creat a new root group (for the scene graph)
@@ -56,15 +55,9 @@ public class JavaFXObserverSimple extends JavaFXObserverBase implements ViewCont
         scene.setFill(Color.BLACK);
         scene.setFill(Color.AQUAMARINE);
 
-        // For the FX Camera stuff we need to setup a group with a camera and 
-        // put an affine transform into it (which will be later used for the 
-        // updating the camera view).
-        Group cameraGroup = new Group();
-        cameraGroup.getChildren().add(fxCamera);
-        cameraGroup.getTransforms().add(cameraTransform);
-        root.getChildren().add(cameraGroup);
-        
-        // Set near and far clip and put camera into scene
+        // For the FX Camera stuff we need to set up the transform and set near 
+        // and far clip distances
+        fxCamera.getTransforms().add(cameraTransform);
         fxCamera.setNearClip(0.1);
         fxCamera.setFarClip(10000);
         scene.setCamera(fxCamera);

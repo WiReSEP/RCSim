@@ -16,7 +16,6 @@
  */
 package de.tubs.wire.graphics;
 
-import static java.lang.Math.random;
 import de.tubs.wire.simulator.track.TrackHelper;
 import de.tubs.wire.simulator.track.TrackInformation;
 import de.tubs.wire.simulator.track.Track;
